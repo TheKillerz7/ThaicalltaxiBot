@@ -1,19 +1,22 @@
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').load()
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   require('dotenv').load()
+// }
 
   //Require
-  const express = require('express')
+  import express from 'express'
+  import bodyParser from 'body-parser'
+  
+  //init express
   const app = express()
-  const bodyParser = require('body-parser')
   
   //routes import
-  const indexRouter = require('./routes/index')
+  import webhook from './routes/webhook.js'
 
   //app use
   app.use(bodyParser.json())
   
-  //database connect
+  //database connect (spreadsheet)
+
   // const mongoose = require('mongoose')
   // mongoose.connect(process.env.DATABASE_URL, { useNewUrlParser: true })
   // const db = mongoose.connection
@@ -21,6 +24,6 @@ if (process.env.NODE_ENV !== 'production') {
   // db.once('open', () => console.log('Connected to Mongoose'))
   
   //use routes
-  app.use('/webhook', indexRouter)
+  app.use('/webhook', webhook)
   
   app.listen(process.env.PORT || 3000)

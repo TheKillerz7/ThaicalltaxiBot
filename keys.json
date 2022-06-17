@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "thaicalltaxi-pitr",
+  "private_key_id": "d4231b4059f70482d6cf04f8b423c6845669abea",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC9bhg/NHV1OWMO\n3o/7n0xp3bGEfvGx26FohBJNnrFk2CXdmkthbaWxGfhm+ldU1iyQysCvJOtag9Ax\nDtwThDXSc1ANoBP5FQoOHuF5eoqQtosBAvJFCT9IaOiaDveFH7ZKv7eD04yZXjrp\nkhOfnV0jz93e6Ken9DPUgrodn8iVURJD9xq5K6gftcp4HnwsVTGSgPBR3NKUCQF6\nkKqGvUUIoMUeBTSLCR0epQmb9Nu5KqpQM43wPQWxRpAB7kaRBurt0s32qyq9KZmk\nEjaM03CYPl9TInLhY67dlHEBQ3iXxfhkqSvzwVbRAFiY4whgKlyX7pi1DdRNmc1P\n94mNhVyrAgMBAAECggEAK1FCPS3XUEObudo+LamLVUgrYGORDH1vZxGQh+xqn2do\nHUk7xJ9IvPt12MKVduJ1FXUv4707DptG3/kIbXQVxLa2zy7UcmiTwI/iOp/BkP8V\nQVl1okDPllTbH+OdSXVrf6NgqUYWiDnKmf/b+euH0XkmwOMN97O5qHZubfjMawxW\ntszTm8YO3RKkwFvpQXTE2MUuUOaP5uPvw1L5xMFwop0GhUTCgy2UHrnHa/dpaJY6\npo5H+41xCvvw46WIqBUSqkzuuxd5SoDwgoCUJOdchZUr29HKmxr5s+MYFsneM0tW\n2XD31Ns+76z7ZASiKkR6BmaOb/JGToQKckCUu1BgbQKBgQDg1p+oJdsobZgixxbr\nxMipN1Ij1Tih4hIHn1fA4yMZ+CoB1OfUBwIT+J90kvhocMgJGtQWqRwrfwX5k2Ag\nFa3hlEpxY7m9lPvni3WriOvrvmzmtp2wHc3031t1WOzRYau/4bJ6iepclg38HNdn\n1vR2xlXPIgUb7X2rmdey7k3j5QKBgQDXryqiZ0hbXCrcyn7/73Y34/veAMx0uaeI\nicVkzh/YeMOc1mMRIvUNQpWvCc8VIpbCksmHFOH/URx8pSAK+B6g+NrtWAg7oMG2\nGlXUVOhFlqX7NClu1Un88J7Ge7H/49WrBlhAn6woBR9jbauj1aIXIv3JqOMMzGdy\ncdakYH1VTwKBgB0qGdmg13W+CY7xTjrU8sZoY6I8RTVScs5EUAi4LdRviVtld5Dc\nO9vFU0G20rwRbREpRruNwhauSmMeR8jBpyVsq99bdTtvOOHHCENw5lFVCSFALOIs\na4vI8T8egtGCHtor94/Hlfvehv/d6d8RVfKWNYlBu3Hs83Ev6nfOS5I1AoGBAMI6\nCtGu4pjrGeo0LEO716CjHKgh3fxrR3QMZQbPHBxrO/Rbl2DSMwza3kJ/Oc2VlV/o\nobSUWKP73gRdCsr1/1cEYtoDQX642FhtxMbuIzCvZg8ePQWC6xrtcH3a3ENMX5ig\noQ6o+3YajtaR51QlSM8/An38KWLYG3wTCbCC97q/AoGAK4Tgc+TICB9QEb9wg2Sb\n59PQwwzzcPXpzC+wM/VZnTPd161CrCk37mTUMj6qIHa1UmfG4zqpUTZ67dsR4G/7\n37C4fe4doDjODTUS5nwz9hCtQs4mlL5FwHCjf9QNXXas7lsYmK++cn3DtAzaOL4L\nyg8tO7BHXojxNBwv45qzVvg=\n-----END PRIVATE KEY-----\n",
+  "client_email": "thaicalltaxi@thaicalltaxi-pitr.iam.gserviceaccount.com",
+  "client_id": "109423829414012126868",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/thaicalltaxi%40thaicalltaxi-pitr.iam.gserviceaccount.com"
+}
