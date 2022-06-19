@@ -1,4 +1,5 @@
 import express from 'express'
+import { areaCalculation } from '../public/js/areaCalculation.js'
 import { geocodingAPI } from '../public/js/geocodingAPI.js'
 import { sheetsInfo, readSheets, writeSheets } from '../public/js/sheetsRequest.js'
 
@@ -6,12 +7,12 @@ import { sheetsInfo, readSheets, writeSheets } from '../public/js/sheetsRequest.
 const router = express.Router()
 
 router.get('/', async (req, res) => {
-  res.send(await readSheets("Drivers!A:C"))
+  res.send(areaCalculation())
 })
 
 //webhook from dialogflow
 router.post('/', async (req, res) => {
-  
+  console.log(req.body.originalDetectIntentRequest.payload)
   // const address = await geocodingAPI(req.body.queryResult.queryText)
   // const obj = {
   //   fulfillmentMessages: [

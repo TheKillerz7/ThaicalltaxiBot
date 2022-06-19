@@ -39,20 +39,20 @@ export const readSheets = async (range) => {
     }
 }
 
-export const writeSheets = async (range, values) => {
+export const writeSheets = (range, values) => {
     try {
-        await googleSheetsInstance.spreadsheets.values.append({
+        googleSheetsInstance.spreadsheets.values.append({
             auth, //auth object
             spreadsheetId, //spreadsheet id
             range, //sheet name and range of cells
             valueInputOption: "USER_ENTERED", // The information will be passed according to what the usere passes in as date, number or text
             resource: {
-                values: [[...values]]
+                values: [["", ...values]]
             },
         });
-        return "Writing data successful!!"
     } 
     catch (err) {
         return err
     }
+    return "Writing data successful!!"
 }
