@@ -1,17 +1,52 @@
 {
-    "bangkokA": {
-        "pattayaA": 800
-    },
-    "bangkokB": {
-
-    },
-    "bangkokC": {
-
-    },
-    "bangkokD": {
-
-    },
-    "pattayaA": {
-
+    "bangkok": {
+        "bangkokA": {
+            "pattayaA": {
+                "sedan": 800,
+                "family": 1000,
+                "minibus": 1200
+            },
+            "pattayaB": {
+                "sedan": 900,
+                "family": 1100,
+                "minibus": 1300
+            }
+        },
+        "bangkokB": {
+            "pattayaA": {
+                "sedan": 1000,
+                "family": 1000,
+                "minibus": 1200
+            },
+            "pattayaB": {
+                "sedan": 1100,
+                "family": 1100,
+                "minibus": 1300
+            }
+        },
+        "bangkokC": {
+            "pattayaA": {
+                "sedan": 1200,
+                "family": 1000,
+                "minibus": 1200
+            },
+            "pattayaB": {
+                "sedan": 1300,
+                "family": 1100,
+                "minibus": 1300
+            }
+        },
+        "bangkokD": {
+            "pattayaA": {
+                "sedan": 1400,
+                "family": 1000,
+                "minibus": 1200
+            },
+            "pattayaB": {
+                "sedan": 1500,
+                "family": 1100,
+                "minibus": 1300
+            }
+        }
     }
 }
