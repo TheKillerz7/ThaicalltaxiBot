@@ -16,7 +16,7 @@ router.get('/', async (req, res) => {
 //webhook from dialogflow
 router.post('/', async (req, res) => {
   //checking and storing events that have been done
-  const events = []
+  const events = myCache.get("key1") || []
   const reqResult = req.body.queryResult
 
   //Checking if the user is booking or checking price
@@ -26,30 +26,41 @@ router.post('/', async (req, res) => {
       break;
   
     case "PriceCheck":
-      const result = await priceCheck(reqResult, events)
-      console.log(typeof result)
-      if (typeof result === "object" || typeof result === "string") {
-        const obj = {
-          fulfillmentMessages: [
-            {
-              text: {
-                text: [
-                  typeof result === "object" ? 
-                  `Sedan car: ${result.sedan} baht\nFamily car: ${result.family} baht\nMinibus: ${result.minibus} baht`
-                  :
-                  result
-                ]
-              }
-            }
-          ]
-        }
-        res.send(obj)
+      let price = {} //price of each car type
+      let textRespond = ""
+      let result = false
+
+      //reaches last step of price checking or proceed to else
+      if(events.length === 2) {
+        myCache.del("key1")
+        price = areaPrices[events[0].area.type][events[0].area.result]["pattayaA"] //accessing price object
+        textRespond = `Sedan car: ${price.sedan} baht\nFamily car: ${price.family} baht\nMinibus: ${price.minibus} baht`
       }
+      else {
+        result = await priceCheck(reqResult, events)
+        textRespond = reqResult.fulfillmentMessages[0].text.text[0] //sends default message set in dialogflow
+      }
+
+      const responseObj = {
+        fulfillmentMessages: [
+          {
+            text: {
+              text: [
+                //if we have service in that area or reach last step of check price, sends textRespond
+                result || events.length === 2 ? 
+                textRespond
+                :
+                "no service"
+              ]
+            }
+          }
+        ]
+      }
+      res.send(responseObj)
       break;
 
     default:
 
-      myCache.set("key1", events)
       break;
   }
 })
@@ -57,18 +68,15 @@ router.post('/', async (req, res) => {
 export default router
 
 const priceCheck = async (reqResult, events) => {
-  const eventCount = events.length
-  let areaType = ""
-
   //convert to real address
   const address = await geocodingAPI(reqResult.queryText)
   //finding province
   const results = address.data.results[0]
-  console.log(results)
-  areaType = results.address_components.find(item => item.types.includes("administrative_area_level_1")).long_name.toLowerCase()
+  const areaType = results.plus_code.compound_code.split(" ")[1].replace(/[^a-zA-Z0-9 ]/g, '').toLowerCase()
   
   //checking which area the address is in
-  const areaResult = areaCalculation([results.geometry.location.lat, results.geometry.location.lng], areaType)
+  const areaResult = areaCalculation([results.geometry.location.lng, results.geometry.location.lat], areaType)
+  //store process in cache
   const objTemp = [
     ...events,
     {
@@ -79,9 +87,7 @@ const priceCheck = async (reqResult, events) => {
       }
     }
   ]
-  myCache.set("key1", objTemp)
-  if (eventCount === 2) {
-    return areaPrices[areaType][objTemp[0].area.result][objTemp[1].area.result] || "We don't have service in that area yet."
-  }
-  return false
+  if (areaResult) myCache.set("key1", objTemp)
+  //if we have service in that area returns true
+  return areaResult ? true : false
 }

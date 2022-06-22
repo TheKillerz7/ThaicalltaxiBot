@@ -16,5 +16,5 @@ export const areaCalculation = (coordinates, areaType) => {
     //point coordinates [x, y]
     const point = [-70.31294531249999, 26.43079719103903]
 
-    return area
+    return area || false
 }
