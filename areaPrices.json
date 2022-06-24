@@ -1,51 +1,131 @@
 {
-    "bangkok": {
-        "bangkokA": {
-            "pattayaA": {
-                "sedan": 800,
-                "family": 1000,
-                "minibus": 1200
+    "oneCourse": {
+        "bkkAirport": {
+            "bangkokBKK": {
+                "economy": 200,
+                "sedan": 300,
+                "family": 300,
+                "minibus": 500,
+                "vipVan": 800
             },
-            "pattayaB": {
+            "dmkAirport": {
+                "economy": 600,
+                "sedan": 700,
+                "family": 800,
+                "minibus": 1100,
+                "vipVan": 1600
+            },
+            "bangkokDMK": {
+                "economy": 600,
+                "sedan": 700,
+                "family": 800,
+                "minibus": 1100,
+                "vipVan": 1600
+            },
+            "bangkokA": {
+                "economy": 500,
+                "sedan": 600,
+                "family": 700,
+                "minibus": 1000,
+                "vipVan": 1500
+            },
+            "bangkokB": {
+                "economy": 600,
+                "sedan": 700,
+                "family": 800,
+                "minibus": 1100,
+                "vipVan": 1600
+            },
+            "bangkokC": {
+                "economy": 600,
+                "sedan": 700,
+                "family": 800,
+                "minibus": 1100,
+                "vipVan": 1600
+            },
+            "bangkokD": {
+                "economy": 700,
+                "sedan": 800,
+                "family": 900,
+                "minibus": 1200,
+                "vipVan": 1700
+            },
+            "bangkokE": {
+                "economy": 500,
+                "sedan": 600,
+                "family": 700,
+                "minibus": 1000,
+                "vipVan": 1500
+            },
+            "pattayaA": {
+                "economy": 800,
                 "sedan": 900,
                 "family": 1100,
-                "minibus": 1300
-            }
-        },
-        "bangkokB": {
-            "pattayaA": {
+                "minibus": 1600,
+                "vipVan": 2100
+            },
+            "pattayaB": {
+                "economy": 900,
                 "sedan": 1000,
-                "family": 1000,
-                "minibus": 1200
+                "family": 1200,
+                "minibus": 1700,
+                "vipVan": 2200
             },
-            "pattayaB": {
+            "pattayaC": {
+                "economy": 1000,
                 "sedan": 1100,
-                "family": 1100,
-                "minibus": 1300
-            }
-        },
-        "bangkokC": {
-            "pattayaA": {
+                "family": 1300,
+                "minibus": 1800,
+                "vipVan": 2300
+            },
+            "pattayaD": {
+                "economy": 1100,
                 "sedan": 1200,
-                "family": 1000,
-                "minibus": 1200
+                "family": 1400,
+                "minibus": 1900,
+                "vipVan": 2400
             },
-            "pattayaB": {
+            "pattayaE": {
+                "economy": 1200,
                 "sedan": 1300,
-                "family": 1100,
-                "minibus": 1300
-            }
-        },
-        "bangkokD": {
-            "pattayaA": {
-                "sedan": 1400,
-                "family": 1000,
-                "minibus": 1200
+                "family": 1500,
+                "minibus": 2000,
+                "vipVan": 2500
             },
-            "pattayaB": {
-                "sedan": 1500,
+            "pattayaS": {
+                "economy": 900,
+                "sedan": 1000,
                 "family": 1100,
-                "minibus": 1300
+                "minibus": 1600,
+                "vipVan": 2100
+            },
+            "huahinA": {
+                "economy": 1700,
+                "sedan": 1800,
+                "family": 2000,
+                "minibus": 2600,
+                "vipVan": 3500
+            },
+            "huahinB": {
+                "economy": 1900,
+                "sedan": 2000,
+                "family": 2200,
+                "minibus": 2800,
+                "vipVan": 3700
+            },
+            "rayongA": {
+                "economy": 1800,
+                "sedan": 2000,
+                "family": 2200,
+                "minibus": 2600,
+                "vipVan": 3400
+            },
+            "rayongB": {
+                "economy": 2000,
+                "sedan": 2200,
+                "family": 2400,
+                "minibus": 2800,
+                "vipVan": 3600
             }
         }
     }
