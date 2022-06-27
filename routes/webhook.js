@@ -10,7 +10,10 @@ const router = express.Router()
 const myCache = new NodeCache();
 
 router.get('/', async (req, res) => {
-  res.send(areaCalculation([100.74164, 13.63214]))
+  res.json({
+    status: 200,
+    message: "Get data has successfully",
+  });
 })
 
 //webhook from dialogflow
