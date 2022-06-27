@@ -14,6 +14,8 @@
 
   //app use
   app.use(bodyParser.json())
+  app.use(compression())
+  app.use(helmet())
   
   //database connect (spreadsheet)
 
