@@ -36,7 +36,8 @@ router.post('/', async (req, res) => {
       //reaches last step of price checking or proceed to else
       if(events.length === 2) {
         myCache.del("key1")
-        price = areaPrices[events[0].area.type][events[0].area.result]["pattayaA"] //accessing price object
+        console.log(events)
+        price = areaPrices.oneCourse[events[0].area.result][events[1].area.result] //accessing price object
         textRespond = `Sedan car: ${price.sedan} baht\nFamily car: ${price.family} baht\nMinibus: ${price.minibus} baht`
       }
       else {
