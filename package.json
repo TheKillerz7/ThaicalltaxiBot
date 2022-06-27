@@ -1,11 +1,10 @@
 {
-  "type": "module",
   "name": "backend",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node --experimental-json-modules server.js",
-    "devStart": "nodemon --experimental-json-modules server.js"
+    "start": "node server.js",
+    "devStart": "nodemon server.js"
   },
   "dependencies": {
     "axios": "^0.27.2",

@@ -1,4 +1,4 @@
-import { google } from "googleapis"
+const { google } = require("googleapis")
 
 const auth = new google.auth.GoogleAuth({
     //the key file
@@ -15,7 +15,7 @@ const authClientObject = async () => await auth.getClient();
 //Google sheets instance
 const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObject() });
 
-export const sheetsInfo = async () => {
+const sheetsInfo = async () => {
     const sheetInfo = await googleSheetsInstance.spreadsheets.get({
       auth,
       spreadsheetId,
@@ -24,7 +24,7 @@ export const sheetsInfo = async () => {
     return sheetInfo
 }
 
-export const readSheets = async (range) => {
+const readSheets = async (range) => {
     try {
         const readData = await googleSheetsInstance.spreadsheets.values.get({
             auth, //auth object
@@ -39,7 +39,7 @@ export const readSheets = async (range) => {
     }
 }
 
-export const writeSheets = (range, values) => {
+const writeSheets = (range, values) => {
     try {
         googleSheetsInstance.spreadsheets.values.append({
             auth, //auth object
@@ -56,3 +56,9 @@ export const writeSheets = (range, values) => {
     }
     return "Writing data successful!!"
 }
+
+module.exports = {
+    sheetsInfo,
+    readSheets,
+    writeSheets
+ }

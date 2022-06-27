@@ -1,9 +1,9 @@
-import express from 'express'
-import { areaCalculation } from '../public/js/areaCalculation.js'
-import { geocodingAPI } from '../public/js/geocodingAPI.js'
-import { sheetsInfo, readSheets, writeSheets } from '../public/js/sheetsRequest.js'
-import NodeCache  from "node-cache"
-import areaPrices from '../areaPrices.json'
+const express = require('express')
+const { areaCalculation } = require('../public/js/areaCalculation.js')
+const { geocodingAPI } = require('../public/js/geocodingAPI.js')
+const { sheetsInfo, readSheets, writeSheets } = require('../public/js/sheetsRequest.js')
+const NodeCache  = require("node-cache")
+const areaPrices = require('../areaPrices.json')
 
 //init packages
 const router = express.Router()
@@ -68,7 +68,7 @@ router.post('/', async (req, res) => {
   }
 })
 
-export default router
+module.exports = router
 
 const priceCheck = async (reqResult, events) => {
   //convert to real address

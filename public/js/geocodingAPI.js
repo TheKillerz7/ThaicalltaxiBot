@@ -1,7 +1,7 @@
-import axios from 'axios';
+const axios = require('axios').default;
 
 //geocoding API
-export const geocodingAPI = (address) => {
+const geocodingAPI = (address) => {
     const geoObject = axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
         params: {
           address: address,
@@ -11,4 +11,8 @@ export const geocodingAPI = (address) => {
     
     //returned Json
     return geoObject
+}
+
+module.exports = {
+  geocodingAPI
 }

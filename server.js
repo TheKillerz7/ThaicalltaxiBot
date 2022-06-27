@@ -3,14 +3,14 @@
 // }
 
   //Require
-  import express from 'express'
-  import bodyParser from 'body-parser'
+  const express = require('express')
+  const bodyParser = require('body-parser')
   
   //init express
   const app = express()
   
-  //routes import
-  import webhook from './routes/webhook.js'
+  //routes require
+  const webhook = require('./routes/webhook.js')
 
   //app use
   app.use(bodyParser.json())
