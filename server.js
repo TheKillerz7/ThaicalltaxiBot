@@ -7,6 +7,7 @@
   const bodyParser = require('body-parser')
   const helmet = require('helmet')
   const compression = require('compression')
+  var cors = require('cors');
   
   //init express
   const app = express()
@@ -19,6 +20,7 @@
   app.use(bodyParser.json())
   app.use(compression())
   app.use(helmet())
+  app.use(cors());
   
   //database connect (spreadsheet)
 
