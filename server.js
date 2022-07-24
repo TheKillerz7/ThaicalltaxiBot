@@ -13,6 +13,7 @@
   
   //routes require
   const webhook = require('./routes/webhook.js')
+  const booking = require('./routes/booking.js')
 
   //app use
   app.use(bodyParser.json())
@@ -29,5 +30,6 @@
   
   //use routes
   app.use('/webhook', webhook)
+  app.use('/booking', booking)
   
-  app.listen(process.env.PORT || 3000)
+  app.listen(process.env.PORT || 5000)
