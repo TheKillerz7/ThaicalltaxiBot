@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
 
 //posting a booking
 router.post('/', async (req, res) => {
-
+    res.send("thank you hehe")
 })
 
 router.put('/', async (req, res) => {
