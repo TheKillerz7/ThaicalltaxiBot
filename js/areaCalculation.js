@@ -1,5 +1,5 @@
 const pointInPolygon = require('point-in-polygon')
-const areas = require("../../areas.json")
+const areas = require("../areas.json")
 
 //finding area
 const areaCalculation = (coordinates, areaType) => {

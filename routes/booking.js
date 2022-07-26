@@ -1,23 +1,13 @@
 const express = require('express')
-const { sheetsInfo, readSheets, writeSheets } = require('../public/js/sheetsRequest.js')
+const bookingController = require('../controllers/bookingController.js')
 
 //init packages
 const router = express.Router()
 
-router.get('/', async (req, res) => {
-  res.json({
-    status: 200,
-    message: "Get data has successfully",
-  });
-})
+router.get('/', bookingController.getAllBooking)
 
-//posting a booking
-router.post('/', async (req, res) => {
-    res.send("thank you hehe")
-})
+// router.post('/', bookingController.post)
 
-router.put('/', async (req, res) => {
-
-})
+// router.put('/:id', bookingController.put)
 
 module.exports = router

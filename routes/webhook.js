@@ -1,7 +1,7 @@
 const express = require('express')
-const { areaCalculation } = require('../public/js/areaCalculation.js')
-const { geocodingAPI } = require('../public/js/geocodingAPI.js')
-const { sheetsInfo, readSheets, writeSheets } = require('../public/js/sheetsRequest.js')
+const { areaCalculation } = require('../js/areaCalculation.js')
+const { geocodingAPI } = require('../js/geocodingAPI.js')
+const { sheetsInfo, readSheets, writeSheets } = require('../js/sheetsRequest.js')
 const NodeCache  = require("node-cache")
 const areaPrices = require('../areaPrices.json')
 
