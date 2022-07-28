@@ -1,9 +1,11 @@
 const express = require('express')
 const { areaCalculation } = require('../js/areaCalculation.js')
 const { geocodingAPI } = require('../js/geocodingAPI.js')
-const { sheetsInfo, readSheets, writeSheets } = require('../js/sheetsRequest.js')
 const NodeCache  = require("node-cache")
 const areaPrices = require('../areaPrices.json')
+const { postToDialogflow } = require('../js/linehelper/postToDialogflow.js')
+const { replyMessage } = require('../js/linehelper/replyToLine.js')
+const userController = require('../controllers/userController.js')
 
 //init packages
 const router = express.Router()
@@ -16,20 +18,66 @@ router.get('/', async (req, res) => {
   });
 })
 
-//webhook from dialogflow
+//webhook from line
 router.post('/', async (req, res) => {
-  //checking and storing events that have been done
-  const events = myCache.get("key1") || []
-  const reqResult = req.body.queryResult
+  if (req.method === "POST") {
+    let event = req.body.events[0]
+    switch (event.type) {
+      case "message":
+        if (event.message.type === "text") {
+          try {
+            await postToDialogflow(req)
+          } catch (error) {
+            console.log(error)
+          }
+        } else {
+          try {
+            await replyMessage(req);
+          } catch (error) {
+            console.log(error.response.data.details)
+          }
+        }
+        break;
 
-  //Checking if the user is booking or checking price
-  switch (req.body.queryResult.action.split(".")[0]) {
-    case "Booking":
-      
-      break;
-  
-    case "PriceCheck":
-      let price = {} //price of each car type
+      case "follow":
+        userController.createUser(req, res)
+        break;
+
+      case "unfollow":
+        userController.deleteUser(req, res)
+        break;
+    
+      default:
+        break;
+    }
+  }
+})
+
+module.exports = router
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+const priceCheckHandle = async (req) => {
+ //checking and storing events that have been done
+ const events = myCache.get("key1") || []
+ const reqResult = req.body.queryResult
+
+ let price = {} //price of each car type
       let textRespond = ""
       let result = false
 
@@ -61,15 +109,7 @@ router.post('/', async (req, res) => {
         ]
       }
       res.send(responseObj)
-      break;
-
-    default:
-
-      break;
-  }
-})
-
-module.exports = router
+}
 
 const priceCheck = async (reqResult, events) => {
   //convert to real address

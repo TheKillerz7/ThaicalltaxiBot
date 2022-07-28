@@ -12,10 +12,13 @@ const getBookingById = (req, res) => {
 }
 
 const createBooking = (req, res) => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+  try {
+    await db.createBookingDB(data)
+    console.log("Create booking successfully!")
+    res.send("Create user succesfully!")
+  } catch (error) {
+    res.send(error)
+  }
 }
 
 const updateBooking = (req, res) => {

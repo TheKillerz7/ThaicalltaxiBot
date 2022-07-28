@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.get('/', bookingController.getAllBooking)
 
-// router.post('/', bookingController.post)
+router.post('/', bookingController.createBooking)
 
 // router.put('/:id', bookingController.put)
 

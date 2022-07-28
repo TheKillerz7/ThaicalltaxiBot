@@ -12,10 +12,10 @@ const getBookingByIdDB = (id) => {
 }
 
 const createBookingDB = () => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+  return knex("booking")
+  .insert({
+    ...data
+  })
 }
 
 const updateBookingDB = (id) => {

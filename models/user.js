@@ -11,11 +11,11 @@ const getUserByIdDB = () => {
     });
 }
 
-const createUserDB = () => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+const createUserDB = (data) => {
+  return knex("users")
+  .insert({
+    ...data
+  })
 }
 
 const updateUserDB = () => {
@@ -25,11 +25,10 @@ const updateUserDB = () => {
     });
 }
 
-const deleteUserDB = () => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+const deleteUserDB = (id) => {
+  return knex("users")
+  .where("userId", id)
+  .del()
 }
 
 module.exports = {
