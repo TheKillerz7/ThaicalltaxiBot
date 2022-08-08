@@ -17,6 +17,7 @@
   const webhook = require('./routes/webhook.js')
   const booking = require('./routes/booking.js')
   const driver = require('./routes/drivers.js')
+  const jobBoard = require('./routes/jobBoards.js')
 
   //app use
   app.use(bodyParser.json())
@@ -28,5 +29,6 @@
   app.use('/webhook', webhook)
   app.use('/booking', booking)
   app.use('/driver', driver)
+  app.use('/jobBoard', jobBoard)
   
   app.listen(process.env.PORT || 5000)

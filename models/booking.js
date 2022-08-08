@@ -1,7 +1,7 @@
 const knex = require("./knexdb")
 
 const getAllBookingDB = () => {
-    res.send(db.Booking())
+  return knex("booking").select()
 }
 
 const getBookingByIdDB = (id) => {
