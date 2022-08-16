@@ -11,11 +11,11 @@ const getBookingById = (req, res) => {
     });
 }
 
-const createBooking = (req, res) => {
+const createBooking = async (req, res) => {
   try {
-    await db.createBookingDB(data)
+    await db.createBookingDB(req.body)
     console.log("Create booking successfully!")
-    res.send("Create user succesfully!")
+    res.send("Create booking successfully!")
   } catch (error) {
     res.send(error)
   }

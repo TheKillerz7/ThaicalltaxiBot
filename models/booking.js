@@ -11,8 +11,15 @@ const getBookingByIdDB = (id) => {
     });
 }
 
-const createBookingDB = () => {
+const createBookingDB = (data) => {
   return knex("booking")
+  .insert({
+    ...data
+  })
+}
+
+const driverRegisterToBookingDB = (data) => {
+  return knex("bookingdrivers")
   .insert({
     ...data
   })
@@ -36,6 +43,7 @@ module.exports = {
     getAllBookingDB,
     getBookingByIdDB,
     createBookingDB,
+    driverRegisterToBookingDB,
     updateBookingDB,
     deleteBookingDB
 }
