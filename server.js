@@ -14,10 +14,13 @@
   const app = express()
   
   //routes require
-  const webhook = require('./routes/webhook.js')
+  const dialogflowUserWebhook = require('./routes/user/dialogflowWebhook.js')
+  const lineUserWebhook = require('./routes/user/lineWebhook.js')
   const booking = require('./routes/booking.js')
+  const dialogflowDriverWebhook = require('./routes/driver/dialogflowWebhook.js')
+  const lineDriverWebhook = require('./routes/driver/lineWebhook.js')
   const driver = require('./routes/drivers.js')
-  const jobBoard = require('./routes/jobBoard.js')
+  const jobBoard = require('./routes/driver/jobBoard.js')
 
   //app use
   app.use(bodyParser.json())
@@ -25,10 +28,15 @@
   app.use(helmet())
   app.use(cors());
   
-  //use routes
-  app.use('/webhook', webhook)
-  app.use('/booking', booking)
+  //use routes for drivers
+  app.use('/driver/dialogflowWebhook', dialogflowDriverWebhook)
+  app.use('/driver/lineWebhook', lineDriverWebhook)
   app.use('/driver', driver)
-  app.use('/jobBoard', jobBoard)
+  app.use('/driver/jobBoard', jobBoard)
+
+  //use routes for users
+  app.use('/user/dialogflowWebhook', dialogflowUserWebhook)
+  app.use('/user/lineWebhook', lineUserWebhook)
+  app.use('/booking', booking)
   
   app.listen(process.env.PORT || 5000)

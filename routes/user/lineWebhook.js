@@ -1,11 +1,11 @@
 const express = require('express')
-const { areaCalculation } = require('../js/areaCalculation.js')
-const { geocodingAPI } = require('../js/geocodingAPI.js')
+const { areaCalculation } = require('../../js/areaCalculation.js')
+const { geocodingAPI } = require('../../js/geocodingAPI.js')
 const NodeCache  = require("node-cache")
-const areaPrices = require('../areaPrices.json')
-const { postToDialogflow } = require('../js/linehelper/postToDialogflow.js')
-const { replyMessage } = require('../js/linehelper/replyToLine.js')
-const userController = require('../controllers/userController.js')
+const areaPrices = require('../../areaPrices.json')
+const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
+const { replyMessage } = require('../../js/linehelper/replyToLine.js')
+const userController = require('../../controllers/userController.js')
 
 //init packages
 const router = express.Router()

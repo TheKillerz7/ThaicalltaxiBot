@@ -5,6 +5,7 @@ const driverController = require('../controllers/driverController')
 const router = express.Router()
 
 router.get('/', driverController.getAllDriver)
+router.get('/:id', driverController.getDriverById)
 
 router.post('/', driverController.createDriver)
 

@@ -24,6 +24,7 @@
     "mysql": "^2.18.1",
     "node-cache": "^5.1.2",
     "point-in-polygon": "^1.1.0",
+    "short-unique-id": "^4.4.4",
     "socket.io": "^4.5.1"
   },
   "devDependencies": {

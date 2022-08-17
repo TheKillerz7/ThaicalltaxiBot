@@ -10,7 +10,9 @@ const getAllDriver = async (req, res) => {
 
 const getDriverById = async (req, res) => {
   try {
-    res.send(await db.getAllDriverDB())
+    const driver = await db.getDriverByIdDB(req.params.id)
+    console.log(driver)
+    res.send(driver)
   } catch (error) {
     res.send(error)
   }

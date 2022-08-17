@@ -4,11 +4,16 @@ const getAllBookingDB = () => {
   return knex("booking").select()
 }
 
+const getBookingWithStatus = (status) => {
+  return knex("booking")
+  .where("status", status)
+  .select()
+}
+
 const getBookingByIdDB = (id) => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+  return knex("booking")
+  .where("bookingId", id)
+  .select()
 }
 
 const createBookingDB = (data) => {
@@ -25,11 +30,10 @@ const driverRegisterToBookingDB = (data) => {
   })
 }
 
-const updateBookingDB = (id) => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+const updateBookingDB = (id, options) => {
+    return knex("booking")
+    .where("bookingId", id)
+    .update({...options})
 }
 
 const deleteBookingDB = (id) => {
@@ -41,6 +45,7 @@ const deleteBookingDB = (id) => {
 
 module.exports = {
     getAllBookingDB,
+    getBookingWithStatus,
     getBookingByIdDB,
     createBookingDB,
     driverRegisterToBookingDB,
