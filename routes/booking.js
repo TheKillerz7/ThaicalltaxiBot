@@ -5,7 +5,7 @@ const bookingController = require('../controllers/bookingController')
 const router = express.Router()
 
 router.get('/', bookingController.getAllBooking)
-router.get('/:status', bookingController.getBookingWithStatus)
+router.get('/:status', bookingController.getBookingByStatus)
 
 router.post('/', bookingController.createBooking)
 

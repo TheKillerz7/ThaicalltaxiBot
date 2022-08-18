@@ -4,7 +4,7 @@ const getAllBookingDB = () => {
   return knex("booking").select()
 }
 
-const getBookingWithStatus = (status) => {
+const getBookingByStatus = (status) => {
   return knex("booking")
   .where("status", status)
   .select()
@@ -45,7 +45,7 @@ const deleteBookingDB = (id) => {
 
 module.exports = {
     getAllBookingDB,
-    getBookingWithStatus,
+    getBookingByStatus,
     getBookingByIdDB,
     createBookingDB,
     driverRegisterToBookingDB,

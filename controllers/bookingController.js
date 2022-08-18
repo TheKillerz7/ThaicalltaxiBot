@@ -5,9 +5,9 @@ const getAllBooking = (req, res) => {
     
 }
 
-const getBookingWithStatus = async (req, res) => {
+const getBookingByStatus = async (req, res) => {
   try {
-    const bookings = await db.getBookingWithStatus(req.params.status)
+    const bookings = await db.getBookingByStatus(req.params.status)
     console.log(bookings)
     res.send(bookings)
   } catch (error) {
@@ -48,7 +48,7 @@ const deleteBooking = (req, res) => {
 
 module.exports = {
     getAllBooking,
-    getBookingWithStatus,
+    getBookingByStatus,
     getBookingById,
     createBooking,
     updateBooking,
