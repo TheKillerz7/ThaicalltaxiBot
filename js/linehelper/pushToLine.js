@@ -15,12 +15,7 @@ exports.pushMessage = (req, type, id) => {
 
     let body = {
         to: id,
-        messages: [
-            {
-            type: "text",
-            text: "Registered to booking: " + req
-            }
-        ]
+        messages: [...req]
         
     }
 
