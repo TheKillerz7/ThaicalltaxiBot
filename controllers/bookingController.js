@@ -36,7 +36,8 @@ const createBooking = async (req, res) => {
     const id = uid()
     req.body.bookingId = id
     await db.createBookingDB(req.body)
-    pushMessage(messageToUser, "user", req.body.userId)
+    console.log(messageToUser)
+    await pushMessage(messageToUser, "user", req.body.userId)
     console.log("Create booking successfully!")
     res.send("Create booking successfully!")
   } catch (error) {
