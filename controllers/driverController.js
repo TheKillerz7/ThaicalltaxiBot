@@ -1,3 +1,4 @@
+const { linkRichMenu } = require('../js/linehelper/linkRichMenu')
 const db = require('../models/driver')
 
 const getAllDriver = async (req, res) => {
@@ -22,6 +23,7 @@ const createDriver = async (req, res) => {
   try {
     console.log(req.body)
     await db.createDriverDB(req.body)
+    console.log(await linkRichMenu("driver", "afterRegistered", req.body.driverId))
     res.send("Create driver succesfully!")
   } catch (error) {
     res.send(error)

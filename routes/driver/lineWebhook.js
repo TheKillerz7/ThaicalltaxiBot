@@ -1,4 +1,5 @@
 const express = require('express')
+const { createRichMenu } = require('../../js/linehelper/createRichmenu.js')
 const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
 const { replyMessage } = require('../../js/linehelper/replyToLine.js')
 
@@ -14,7 +15,8 @@ router.post('/', async (req, res) => {
         if (event.message.type === "text") {
           try {
             // await postToDialogflow(req)
-            console.log("ok")
+            const response = await createRichMenu('driver', 'afterRegistered')
+            console.log(response)
             res.send("ok")
           } catch (error) {
             console.log(error)

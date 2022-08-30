@@ -1,0 +1,57 @@
+{
+    "user" : {
+
+    },
+    "driver" : {
+        "afterRegistered" : [
+            "richmenu-f99576190b7e24e338c3652ef0462992",
+            {
+                "size": {
+                "width": 2500,
+                "height": 843
+                },
+                "selected": true,
+                "name": "Rich Menu B",
+                "chatBarText": "Bulletin",
+                "areas": [
+                {
+                    "bounds": {
+                    "x": 0,
+                    "y": 4,
+                    "width": 891,
+                    "height": 839
+                    },
+                    "action": {
+                    "type": "uri",
+                    "uri": "https://liff.line.me/1657246657-XxVxBO25"
+                    }
+                },
+                {
+                    "bounds": {
+                    "x": 887,
+                    "y": 8,
+                    "width": 773,
+                    "height": 831
+                    },
+                    "action": {
+                    "type": "uri",
+                    "uri": "https://liff.line.me/1657246657-zkQEeOoL"
+                    }
+                },
+                {
+                    "bounds": {
+                    "x": 1664,
+                    "y": 0,
+                    "width": 836,
+                    "height": 843
+                    },
+                    "action": {
+                    "type": "message",
+                    "text": "Current Jobs"
+                    }
+                }
+                ]
+            }
+        ]
+    }
+}

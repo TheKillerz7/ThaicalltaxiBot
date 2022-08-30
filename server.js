@@ -16,7 +16,7 @@
   const server = http.createServer(app);
   const io = new Server(server);
   const corsOptions = {
-    origin: 'http://localhost:3000',
+    origin: '*',
     credentials: true,
   };
   
