@@ -14,11 +14,20 @@
   //init express
   const app = express()
   const server = http.createServer(app);
-  const io = new Server(server);
+  const io = new Server(server, {
+    path: "/chatting",
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });
   const corsOptions = {
     origin: '*',
     credentials: true,
   };
+  io.on('connection', (socket) => {
+    console.log('a user connected');
+  });
   
   //routes require
   const dialogflowUserWebhook = require('./routes/user/dialogflowWebhook.js')

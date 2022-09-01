@@ -1,7 +1,18 @@
 const { pushMessage } = require('../js/linehelper/pushToLine')
+const { driverRegisteredCard } = require('../lineComponents/driverRegisteredCard')
+const { carouselWrapper } = require('../lineComponents/carouselWrapper')
 const { driverRegisterToBookingDB, getBookingByIdDB, updateBookingDB } = require('../models/booking')
 const { getRegisteredDrivers } = require('../models/bookingdrivers')
 const { getDriverByIdDB } = require('../models/driver')
+const { flexWrapper } = require('../lineComponents/flexWrapper')
+const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
+
+const getBookingByStatusWithoutDriverId = async (req, res) => {
+    const status = req.params.status
+    const driverId = req.params.driverId
+    const bookings = getBookingByStatusWithoutDriverIdDB(status, driverId)
+    res.send(bookings)
+}
 
 const driverRegisterToBooking = async (req, res) => {
     let messageToUser = []
@@ -17,42 +28,58 @@ const driverRegisterToBooking = async (req, res) => {
         const data = req.body
         const booking = (await getBookingByIdDB(data.bookingId))[0]
         const driversRegisters = await getRegisteredDrivers(data.bookingId)
+        const driverIds = driversRegisters.map(driver => driver.driverId)
         if (booking.status !== "waiting") {
             res.send("This job has been closed.")
             return
         }
+        if (driverIds.includes(data.driverId)) {
+            res.send("You've already registered to this job.")
+            return
+        }
         if (driversRegisters.length >= 2) {
             driversRegisters.push(data)
-            messageToDriver = await Promise.all(driversRegisters.map(async (register) => {
+            const cards = await Promise.all(driversRegisters.map(async (register, index) => {
                 const driverInfo = (await getDriverByIdDB(register.driverId))[0]
-                const tripPrice = parseInt(register.trip)
-                const tollwayPrice = parseInt(register.tollway)
+                const driverInfoForCard = {
+                    driverId: driverInfo.driverId,
+                    bookingId: data.bookingId,
+                    name: driverInfo.name,
+                    carType: driverInfo.carType,
+                    carModel: driverInfo.carModel,
+                    carAge: driverInfo.carAge,
+                }
+                const prices = {
+                    "Trip": register.trip,
+                    "Tollway": register.tollway,
+                }
                 let extraPrice = 0
-                let extraPriceText = ""
-                register.extra = JSON.parse(register.extra)
+                if (index !== 2) register.extra = JSON.parse(register.extra)
                 register.extra.map((extra) => {
                     extraPrice += parseInt(extra.price)
-                    extraPriceText += `Title: ${extra.title}, Price: ${parseInt(extra.price)} baht\n`
+                    prices[extra.title] = extra.price
                 })
-                const totalPrice = tripPrice + tollwayPrice + extraPrice
-                const text = `Driver's name: ${driverInfo.name}\nTrip price: ${tripPrice} baht\nTollway price: ${tollwayPrice} baht\nExtra price: ${extraPriceText}\n_Total: ${totalPrice} baht_`
-                return textTemplate(text)
+                const totalPrice = register.trip + register.tollway + extraPrice
+                return driverRegisteredCard(prices, totalPrice, driverInfoForCard)
             }))
-            messageToDriver.push(extraPriceText += `Title: ${data.extra.title}, Price: ${parseInt(data.extra.price)} baht\n`)
+            const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
+            messageToUser.push(cardsWrapped)
+            messageToUser.push(textTemplate("Please select one of the drivers to your liking."))
             await updateBookingDB(data.bookingId, { status: "selecting" })
-            await pushMessage(messageToDriver, "user", booking.userId)
+            await pushMessage(messageToUser, "user", booking.userId)
         }
-        messageToUser.push(textTemplate("You've registered to booking ID: " + booking.bookingId))
-        await pushMessage(messageToUser, "driver", data.driverId)
+        messageToDriver.push(textTemplate("You've registered to booking ID: " + booking.bookingId))
+        await pushMessage(messageToDriver, "driver", data.driverId)
         data.extra = JSON.stringify(data.extra)
         await driverRegisterToBookingDB(data)
         console.log("Registration success!")
         res.send("Registration success!")
     } catch (error) {
-        console.log(error.response?.data?.details)
+        console.log(error)
     }
 }
 
 module.exports = {
-    driverRegisterToBooking
+    driverRegisterToBooking,
+    getBookingByStatusWithoutDriverId
 }

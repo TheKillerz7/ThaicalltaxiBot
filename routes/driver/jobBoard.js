@@ -1,9 +1,10 @@
 const express = require('express');
-const { driverRegisterToBooking } = require('../../controllers/jobBoardController');
+const { driverRegisterToBooking, getBookingByStatusWithoutDriverId } = require('../../controllers/jobBoardController');
 const router = express.Router();
 
 /* GET users listing. */
 router.get('/', );
+router.get('/:status/:driverId', getBookingByStatusWithoutDriverId);
 
 router.post('/', driverRegisterToBooking)
 

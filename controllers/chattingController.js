@@ -1,9 +1,5 @@
 const getChattingMessages = async (req, res) => {
-    const io = req.app.get('socketio');
 
-    io.on('connection', (socket) => {
-        console.log('a user connected');
-    });
 }
 
 const storeChatMessages = (req, res) => {

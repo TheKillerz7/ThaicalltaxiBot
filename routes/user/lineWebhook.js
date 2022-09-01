@@ -46,6 +46,10 @@ router.post('/', async (req, res) => {
       case "unfollow":
         userController.deleteUser(req, res)
         break;
+
+      case "postback":
+        userController.selectDriver(event, res)
+        break;
     
       default:
         break;

@@ -1,10 +1,47 @@
 {
     "user" : {
-
+        "afterBooked": [
+            "richmenu-7771e5f46cb8b100a5b42ceec875f3df",
+            {
+                "size": {
+                  "width": 2500,
+                  "height": 843
+                },
+                "selected": true,
+                "name": "Rich Menu 1",
+                "chatBarText": "Bulletin",
+                "areas": [
+                  {
+                    "bounds": {
+                      "x": 0,
+                      "y": 0,
+                      "width": 1318,
+                      "height": 843
+                    },
+                    "action": {
+                      "type": "uri",
+                      "uri": "https://liff.line.me/1657246657-zkQEeOoL"
+                    }
+                  },
+                  {
+                    "bounds": {
+                      "x": 1326,
+                      "y": 0,
+                      "width": 1174,
+                      "height": 843
+                    },
+                    "action": {
+                      "type": "message",
+                      "text": "Trip Info"
+                    }
+                  }
+                ]
+            }
+        ]
     },
     "driver" : {
         "afterRegistered" : [
-            "richmenu-f99576190b7e24e338c3652ef0462992",
+            "richmenu-249dccb262a59e83ae9ecbd88eea6667",
             {
                 "size": {
                 "width": 2500,

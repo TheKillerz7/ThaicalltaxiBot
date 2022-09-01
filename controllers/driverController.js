@@ -1,4 +1,6 @@
+const { textTemplate } = require('../js/helper/textTemplate')
 const { linkRichMenu } = require('../js/linehelper/linkRichMenu')
+const { pushMessage } = require('../js/linehelper/pushToLine')
 const db = require('../models/driver')
 
 const getAllDriver = async (req, res) => {
@@ -23,7 +25,9 @@ const createDriver = async (req, res) => {
   try {
     console.log(req.body)
     await db.createDriverDB(req.body)
-    console.log(await linkRichMenu("driver", "afterRegistered", req.body.driverId))
+    await linkRichMenu("driver", "afterRegistered", req.body.driverId)
+    await pushMessage([textTemplate('Register successful')], 'driver', req.body.driverId)
+    console.log('successful')
     res.send("Create driver succesfully!")
   } catch (error) {
     res.send(error)
