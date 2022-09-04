@@ -56,7 +56,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo) => {
           },
           {
             "type": "text",
-            "text": `${driverInfo.carModel}, ${driverInfo.carType}, ${driverInfo.carAge}`,
+            "text": `${driverInfo.carModel}, ${driverInfo.carType} car, ${driverInfo.carAge} years old`,
             "size": "xs",
             "wrap": true
           },

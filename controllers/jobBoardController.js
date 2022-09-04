@@ -5,12 +5,14 @@ const { driverRegisterToBookingDB, getBookingByIdDB, updateBookingDB } = require
 const { getRegisteredDrivers } = require('../models/bookingdrivers')
 const { getDriverByIdDB } = require('../models/driver')
 const { flexWrapper } = require('../lineComponents/flexWrapper')
+const { userBooking } = require('../lineComponents/userBooking')
 const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
 
 const getBookingByStatusWithoutDriverId = async (req, res) => {
     const status = req.params.status
     const driverId = req.params.driverId
-    const bookings = getBookingByStatusWithoutDriverIdDB(status, driverId)
+    const bookings = await getBookingByStatusWithoutDriverIdDB(status, driverId)
+    console.log(bookings)
     res.send(bookings)
 }
 
@@ -37,7 +39,7 @@ const driverRegisterToBooking = async (req, res) => {
             res.send("You've already registered to this job.")
             return
         }
-        if (driversRegisters.length >= 2) {
+        if (driversRegisters.length >= 0) {
             driversRegisters.push(data)
             const cards = await Promise.all(driversRegisters.map(async (register, index) => {
                 const driverInfo = (await getDriverByIdDB(register.driverId))[0]
@@ -54,12 +56,12 @@ const driverRegisterToBooking = async (req, res) => {
                     "Tollway": register.tollway,
                 }
                 let extraPrice = 0
-                if (index !== 2) register.extra = JSON.parse(register.extra)
+                // if (index !== 2) register.extra = JSON.parse(register.extra)
                 register.extra.map((extra) => {
                     extraPrice += parseInt(extra.price)
                     prices[extra.title] = extra.price
                 })
-                const totalPrice = register.trip + register.tollway + extraPrice
+                const totalPrice = parseInt(register.trip) + parseInt(register.tollway) + extraPrice
                 return driverRegisteredCard(prices, totalPrice, driverInfoForCard)
             }))
             const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
@@ -68,7 +70,8 @@ const driverRegisterToBooking = async (req, res) => {
             await updateBookingDB(data.bookingId, { status: "selecting" })
             await pushMessage(messageToUser, "user", booking.userId)
         }
-        messageToDriver.push(textTemplate("You've registered to booking ID: " + booking.bookingId))
+        const flexMessage = flexWrapper(userBooking(booking))
+        messageToDriver.push(flexMessage)
         await pushMessage(messageToDriver, "driver", data.driverId)
         data.extra = JSON.stringify(data.extra)
         await driverRegisterToBookingDB(data)

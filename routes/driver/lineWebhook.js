@@ -18,7 +18,7 @@ router.post('/', async (req, res) => {
           try {
             // console.log(event)
             // await postToDialogflow(req)
-
+            // await unlinkRichMenu("driver", event.source.userId)
             console.log(response)
             res.send("ok")
           } catch (error) {

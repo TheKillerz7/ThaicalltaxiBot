@@ -1,6 +1,8 @@
 const { textTemplate } = require('../js/helper/textTemplate')
 const { linkRichMenu } = require('../js/linehelper/linkRichMenu')
 const { pushMessage } = require('../js/linehelper/pushToLine')
+const { driverRegistration } = require('../lineComponents/driverRegistration')
+const { flexWrapper } = require('../lineComponents/flexWrapper')
 const db = require('../models/driver')
 
 const getAllDriver = async (req, res) => {
@@ -22,11 +24,13 @@ const getDriverById = async (req, res) => {
 }
 
 const createDriver = async (req, res) => {
+  const flexMessage = flexWrapper(driverRegistration(req.body))
+
   try {
     console.log(req.body)
     await db.createDriverDB(req.body)
     await linkRichMenu("driver", "afterRegistered", req.body.driverId)
-    await pushMessage([textTemplate('Register successful')], 'driver', req.body.driverId)
+    await pushMessage([flexMessage], 'driver', req.body.driverId)
     console.log('successful')
     res.send("Create driver succesfully!")
   } catch (error) {

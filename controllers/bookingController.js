@@ -1,6 +1,8 @@
 const db = require('../models/booking')
 const ShortUniqueId = require('short-unique-id');
 const { pushMessage } = require('../js/linehelper/pushToLine');
+const { userBooking } = require('../lineComponents/userBooking');
+const { flexWrapper } = require('../lineComponents/flexWrapper');
 
 const getAllBooking = (req, res) => {
     
@@ -24,7 +26,13 @@ const getBookingById = (req, res) => {
 }
 
 const createBooking = async (req, res) => {
+  const uid = new ShortUniqueId({ length: 10 });
+  const id = uid()
+  req.body.bookingId = id
+
+  const flexMessage = flexWrapper(userBooking(req.body))
   let messageToUser = [
+    flexMessage,
     {
       type: "text",
       text: "Please wait 3 minutes and we'll send you drivers"
@@ -32,9 +40,6 @@ const createBooking = async (req, res) => {
   ]
 
   try {
-    const uid = new ShortUniqueId({ length: 10 });
-    const id = uid()
-    req.body.bookingId = id
     await db.createBookingDB(req.body)
     console.log(messageToUser)
     await pushMessage(messageToUser, "user", req.body.userId)
