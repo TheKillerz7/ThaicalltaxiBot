@@ -15,7 +15,6 @@
   const app = express()
   const server = http.createServer(app);
   const io = new Server(server, {
-    path: "/chatting",
     cors: {
       origin: "*",
       methods: ["GET", "POST"]
@@ -26,7 +25,26 @@
     credentials: true,
   };
   io.on('connection', (socket) => {
-    console.log('a user connected');
+    console.log(socket.id, " connected")
+    socket.on('join', (roomId) => {
+      socket.join(roomId);
+      console.log('a user: ', socket.id,  ' joined room: ' + roomId)
+    })
+    socket.on('message', async (obj) => {
+      const chatObj = {
+        roomId: obj.roomId,
+        senderId: obj.userId,
+        senderType: obj.userType,
+        message: obj.inputValue
+      }
+      await storeChatMessages(chatObj)
+
+      io.to(obj.roomId).emit("message", chatObj);
+      console.log('a user: ', socket.id,  ' send message: ' + obj.inputValue)
+    })
+    socket.on('disconnect', () => {
+        console.log('a user: ', socket.id,  ' disconnect')
+      })
   });
   
   //routes require
@@ -37,7 +55,8 @@
   const lineDriverWebhook = require('./routes/driver/lineWebhook.js')
   const driver = require('./routes/drivers.js')
   const jobBoard = require('./routes/driver/jobBoard.js')
-  const chat = require("./routes/chat")
+  const chat = require("./routes/chat");
+const { storeChatMessages } = require('./controllers/chattingController.js');
 
   //app use
   app.use(bodyParser.json())

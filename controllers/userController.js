@@ -1,8 +1,10 @@
+const { default: ShortUniqueId } = require('short-unique-id');
 const { textTemplate } = require('../js/helper/textTemplate');
 const { linkRichMenu } = require('../js/linehelper/linkRichMenu');
 const { pushMessage } = require('../js/linehelper/pushToLine');
 const { getBookingByIdDB, updateBookingDB } = require('../models/booking');
 const { selectedDriver } = require('../models/bookingdrivers');
+const { createChatRoom } = require('../models/chatting');
 const db = require('../models/user')
 
 const getAllUser = (req, res) => {
@@ -17,21 +19,30 @@ const getUserById = (req, res) => {
 }
 
 const selectDriver = async (req, res) => {
+  const uid = new ShortUniqueId({ length: 10 });
+  const postbackData = new URLSearchParams(req.postback.data)
+  const bookingId = postbackData.get("bookingId")
+  const userId = req.source.userId
+  const driverId = postbackData.get("driverId")
   try {
-    const postbackData = new URLSearchParams(req.postback.data)
-    const bookingId = postbackData.get("bookingId")
-    const driverId = postbackData.get("driverId")
     const bookingStatus = (await getBookingByIdDB(bookingId))[0].status
-    if (bookingStatus === 'closed') {
+    if (bookingStatus !== 'selecting') {
       await pushMessage([textTemplate("You've already selected driver")], 'user', req.source.userId)
       return
     }
-    const respond = await selectedDriver(driverId, bookingId)
+    await selectedDriver(driverId, bookingId)
     await updateBookingDB(bookingId, {status: "closed"})
     await linkRichMenu('user', "afterBooked", req.source.userId)
     await pushMessage([textTemplate("You've been selected, Booking: " + bookingId)], 'driver', driverId)
     await pushMessage([textTemplate("You've selected Driver: " + driverId)], 'user', req.source.userId)
-    console.log(respond)
+    const roomData = {
+      roomId: uid(),
+      bookingId,
+      userId,
+      driverId
+    }
+    await createChatRoom(roomData)
+    console.log("success")
     res.send('successssss')
   } catch (error) {
     console.log(error)
