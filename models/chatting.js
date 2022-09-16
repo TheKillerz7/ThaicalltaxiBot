@@ -31,6 +31,7 @@ const getMessagesByRoomId = (roomId, limit, options) => {
         roomId,
         ...options
     })
+    .orderBy('id', 'desc')
     .limit(limit || 20)
     .select()
 }
@@ -45,7 +46,10 @@ const storeMessage = (data) => {
 const updateChatMessages = (data, option) => {
     return knex("chatmessages")
     .where({
-        ...option
+        ...option?.where
+    })
+    .whereNot({
+        ...option?.whereNot
     })
     .update({
         ...data

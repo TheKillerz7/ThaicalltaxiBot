@@ -4,7 +4,6 @@ const getChattingMessages = async (req, res) => {
     const { roomId } = req.params
     try {
         const messages = await getMessagesByRoomId(roomId)
-        console.log(messages)
         res.send(messages)
     } catch (error) {
         console.log(error)
@@ -13,10 +12,9 @@ const getChattingMessages = async (req, res) => {
 
 const getRoomsByUserId = async (req, res) => {
     const { userId, userType } = req.params
-    console.log(req.params)
     try {
+        console.log(userType)
         const rooms = await getRoomsByUserIdDB(userId, userType)
-        console.log(rooms)
         if (!rooms.length) return res.send("No rooms are open.")
         const roomsWithMessage = await Promise.all(rooms.map(async (room, index) => {
             const latestMessage = await getMessagesByRoomId(room.roomId, 1)
@@ -39,27 +37,31 @@ const getRoomsByUserId = async (req, res) => {
 
 const storeChatMessages = async (req, res) => {
     try {
-        console.log(req)
-        return await storeMessage(req)
+        await storeMessage(req)
     } catch (error) {
         console.log(error)
-        return error
     }
 }
 
 const readChatMessages = async (req, res) => {
-    const { roomId } = req.body
+    const { roomId, userId } = req.body
+    console.log(req.body)
     const data = {
         status: "read"
     }
     const option = {
-        roomId,
-        status: "unread"
+        where: {
+            roomId,
+            status: "unread"
+        },
+        whereNot: {
+            senderId: userId
+        }
     }
 
     try {
         const updated = await updateChatMessages(data, option)
-        res.send(updated)
+        res.send("ok")
     } catch (error) {
         console.log(error)
     }

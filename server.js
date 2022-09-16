@@ -5,21 +5,22 @@
   //Require
   const express = require('express')
   const bodyParser = require('body-parser')
-  const http = require('http');
+  const { createServer } = require('http');
   const helmet = require('helmet')
   const compression = require('compression')
   var cors = require('cors');
   const { Server } = require("socket.io");
+  const { storeChatMessages } = require('./controllers/chattingController.js');
   
   //init express
   const app = express()
-  const server = http.createServer(app);
-  const io = new Server(server, {
+  const server = createServer(app);
+  const io = new Server(server, {  
     cors: {
-      origin: "*",
-      methods: ["GET", "POST"]
-    }
-  });
+    origin: "*",
+    credentials: true
+  }});
+
   const corsOptions = {
     origin: '*',
     credentials: true,
@@ -37,10 +38,14 @@
         senderType: obj.userType,
         message: obj.inputValue
       }
-      await storeChatMessages(chatObj)
-
-      io.to(obj.roomId).emit("message", chatObj);
-      console.log('a user: ', socket.id,  ' send message: ' + obj.inputValue)
+      try {
+        await storeChatMessages(chatObj) 
+        io.to(obj.roomId).emit("message", chatObj);
+        console.log('a user: ', socket.id,  ' send message: ' + obj.inputValue)
+      } catch (error) {
+        
+      }
+      
     })
     socket.on('disconnect', () => {
         console.log('a user: ', socket.id,  ' disconnect')
@@ -56,7 +61,6 @@
   const driver = require('./routes/drivers.js')
   const jobBoard = require('./routes/driver/jobBoard.js')
   const chat = require("./routes/chat");
-const { storeChatMessages } = require('./controllers/chattingController.js');
 
   //app use
   app.use(bodyParser.json())

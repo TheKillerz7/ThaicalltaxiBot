@@ -9,6 +9,8 @@ router.get('/:status', bookingController.getBookingByStatus)
 
 router.post('/', bookingController.createBooking)
 
+router.patch('/', bookingController.updateBooking)
+
 // router.put('/:id', bookingController.put)
 
 module.exports = router

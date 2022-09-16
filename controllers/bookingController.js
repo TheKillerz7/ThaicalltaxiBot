@@ -50,8 +50,17 @@ const createBooking = async (req, res) => {
   }
 }
 
-const updateBooking = (req, res) => {
-    console.log(req)
+const updateBooking = async (req, res) => {
+    let data = {
+      ...req.body,
+      updatedDate: new Date()
+    }
+    try {
+      // await db.updateBookingDB(data)
+      res.send(data)
+    } catch (error) {
+      console.log(error)
+    }
 }
 
 const deleteBooking = (req, res) => {
