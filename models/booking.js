@@ -30,10 +30,10 @@ const driverRegisterToBookingDB = (data) => {
   })
 }
 
-const updateBookingDB = (id, options) => {
+const updateBookingDB = (id, data) => {
     return knex("booking")
     .where("bookingId", id)
-    .update({...options})
+    .update({...data})
 }
 
 const deleteBookingDB = (id) => {

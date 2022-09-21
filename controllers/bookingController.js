@@ -52,11 +52,18 @@ const createBooking = async (req, res) => {
 
 const updateBooking = async (req, res) => {
     let data = {
-      ...req.body,
+      ...req.body.data,
       updatedDate: new Date()
     }
+    let messageToUser = [
+      {
+        type: "text",
+        text: "Thank you for booking with us! You can use our 'Chat Inbox' menu to chat with your driver."
+      }
+    ]
     try {
-      // await db.updateBookingDB(data)
+      await db.updateBookingDB(req.body.bookingId, data)
+      await pushMessage(messageToUser, "user", req.body.userId)
       res.send(data)
     } catch (error) {
       console.log(error)

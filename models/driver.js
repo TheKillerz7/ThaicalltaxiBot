@@ -24,6 +24,16 @@ const updateDriverDB = async () => {
     });
 }
 
+const finishingJobDB = async (bookingId) => {
+  await knex("booking")
+  .where("bookingId", bookingId)
+  .update("status", "finished")
+
+  await knex("bookingdrivers")
+  .where("bookingId", bookingId)
+  .update("status", "finished")
+}
+
 const deleteDriverDB = async () => {
     res.json({
       status: 200,
@@ -35,6 +45,7 @@ module.exports = {
     getAllDriverDB,
     getDriverByIdDB,
     createDriverDB,
+    finishingJobDB,
     updateDriverDB,
     deleteDriverDB
 }

@@ -112,9 +112,9 @@ exports.driverRegisteredCard = (prices, total, driverInfo) => {
                 "type": "button",
                 "action": {
                   "type": "postback",
-                  "label": "Select this driver",
+                  "label": "Book with this driver",
                   "data": `driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}`,
-                  "displayText": `Select ${driverInfo.name}`
+                  "displayText": `Book with this driver: ${driverInfo.name}`
                 },
                 "color": "#ffffff"
               }

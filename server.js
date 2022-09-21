@@ -8,10 +8,19 @@
   const { createServer } = require('http');
   const helmet = require('helmet')
   const compression = require('compression')
-  var cors = require('cors');
+  const cors = require('cors');
   const { Server } = require("socket.io");
+  const axios = require('axios');
   const { storeChatMessages } = require('./controllers/chattingController.js');
-  
+  const translations = (text, target) => {
+    return axios.post("https://translation.googleapis.com/language/translate/v2", {}, {
+        params: {
+            q: text,
+            target,
+            key: "AIzaSyAyRniSWIgVCvj30C2q7d9YlMnN06ZzT_M"
+        }
+    })
+}
   //init express
   const app = express()
   const server = createServer(app);
@@ -31,6 +40,10 @@
       socket.join(roomId);
       console.log('a user: ', socket.id,  ' joined room: ' + roomId)
     })
+    socket.on('leave', (roomId) => {
+      socket.leave(roomId);
+      console.log('a user: ', socket.id,  ' leaved room: ' + roomId)
+    })
     socket.on('message', async (obj) => {
       const chatObj = {
         roomId: obj.roomId,
@@ -39,6 +52,8 @@
         message: obj.inputValue
       }
       try {
+        const translated = await translations(chatObj.message, "th")
+        chatObj.translated = translated.data.data.translations[0].translatedText
         await storeChatMessages(chatObj) 
         io.to(obj.roomId).emit("message", chatObj);
         console.log('a user: ', socket.id,  ' send message: ' + obj.inputValue)

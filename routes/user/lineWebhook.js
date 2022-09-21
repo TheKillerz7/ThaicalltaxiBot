@@ -7,6 +7,7 @@ const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
 const { replyMessage } = require('../../js/linehelper/replyToLine.js')
 const userController = require('../../controllers/userController.js')
 const { unlinkRichMenu } = require('../../js/linehelper/unlinkRichMenu.js')
+const { createRichMenu } = require('../../js/linehelper/createRichmenu.js')
 
 //init packages
 const router = express.Router()
@@ -28,6 +29,7 @@ router.post('/', async (req, res) => {
         if (event.message.type === "text") {
           try {
             await postToDialogflow(req)
+            
             // await unlinkRichMenu("user", event.source.userId)
           } catch (error) {
             console.log(error)

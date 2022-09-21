@@ -7,6 +7,7 @@ const { getDriverByIdDB } = require('../models/driver')
 const { flexWrapper } = require('../lineComponents/flexWrapper')
 const { userBooking } = require('../lineComponents/userBooking')
 const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
+const { cancelWhenSelecting } = require('../lineComponents/cancelWhenSelecting')
 
 const getBookingByStatusWithoutDriverId = async (req, res) => {
     const status = req.params.status
@@ -66,7 +67,7 @@ const driverRegisterToBooking = async (req, res) => {
             }))
             const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
             messageToUser.push(cardsWrapped)
-            messageToUser.push(textTemplate("Please select one of the drivers to your liking."))
+            messageToUser.push(flexWrapper(cancelWhenSelecting(data.bookingId)))
             await updateBookingDB(data.bookingId, { status: "selecting" })
             await pushMessage(messageToUser, "user", booking.userId)
         }

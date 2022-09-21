@@ -2,6 +2,8 @@ const { default: ShortUniqueId } = require('short-unique-id');
 const { textTemplate } = require('../js/helper/textTemplate');
 const { linkRichMenu } = require('../js/linehelper/linkRichMenu');
 const { pushMessage } = require('../js/linehelper/pushToLine');
+const { cancelWhenSelecting } = require('../lineComponents/cancelWhenSelecting');
+const { flexWrapper } = require('../lineComponents/flexWrapper');
 const { privateInfo } = require('../lineComponents/privateInfo');
 const { getBookingByIdDB, updateBookingDB } = require('../models/booking');
 const { selectedDriver } = require('../models/bookingdrivers');
@@ -35,7 +37,7 @@ const selectDriver = async (req, res) => {
     await updateBookingDB(bookingId, {status: "closed"})
     await linkRichMenu('user', "afterBooked", req.source.userId)
     await pushMessage([textTemplate("You've been selected, Booking: " + bookingId)], 'driver', driverId)
-    await pushMessage([privateInfo(bookingId)], 'user', req.source.userId)
+    await pushMessage([flexWrapper(privateInfo(bookingId))], 'user', req.source.userId)
     const roomData = {
       roomId: uid(),
       bookingId,
@@ -46,7 +48,7 @@ const selectDriver = async (req, res) => {
     console.log("success")
     res.send('successssss')
   } catch (error) {
-    console.log(error)
+    console.log(error.data)
   }
 }
 

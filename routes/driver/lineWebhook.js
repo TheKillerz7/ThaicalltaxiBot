@@ -1,4 +1,5 @@
 const express = require('express')
+const { getCurrentJobs, finishingJob } = require('../../controllers/driverController.js')
 const { createRichMenu } = require('../../js/linehelper/createRichmenu.js')
 const { linkRichMenu } = require('../../js/linehelper/linkRichMenu.js')
 const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
@@ -19,7 +20,6 @@ router.post('/', async (req, res) => {
             // console.log(event)
             // await postToDialogflow(req)
             // await unlinkRichMenu("driver", event.source.userId)
-            console.log(response)
             res.send("ok")
           } catch (error) {
             console.log(error)
@@ -34,7 +34,19 @@ router.post('/', async (req, res) => {
         break;
 
       case "postback":
-        
+        const type = new URLSearchParams(event.postback.data)
+        switch (type.get('type')) {
+          case "currentJobs":
+            await getCurrentJobs({driverId: event.source.userId})
+            break;
+
+          case "finishJob":
+            await finishingJob({bookingId: type.get('bookingId')})
+            break;
+
+          default:
+            break;
+        }
         break;
     
       default:

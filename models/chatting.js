@@ -3,25 +3,12 @@ const knex = require("./knexdb")
 const getRoomsByUserIdDB = async (userId, userType) => {
     console.log(userId)
     const userIdWithType = userType === "driver" ? { driverId: userId } : { userId: userId }
-    // if (userType === "driver") {
-    //     return knex("chatrooms")
-    //     .where("status", "open")
-    //     .whereExists(
-    //         knex("bookingdrivers")
-    //         .whereRaw('chatrooms.driverId = bookingdrivers.driverId')
-    //         .where({
-    //             driverId: userId,
-    //             "status": "selected"
-    //         })
-    //         .select()
-    //     )
-    //     .select()
-    // }
     return knex("chatrooms")
     .where({
         ...userIdWithType,
         status: "open"
     })
+    .orderBy("updatedDate", "desc")
     .select()
 }
 
@@ -36,7 +23,11 @@ const getMessagesByRoomId = (roomId, limit, options) => {
     .select()
 }
 
-const storeMessage = (data) => {
+const storeMessage = async (data, date) => {
+    await knex("chatrooms")
+    .where("roomId", data.roomId)
+    .update("updatedDate", new Date())
+
     return knex("chatmessages")
     .insert({
         ...data

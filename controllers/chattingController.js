@@ -1,4 +1,5 @@
 const { getRoomsByUserIdDB, getMessagesByRoomId, storeMessage, updateChatMessages } = require("../models/chatting")
+const moment = require('moment');
 
 const getChattingMessages = async (req, res) => {
     const { roomId } = req.params
@@ -13,12 +14,14 @@ const getChattingMessages = async (req, res) => {
 const getRoomsByUserId = async (req, res) => {
     const { userId, userType } = req.params
     try {
-        console.log(userType)
         const rooms = await getRoomsByUserIdDB(userId, userType)
         if (!rooms.length) return res.send("No rooms are open.")
         const roomsWithMessage = await Promise.all(rooms.map(async (room, index) => {
-            const latestMessage = await getMessagesByRoomId(room.roomId, 1)
-            const unreadMessages = await getMessagesByRoomId(room.roomId, 1000, { status: "unread" })
+            const messages = await getMessagesByRoomId(room.roomId, 1000)
+            const latestMessage = messages[0]
+            const unreadMessages = messages.filter((message) => {
+                if (message.senderType != userType && message.status === "unread") return message
+            })
             const obj = {
                 ...room,
                 messages: {
@@ -28,7 +31,6 @@ const getRoomsByUserId = async (req, res) => {
             }
             return obj
         }))
-        console.log(roomsWithMessage)
         res.send(roomsWithMessage)  
     } catch (error) {
         console.log(error)
@@ -44,7 +46,7 @@ const storeChatMessages = async (req, res) => {
 }
 
 const readChatMessages = async (req, res) => {
-    const { roomId, userId } = req.body
+    const { roomId, userType } = req.body
     console.log(req.body)
     const data = {
         status: "read"
@@ -55,12 +57,13 @@ const readChatMessages = async (req, res) => {
             status: "unread"
         },
         whereNot: {
-            senderId: userId
+            senderType: userType
         }
     }
 
     try {
         const updated = await updateChatMessages(data, option)
+        console.log(updated)
         res.send("ok")
     } catch (error) {
         console.log(error)

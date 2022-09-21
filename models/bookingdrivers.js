@@ -6,6 +6,24 @@ const getRegisteredDrivers = (bookingId) => {
     .select()
 }
 
+const getSelectedRegisterByBookingId = (bookingId) => {
+    return knex("bookingdrivers")
+    .where({
+        bookingId,
+        status: "selected"
+    })
+    .select()
+}
+
+const getRegisteresByDriverId = (driverId, option) => {
+    return knex("bookingdrivers")
+    .where({
+        driverId,
+        ...option
+    })
+    .select()
+}
+
 const selectedDriver = (selectedDriverId, bookingId) => {
     knex("bookingdrivers")
     .where("bookingId", bookingId)
@@ -19,5 +37,7 @@ const selectedDriver = (selectedDriverId, bookingId) => {
 
 module.exports = {
     getRegisteredDrivers,
+    getSelectedRegisterByBookingId,
+    getRegisteresByDriverId,
     selectedDriver
 }
