@@ -18,6 +18,7 @@ router.post('/', async (req, res) => {
         if (event.message.type === "text") {
           try {
             // console.log(event)
+            await createRichMenu("driver")
             // await postToDialogflow(req)
             // await unlinkRichMenu("driver", event.source.userId)
             res.send("ok")

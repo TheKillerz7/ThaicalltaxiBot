@@ -11,6 +11,7 @@
   const cors = require('cors');
   const { Server } = require("socket.io");
   const axios = require('axios');
+  const he = require('he');
   const { storeChatMessages } = require('./controllers/chattingController.js');
   const translations = (text, target) => {
     return axios.post("https://translation.googleapis.com/language/translate/v2", {}, {
@@ -52,8 +53,9 @@
         message: obj.inputValue
       }
       try {
-        const translated = await translations(chatObj.message, "th")
-        chatObj.translated = translated.data.data.translations[0].translatedText
+
+        const translated = await translations(chatObj.message, chatObj.senderType === "user" ? "th" : "en")
+        chatObj.translated = he.decode(translated.data.data.translations[0].translatedText)
         await storeChatMessages(chatObj) 
         io.to(obj.roomId).emit("message", chatObj);
         console.log('a user: ', socket.id,  ' send message: ' + obj.inputValue)

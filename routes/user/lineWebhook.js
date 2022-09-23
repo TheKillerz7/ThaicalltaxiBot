@@ -29,7 +29,6 @@ router.post('/', async (req, res) => {
         if (event.message.type === "text") {
           try {
             await postToDialogflow(req)
-            
             // await unlinkRichMenu("user", event.source.userId)
           } catch (error) {
             console.log(error)

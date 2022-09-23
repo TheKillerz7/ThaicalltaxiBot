@@ -1,7 +1,7 @@
 {
     "user" : {
         "defaultMenu": [
-          "richmenu-11eee82d1ba87b12c577b39bf5580cc7",
+          "",
           {
             "size": {
               "width": 2500,
@@ -13,10 +13,10 @@
             "areas": [
               {
                 "bounds": {
-                  "x": 161,
-                  "y": 344,
-                  "width": 2170,
-                  "height": 614
+                  "x": 0,
+                  "y": 0,
+                  "width": 2497,
+                  "height": 839
                 },
                 "action": {
                   "type": "uri",
@@ -25,52 +25,52 @@
               },
               {
                 "bounds": {
-                  "x": 1305,
-                  "y": 60,
-                  "width": 1030,
-                  "height": 220
+                  "x": 0,
+                  "y": 842,
+                  "width": 628,
+                  "height": 844
                 },
                 "action": {
-                  "type": "richmenuswitch",
-                  "richMenuAliasId": "richmenu-alias-b",
-                  "data": "richmenu-changed-to-b"
+                  "type": "uri",
+                  "uri": "https://liff.line.me/1657246657-zkQEeOoL"
                 }
               },
               {
                 "bounds": {
-                  "x": 169,
-                  "y": 1024,
-                  "width": 645,
-                  "height": 577
+                  "x": 1881,
+                  "y": 842,
+                  "width": 619,
+                  "height": 844
+                },
+                "action": {
+                  "type": "message",
+                  "text": "Action 3"
+                }
+              },
+              {
+                "bounds": {
+                  "x": 623,
+                  "y": 835,
+                  "width": 622,
+                  "height": 847
                 },
                 "action": {
                   "type": "postback",
-                  "text": "",
+                  "text": "Action 4",
+                  "data": "type=currentBooking"
+                }
+              },
+              {
+                "bounds": {
+                  "x": 1245,
+                  "y": 843,
+                  "width": 631,
+                  "height": 839
+                },
+                "action": {
+                  "type": "postback",
+                  "text": "Action 5",
                   "data": "type=bookingHistory"
-                }
-              },
-              {
-                "bounds": {
-                  "x": 924,
-                  "y": 1024,
-                  "width": 648,
-                  "height": 573
-                },
-                "action": {
-                  "type": "message",
-                  "text": "Car types"
-                }
-              },
-              {
-                "bounds": {
-                  "x": 1691,
-                  "y": 1026,
-                  "width": 648,
-                  "height": 571
-                },
-                "action": {
-                  "type": "message",
-                  "text": "FAQs"
                 }
               }
             ]
@@ -131,7 +131,7 @@
     },
     "driver" : {
         "afterRegistered" : [
-            "richmenu-a0424c4e41316dcfed21aa630b972e93",
+            "richmenu-b13e5a7208b13956c662dab982a245ee",
             {
               "size": {
                 "width": 2500,
@@ -145,8 +145,8 @@
                   "bounds": {
                     "x": 0,
                     "y": 0,
-                    "width": 2500,
-                    "height": 846
+                    "width": 2497,
+                    "height": 839
                   },
                   "action": {
                     "type": "uri",
@@ -156,9 +156,9 @@
                 {
                   "bounds": {
                     "x": 0,
-                    "y": 848,
-                    "width": 843,
-                    "height": 838
+                    "y": 838,
+                    "width": 628,
+                    "height": 844
                   },
                   "action": {
                     "type": "uri",
@@ -167,28 +167,40 @@
                 },
                 {
                   "bounds": {
-                    "x": 844,
-                    "y": 847,
-                    "width": 826,
-                    "height": 839
+                    "x": 1881,
+                    "y": 842,
+                    "width": 619,
+                    "height": 844
                   },
                   "action": {
-                    "type": "postback",
-                    "text": "",
-                    "data": "type=currentJobs"
+                    "type": "message",
+                    "text": "Action 3"
                   }
                 },
                 {
                   "bounds": {
-                    "x": 1662,
-                    "y": 843,
-                    "width": 838,
-                    "height": 843
+                    "x": 623,
+                    "y": 835,
+                    "width": 622,
+                    "height": 847
                   },
                   "action": {
                     "type": "postback",
-                    "text": "",
-                    "data": "finishJobs"
+                    "text": "Action 4",
+                    "data": "type=currentJob"
+                  }
+                },
+                {
+                  "bounds": {
+                    "x": 1245,
+                    "y": 843,
+                    "width": 631,
+                    "height": 839
+                  },
+                  "action": {
+                    "type": "postback",
+                    "text": "Action 5",
+                    "data": "type=jobHistory"
                   }
                 }
               ]
