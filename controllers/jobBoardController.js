@@ -13,19 +13,18 @@ const getBookingByStatusWithoutDriverId = async (req, res) => {
     const status = req.params.status
     const driverId = req.params.driverId
     const bookings = await getBookingByStatusWithoutDriverIdDB(status, driverId)
-    console.log(bookings)
-    res.send(bookings)
+    const ParsedBookings = bookings.map((booking, index) => {
+        const bookingTemp = booking
+        bookingTemp.bookingInfo = JSON.parse(bookingTemp.bookingInfo)
+        return bookingTemp
+    })
+    console.log(ParsedBookings)
+    res.send(ParsedBookings)
 }
 
 const driverRegisterToBooking = async (req, res) => {
     let messageToUser = []
     let messageToDriver = []
-    const textTemplate = (text) => {
-        return {
-            type: "text",
-            text
-        }
-    }
 
     try {
         const data = req.body

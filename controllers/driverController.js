@@ -61,12 +61,13 @@ const createDriver = async (req, res) => {
   try {
     console.log(req.body)
     await db.createDriverDB(req.body)
-    await linkRichMenu("driver", "afterRegistered", req.body.driverId)
-    await pushMessage([flexMessage], 'driver', req.body.driverId)
+    // await linkRichMenu("driver", "afterRegistered", req.body.driverId)
+    console.log(req.body.driverId)
+    await pushMessage([textTemplate("flexMessage")], 'driver', req.body.driverId)
     console.log('successful')
     res.send("Create driver succesfully!")
   } catch (error) {
-    res.send(error)
+    console.log(error)
   }
 }
 
