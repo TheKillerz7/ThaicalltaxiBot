@@ -2,7 +2,6 @@ const { default: ShortUniqueId } = require('short-unique-id');
 const { textTemplate } = require('../js/helper/textTemplate');
 const { linkRichMenu } = require('../js/linehelper/linkRichMenu');
 const { pushMessage } = require('../js/linehelper/pushToLine');
-const { cancelWhenSelecting } = require('../lineComponents/cancelWhenSelecting');
 const { flexWrapper } = require('../lineComponents/flexWrapper');
 const { privateInfo } = require('../lineComponents/privateInfo');
 const { getBookingByIdDB, updateBookingDB } = require('../models/booking');
@@ -21,23 +20,19 @@ const getUserById = (req, res) => {
     });
 }
 
-const selectDriver = async (req, res) => {
+const selectDriver = async (bookingId, driverId, userId) => {
   const uid = new ShortUniqueId({ length: 10 });
-  const postbackData = new URLSearchParams(req.postback.data)
-  const bookingId = postbackData.get("bookingId")
-  const userId = req.source.userId
-  const driverId = postbackData.get("driverId")
+
   try {
     const bookingStatus = (await getBookingByIdDB(bookingId))[0].status
     if (bookingStatus !== 'selecting') {
-      await pushMessage([textTemplate("You've already selected driver")], 'user', req.source.userId)
+      await pushMessage([textTemplate("You've already selected driver")], 'user', userId)
       return
     }
     await selectedDriver(driverId, bookingId)
-    await updateBookingDB(bookingId, {status: "closed"})
-    await linkRichMenu('user', "afterBooked", req.source.userId)
+    await updateBookingDB(bookingId, {status: "selected"})
     await pushMessage([textTemplate("You've been selected, Booking: " + bookingId)], 'driver', driverId)
-    await pushMessage([flexWrapper(privateInfo(bookingId))], 'user', req.source.userId)
+    await pushMessage([flexWrapper(privateInfo(bookingId))], 'user', userId)
     const roomData = {
       roomId: uid(),
       bookingId,
@@ -46,9 +41,8 @@ const selectDriver = async (req, res) => {
     }
     await createChatRoom(roomData)
     console.log("success")
-    res.send('successssss')
   } catch (error) {
-    console.log(error.data)
+    console.log(error)
   }
 }
 

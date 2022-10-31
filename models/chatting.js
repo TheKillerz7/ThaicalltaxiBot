@@ -1,7 +1,15 @@
 const knex = require("./knexdb")
 
+const getRoomByRoomIdDB = async (roomId) => {
+    return knex("chatrooms")
+    .where({
+        roomId
+    })
+    .select()
+}
+
 const getRoomsByUserIdDB = async (userId, userType) => {
-    console.log(userId)
+
     const userIdWithType = userType === "driver" ? { driverId: userId } : { userId: userId }
     return knex("chatrooms")
     .where({
@@ -55,6 +63,7 @@ const createChatRoom = (data) => {
 }
 
 module.exports = {
+    getRoomByRoomIdDB,
     getRoomsByUserIdDB,
     getMessagesByRoomId,
     createChatRoom,

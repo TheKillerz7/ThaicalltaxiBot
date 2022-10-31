@@ -6,6 +6,17 @@ const getRegisteredDrivers = (bookingId) => {
     .select()
 }
 
+const getRegisteredDriversWithDriverInfo = (bookingId, sort) => {
+    return knex("bookingdrivers")
+    .where({
+        bookingId,
+        "bookingdrivers.status": "selecting"
+    })
+    .join("drivers", "bookingdrivers.driverId", "drivers.driverId")
+    .orderBy(sort || "createdDate")
+    .select()
+}
+
 const getSelectedRegisterByBookingId = (bookingId) => {
     return knex("bookingdrivers")
     .where({
@@ -24,20 +35,36 @@ const getRegisteresByDriverId = (driverId, option) => {
     .select()
 }
 
-const selectedDriver = (selectedDriverId, bookingId) => {
-    knex("bookingdrivers")
+const selectedDriver = async (selectedDriverId, bookingId) => {
+    await knex("bookingdrivers")
     .where("bookingId", bookingId)
     .whereNot("driverId", selectedDriverId)
     .update("status", "rejected")
 
-    return knex("bookingdrivers")
+    await knex("bookingdrivers")
     .where("driverId", selectedDriverId)
     .update("status", "selected")
+}
+
+const updateBookingdriverByDriverId = (bookingId, driverIds, data) => {
+    return knex("bookingdrivers")
+    .where("bookingId", bookingId)
+    .whereNotIn("driverId", [...driverIds])
+    .update({...data})
+}
+
+const updateBookingdriverByBookingId = (bookingId, data) => {
+    return knex("bookingdrivers")
+    .where("bookingId", bookingId)
+    .update({...data})
 }
 
 module.exports = {
     getRegisteredDrivers,
     getSelectedRegisterByBookingId,
     getRegisteresByDriverId,
-    selectedDriver
+    selectedDriver,
+    getRegisteredDriversWithDriverInfo,
+    updateBookingdriverByDriverId,
+    updateBookingdriverByBookingId
 }

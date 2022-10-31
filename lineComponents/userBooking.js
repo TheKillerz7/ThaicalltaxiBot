@@ -1,255 +1,523 @@
-exports.userBooking = (bookingInfo) => {
-    const hasMessage = bookingInfo.message ? {
-        "type": "text",
-        "size": "xs",
-        "color": "#828282",
-        "wrap": true,
-        "text": bookingInfo.message,
-        "margin": "sm"
-    } 
-    :
-    {
-        "type": "filler"
+const moment = require("moment")
+
+exports.userBooking = (bookingInfo) => {console.log(bookingInfo)
+  let startingDate = []
+  let pickupDateStart = ""
+  if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
+    pickupDateStart = "As soon as possible"
+  } else {
+    startingDate = bookingInfo.bookingInfo.start?.pickupDate.split("/").reverse() || bookingInfo.bookingInfo.pickupDate.split("/").reverse()
+    pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM YYYY")}`
+  }
+
+  const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
+  const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
+
+    const message = bookingInfo.bookingInfo.message ? {
+      "type": "text",
+      "text": bookingInfo.bookingInfo.message,
+      "size": "sm",
+      "wrap": true,
+      "margin": "md"
+    } : {
+      "type": "filler"
     }
 
-    const hasFlightNoOrName = (bookingInfo.name|| bookingInfo.flightNumber) ? [
+    const bookingFlex = bookingInfo.bookingType === "A2B" ? 
+    {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
         {
-            "type": "separator",
-            "margin": "xl"
-        },
-        {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "text",
-                "text": "Name",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-              },
-              {
-                "type": "text",
-                "text": bookingInfo.name,
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-              }
-            ],
-            "margin": "xl"
-        },
-        {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
             {
-                "type": "text",
-                "text": "Flight No.",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "Pickup Date",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Car Type",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Passengers",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Luggages",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                }
+              ],
+              "flex": 0,
+              "spacing": "xs"
             },
             {
-                "type": "text",
-                "text": bookingInfo.flightNumber,
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": `${pickupDateStart}`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": bookingInfo.bookingInfo.carSize,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${bookingInfo.bookingInfo.passenger.adult} Adults, ${bookingInfo.bookingInfo.passenger.child} Children`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                }
+              ],
+              "spacing": "xs",
+              "margin": "xl"
             }
-            ],
-            "margin": "xl"
+          ]
         }
-    ]
+      ]
+    }
     :
-    [
+    {
+      "type": "box",
+      "layout": "vertical",
+      "spacing": "sm",
+      "contents": [
         {
-            "type": "filler"
+          "type": "box",
+          "layout": "horizontal",
+          "contents": [
+            {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": "Type",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Starting Date",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Ending Date",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Car Type",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Passengers",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Luggages",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                }
+              ],
+              "flex": 0,
+              "spacing": "xs"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
+                {
+                  "type": "text",
+                  "text": bookingInfo.bookingInfo.type,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${pickupDateStart}`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${bookingInfo.bookingInfo.start.pickupTime}, ${pickupDateEnd}`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": bookingInfo.bookingInfo.carSize,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${bookingInfo.bookingInfo.passenger.adult} Adults, ${bookingInfo.bookingInfo.passenger.child} Children`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                }
+              ],
+              "spacing": "xs",
+              "margin": "xl"
+            }
+          ]
         }
+      ]
+    }
+
+    const areaToVisit = bookingInfo.bookingType === "R&H" ? bookingInfo.bookingInfo.visit.map((area, index) => {
+      return {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "filler"
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [],
+                "cornerRadius": "30px",
+                "width": "10px",
+                "height": "10px",
+                "borderColor": "#f29422",
+                "borderWidth": "2px",
+                "offsetStart": "1px"
+              },
+              {
+                "type": "filler"
+              }
+            ],
+            "flex": 0,
+            "width": "20px"
+          },
+          {
+            "type": "text",
+            "text": area.place,
+            "gravity": "center",
+            "flex": 4,
+            "size": "sm"
+          }
+        ],
+        "spacing": "lg",
+        "cornerRadius": "30px"
+      }
+    }) : [
+      {
+        "type": "filler"
+      }
     ]
 
     const card = {
-        "type": "bubble",
-        "body": {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "text",
-              "text": "Booking Info",
-              "weight": "bold",
-              "color": "#1DB446",
-              "size": "xs",
-              "margin": "none"
-            },
-            {
-              "type": "box",
-              "layout": "horizontal",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [],
-                  "width": "12px",
-                  "height": "12px",
-                  "borderColor": "#6486E3",
-                  "borderWidth": "3px",
-                  "cornerRadius": "xxl"
-                },
-                {
-                  "type": "text",
-                  "text": bookingInfo.from,
-                  "weight": "bold",
-                  "size": "md",
-                  "margin": "md",
-                  "decoration": "underline"
-                }
-              ],
-              "cornerRadius": "none",
-              "justifyContent": "center",
-              "alignItems": "center",
-              "margin": "md"
-            },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [],
-              "width": "2px",
-              "height": "12px",
-              "backgroundColor": "#6486E3",
-              "offsetStart": "5px"
-            },
-            {
-              "type": "box",
-              "layout": "horizontal",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "vertical",
-                  "contents": [],
-                  "width": "12px",
-                  "height": "12px",
-                  "borderColor": "#6486E3",
-                  "borderWidth": "3px",
-                  "cornerRadius": "xxl"
-                },
-                {
-                  "type": "text",
-                  "text": bookingInfo.to,
-                  "size": "md",
-                  "margin": "md",
-                  "weight": "bold",
-                  "decoration": "underline"
-                }
-              ],
-              "justifyContent": "center",
-              "alignItems": "center"
-            },
-            hasMessage,
-            {
-              "type": "separator",
-              "margin": "lg"
-            },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "margin": "xl",
-              "spacing": "sm",
-              "contents": [
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "Pick up",
-                      "size": "sm",
-                      "color": "#555555",
-                      "flex": 0
-                    },
-                    {
-                      "type": "text",
-                      "text": `${bookingInfo.pickupDate}, ${bookingInfo.pickupTime}`,
-                      "size": "sm",
-                      "color": "#111111",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "Passenger",
-                      "size": "sm",
-                      "color": "#555555",
-                      "flex": 0
-                    },
-                    {
-                      "type": "text",
-                      "text": `${bookingInfo.passenger} people`,
-                      "size": "sm",
-                      "color": "#111111",
-                      "align": "end"
-                    }
-                  ]
-                },
-                {
-                  "type": "box",
-                  "layout": "horizontal",
-                  "contents": [
-                    {
-                      "type": "text",
-                      "text": "Luggage",
-                      "size": "sm",
-                      "color": "#555555"
-                    },
-                    {
-                      "type": "text",
-                      "text": `${bookingInfo.luggage} luggages`,
-                      "size": "sm",
-                      "color": "#111111",
-                      "align": "end"
-                    }
-                  ]
-                },
-                ...hasFlightNoOrName
-              ]
-            },
-            {
-              "type": "separator",
-              "margin": "xl"
-            },
-            {
-              "type": "box",
-              "layout": "horizontal",
-              "margin": "md",
-              "contents": [
-                {
-                  "type": "text",
-                  "text": "Booking ID",
-                  "size": "xs",
-                  "color": "#aaaaaa",
-                  "flex": 0
-                },
-                {
-                  "type": "text",
-                  "text": `#${bookingInfo.bookingId}`,
-                  "color": "#aaaaaa",
-                  "size": "xs",
-                  "align": "end"
-                }
-              ]
-            }
-          ]
-        },
-        "styles": {
-          "footer": {
-            "separator": true
+      "type": "bubble",
+      "body": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+          {
+            "type": "text",
+            "text": bookingInfo.bookingType === "A2B" ? "A to B Course" : "Rent & Hire",
+            "weight": "bold",
+            "color": "#1DB446",
+            "size": "sm"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "filler"
+                      },
+                      {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [],
+                        "cornerRadius": "30px",
+                        "height": "14px",
+                        "width": "14px",
+                        "borderColor": "#6486E3",
+                        "borderWidth": "2px"
+                      },
+                      {
+                        "type": "filler"
+                      }
+                    ],
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": bookingInfo.bookingInfo.start?.place.name || bookingInfo.bookingInfo.from.name,
+                    "gravity": "center",
+                    "flex": 4,
+                    "size": "sm",
+                    "weight": "bold"
+                  }
+                ],
+                "spacing": "lg",
+                "cornerRadius": "30px",
+                "margin": "none"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                          {
+                            "type": "filler"
+                          },
+                          {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [],
+                            "width": "2px",
+                            "backgroundColor": "#B7B7B7"
+                          },
+                          {
+                            "type": "filler"
+                          }
+                        ],
+                        "flex": 1
+                      }
+                    ],
+                    "width": "12px"
+                  },
+                  {
+                    "type": "text",
+                    "gravity": "center",
+                    "flex": 4,
+                    "size": "xxs",
+                    "color": "#ffffff",
+                    "text": "."
+                  }
+                ],
+                "spacing": "lg",
+                "height": "8px"
+              },
+              ...areaToVisit,
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "box",
+                        "layout": "horizontal",
+                        "contents": [
+                          {
+                            "type": "filler"
+                          },
+                          {
+                            "type": "box",
+                            "layout": "vertical",
+                            "contents": [],
+                            "width": "2px",
+                            "backgroundColor": "#B7B7B7"
+                          },
+                          {
+                            "type": "filler"
+                          }
+                        ],
+                        "flex": 1
+                      }
+                    ],
+                    "width": "12px"
+                  },
+                  {
+                    "type": "text",
+                    "gravity": "center",
+                    "flex": 4,
+                    "size": "xxs",
+                    "color": "#ffffff",
+                    "text": "."
+                  }
+                ],
+                "spacing": "lg",
+                "height": "8px"
+              },
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "filler"
+                      },
+                      {
+                        "type": "box",
+                        "layout": "vertical",
+                        "contents": [],
+                        "cornerRadius": "30px",
+                        "width": "14px",
+                        "height": "14px",
+                        "borderColor": "#6486E3",
+                        "borderWidth": "2px"
+                      },
+                      {
+                        "type": "filler"
+                      }
+                    ],
+                    "flex": 0
+                  },
+                  {
+                    "type": "text",
+                    "text": bookingInfo.bookingInfo.end?.place.name || bookingInfo.bookingInfo.to.name,
+                    "gravity": "center",
+                    "flex": 4,
+                    "size": "sm",
+                    "weight": "bold"
+                  }
+                ],
+                "spacing": "lg",
+                "cornerRadius": "30px"
+              }
+            ],
+            "margin": "md"
+          },
+          message,
+          {
+            "type": "separator",
+            "margin": "md"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "lg",
+            "spacing": "sm",
+            "contents": [
+              bookingFlex
+            ]
+          },
+          {
+            "type": "separator",
+            "margin": "xl"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "lg",
+            "contents": [
+              {
+                "type": "text",
+                "text": "BELL-MAN",
+                "size": "xs",
+                "flex": 0,
+                "weight": "bold",
+                "color": "#6e6e6e"
+              },
+              {
+                "type": "text",
+                "text": "Thai limo taxi for tourists and foreigners",
+                "color": "#a8a8a8",
+                "size": "xs",
+                "align": "end"
+              }
+            ],
+            "justifyContent": "flex-end",
+            "alignItems": "flex-start"
           }
+        ],
+        "paddingBottom": "lg"
+      },
+      "styles": {
+        "footer": {
+          "separator": false
         }
       }
+    }
 
     return card
 }

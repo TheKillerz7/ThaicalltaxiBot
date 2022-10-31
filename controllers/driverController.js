@@ -12,7 +12,15 @@ const db = require('../models/driver')
 
 const getAllDriver = async (req, res) => {
   try {
-    res.send(await db.getAllDriverDB())
+    const drivers = await db.getAllDriverDB(req.query.option || null, JSON.parse(req.query.value || null))
+    const parsedDrivers = drivers.map((driver, index) => {
+      if (driver) {
+        driver.personalInfo = JSON.parse(driver.personalInfo)
+        driver.vehicleInfo = JSON.parse(driver.vehicleInfo)
+      }
+      return driver
+    })
+    res.send(parsedDrivers)
   } catch (error) {
     res.send(error)
   }
@@ -30,7 +38,11 @@ const getDriverById = async (req, res) => {
 
 const getCurrentJobs = async (req, res) => {
   try {
-    const currentJobs = await getRegisteresByDriverId(req.driverId, {status: "selected"})
+    const driverId = req.params.id || req.driverId
+    const currentJobs = await getRegisteresByDriverId(driverId, {status: "selected"})
+    if (res) {
+      return res.send(currentJobs)
+    }
     const flexBookings = await Promise.all(currentJobs.map(async (job, index) => {
       const booking = await getBookingByIdDB(job.bookingId)
       return finishJob(booking[0])
@@ -41,13 +53,44 @@ const getCurrentJobs = async (req, res) => {
   }
 }
 
+const actionToDriver = async (req, res) => {
+  try {
+    switch (req.body.action) {
+      case "ban":
+        await db.updateDriverDB(req.body.id, {status: "banned"})
+        await pushMessage([textTemplate(`Your account has been banned. You won't be able to register to any job until you're unban.\n\nMessage: ${req.body.message}`)], "driver", req.body.id)
+        break;
+
+      case "unban":
+        await db.updateDriverDB(req.body.id, {status: "active"})
+        await pushMessage([textTemplate(`Your account has been unbanned. You can now use our "Job Board" menu.\n\nMessage: ${req.body.message}`)], "driver", req.body.id)
+        break;
+
+      case "accept":
+        await db.updateDriverDB(req.body.id, {status: "active"})
+        await pushMessage([textTemplate(`Your registration has been accepted. Welcome to our community, you can now find jobs in "Job Board" menu.`)], "driver", req.body.id)
+        break;
+
+      case "reject":
+        await db.updateDriverDB(req.body.id, {status: "rejected"})
+        await pushMessage([textTemplate(`Your registration has been rejected. Please send recheck your information and send again.\n\nMessage: ${req.body.message}`)], "driver", req.body.id)
+        break;
+    
+      default:
+        break;
+    }
+    res.send("ok")
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const finishingJob = async (req, res) => {
   try {
     const booking = await getBookingByIdDB(req.bookingId)
     const bookingDriver = await getSelectedRegisterByBookingId(req.bookingId)
     await db.finishingJobDB(req.bookingId)
-    await pushMessage([textTemplate("Thank you for using our service! Have a great trip!")], "user", booking[0].userId)
-    await unlinkRichMenu('user', "afterBooked", booking[0].userId)
+    await pushMessage([textTemplate("Thank you for using our service! Have a great trip!")], "user", booking[0].userId) 
     await pushMessage([textTemplate("Thank you for giving out such great service! We are greatful to work with you.")], "driver", bookingDriver[0].driverId)
     // res.send("ok")
   } catch (error) {
@@ -89,6 +132,7 @@ module.exports = {
     getAllDriver,
     getDriverById,
     getCurrentJobs,
+    actionToDriver,
     finishingJob,
     createDriver,
     updateDriver,

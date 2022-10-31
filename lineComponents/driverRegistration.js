@@ -21,7 +21,7 @@ exports.driverRegistration = (driverInfo) => {
             },
             {
               "type": "text",
-              "text": `${driverInfo.carModel}, ${driverInfo.carType} car, ${driverInfo.carAge} years old`,
+              "text": `${driverInfo.carModel}, ${driverInfo.carSize} car, ${driverInfo.carAge} years old`,
               "size": "xs",
               "color": "#828282",
               "wrap": true

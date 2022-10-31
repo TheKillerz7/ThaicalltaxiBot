@@ -1,16 +1,15 @@
 const express = require('express')
-const bookingController = require('../controllers/bookingController')
+const { getAllBooking, getBookingByStatus, createBooking, updatePrivateInfo, getBookingById } = require('../controllers/bookingController')
 
 //init packages
 const router = express.Router()
 
-router.get('/', bookingController.getAllBooking)
-router.get('/:status', bookingController.getBookingByStatus)
+router.get('/', getAllBooking)
+router.get('/:status', getBookingByStatus)
+router.get('/id/:id', getBookingById)
 
-router.post('/', bookingController.createBooking)
+router.post('/', createBooking)
 
-router.patch('/', bookingController.updateBooking)
-
-// router.put('/:id', bookingController.put)
+router.patch('/', updatePrivateInfo)
 
 module.exports = router

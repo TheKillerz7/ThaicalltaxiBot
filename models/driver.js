@@ -1,27 +1,39 @@
 const knex = require("./knexdb")
 
-const getAllDriverDB = async () => {
-  return await knex("drivers").select()
+const getAllDriverDB = (option, value) => {
+  switch (option) {
+    case "where":
+      return knex("drivers")
+      .where(value.title, value.value)
+      .select()
+
+    case "whereNot":
+      return knex("drivers")
+      .whereNot(value.title, value.value)
+      .select()
+  
+    default:
+      return knex("drivers").select()
+  }
 }
 
-const getDriverByIdDB = async (id) => {
-  return await knex("drivers")
+const getDriverByIdDB = (id) => {
+  return knex("drivers")
   .where("driverId", id)
   .select()
 }
 
-const createDriverDB = async (data) => {
-  return await knex("drivers")
+const createDriverDB = (data) => {
+  return knex("drivers")
   .insert({
     ...data
   })
 }
 
-const updateDriverDB = async () => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+const updateDriverDB = (id, data) => {
+    return knex("drivers")
+    .where("driverId", id)
+    .update({...data})
 }
 
 const finishingJobDB = async (bookingId) => {

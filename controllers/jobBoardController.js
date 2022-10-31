@@ -1,13 +1,10 @@
 const { pushMessage } = require('../js/linehelper/pushToLine')
-const { driverRegisteredCard } = require('../lineComponents/driverRegisteredCard')
-const { carouselWrapper } = require('../lineComponents/carouselWrapper')
-const { driverRegisterToBookingDB, getBookingByIdDB, updateBookingDB } = require('../models/booking')
+const { driverRegisterToBookingDB, getBookingByIdDB } = require('../models/booking')
 const { getRegisteredDrivers } = require('../models/bookingdrivers')
-const { getDriverByIdDB } = require('../models/driver')
 const { flexWrapper } = require('../lineComponents/flexWrapper')
 const { userBooking } = require('../lineComponents/userBooking')
 const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
-const { cancelWhenSelecting } = require('../lineComponents/cancelWhenSelecting')
+const { textTemplate } = require('../js/helper/textTemplate')
 
 const getBookingByStatusWithoutDriverId = async (req, res) => {
     const status = req.params.status
@@ -18,12 +15,10 @@ const getBookingByStatusWithoutDriverId = async (req, res) => {
         bookingTemp.bookingInfo = JSON.parse(bookingTemp.bookingInfo)
         return bookingTemp
     })
-    console.log(ParsedBookings)
     res.send(ParsedBookings)
 }
 
 const driverRegisterToBooking = async (req, res) => {
-    let messageToUser = []
     let messageToDriver = []
 
     try {
@@ -38,41 +33,10 @@ const driverRegisterToBooking = async (req, res) => {
         if (driverIds.includes(data.driverId)) {
             res.send("You've already registered to this job.")
             return
-        }
-        if (driversRegisters.length >= 0) {
-            driversRegisters.push(data)
-            const cards = await Promise.all(driversRegisters.map(async (register, index) => {
-                const driverInfo = (await getDriverByIdDB(register.driverId))[0]
-                const driverInfoForCard = {
-                    driverId: driverInfo.driverId,
-                    bookingId: data.bookingId,
-                    name: driverInfo.name,
-                    carType: driverInfo.carType,
-                    carModel: driverInfo.carModel,
-                    carAge: driverInfo.carAge,
-                }
-                const prices = {
-                    "Trip": register.trip,
-                    "Tollway": register.tollway,
-                }
-                let extraPrice = 0
-                // if (index !== 2) register.extra = JSON.parse(register.extra)
-                register.extra.map((extra) => {
-                    extraPrice += parseInt(extra.price)
-                    prices[extra.title] = extra.price
-                })
-                const totalPrice = parseInt(register.trip) + parseInt(register.tollway) + extraPrice
-                return driverRegisteredCard(prices, totalPrice, driverInfoForCard)
-            }))
-            const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
-            messageToUser.push(cardsWrapped)
-            messageToUser.push(flexWrapper(cancelWhenSelecting(data.bookingId)))
-            await updateBookingDB(data.bookingId, { status: "selecting" })
-            await pushMessage(messageToUser, "user", booking.userId)
-        }
-        const flexMessage = flexWrapper(userBooking(booking))
-        messageToDriver.push(flexMessage)
-        await pushMessage(messageToDriver, "driver", data.driverId)
+        } 
+        // const flexMessage = flexWrapper(userBooking(booking))
+        // messageToDriver.push(flexMessage)
+        await pushMessage([textTemplate("registered")], "driver", data.driverId)
         data.extra = JSON.stringify(data.extra)
         await driverRegisterToBookingDB(data)
         console.log("Registration success!")
