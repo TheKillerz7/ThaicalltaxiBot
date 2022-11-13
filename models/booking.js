@@ -16,6 +16,19 @@ const getBookingByIdDB = (id) => {
   .select()
 }
 
+const getBookingsByDriverId = (id, status) => {
+  return knex("booking")
+  .where("status", status)
+  .whereNotExists(
+    knex('bookingdrivers')
+      .whereRaw('bookingdrivers.bookingId = booking.bookingId')
+      .where("bookingdrivers.driverId", driverId)
+      .select()
+  )
+  .select()
+}
+
+
 const createBookingDB = (data) => {
   return knex("booking")
   .insert({

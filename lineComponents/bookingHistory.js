@@ -1,8 +1,10 @@
 const moment = require("moment")
 
-exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
+exports.bookingHistory = (bookingInfo, prices, total) => {
+
   let startingDate = []
   let pickupDateStart = ""
+
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
     pickupDateStart = "As soon as possible"
   } else {
@@ -13,24 +15,74 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
   const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
 
-    const message = bookingInfo.bookingInfo.message ? {
-      "type": "text",
-      "text": bookingInfo.bookingInfo.message,
-      "size": "sm",
-      "wrap": true,
-      "margin": "md"
-    } : {
-      "type": "filler"
-    }
+  const bookingMessage = bookingInfo.bookingInfo.message ? {
+    "type": "text",
+    "text": `"${bookingInfo.bookingInfo.message.en}"`,
+    "color": "#b58b0b",
+    "size": "sm",
+    "wrap": true,
+    "margin": "md"
+  } : {
+    "type": "filler"
+  }
 
-    const pricesFlexObj = Object.keys(prices).map((title, index) => {
+  const arrival = bookingInfo.arrival ? [{
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Arrival Time`,
+        "size": "sm",
+        "color": "#555555",
+        "flex": 0,
+        "weight": "bold"
+      },
+      {
+        "type": "text",
+        "text": `${bookingInfo.arrival} mins`,
+        "size": "sm",
+        "color": "#111111",
+        "align": "end"
+      }
+    ]
+  }] : [{
+    "type": "filler"
+  }]
+
+  const driverMessage = bookingInfo.message.en ? [{
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Message`,
+        "size": "sm",
+        "color": "#555555",
+        "flex": 0,
+        "weight": "bold"
+      },
+      {
+        "type": "text",
+        "text": `${bookingInfo.message.en}`,
+        "size": "sm",
+        "wrap": true,
+        "color": "#111111",
+        "align": "end"
+      }
+    ]
+  }] : [{
+    "type": "filler"
+  }]
+
+    const pricesFlexObj = prices.map((price, index) => {
       return {
         "type": "box",
         "layout": "horizontal",
         "contents": [
           {
             "type": "text",
-            "text": `${title}`,
+            "text": `${Object.keys(prices[index])}`,
             "size": "sm",
             "color": "#555555",
             "flex": 0,
@@ -38,7 +90,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
           },
           {
             "type": "text",
-            "text": `฿${prices[title]}`,
+            "text": `฿${price[Object.keys(prices[index])]}`,
             "size": "sm",
             "color": "#111111",
             "align": "end"
@@ -63,7 +115,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Pickup Date",
+                  "text": "Time",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -110,7 +162,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carSize,
+                  "text": bookingInfo.selectedCarType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -230,7 +282,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carSize,
+                  "text": bookingInfo.selectedCarType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -290,7 +342,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
           },
           {
             "type": "text",
-            "text": area.place,
+            "text": area.name,
             "gravity": "center",
             "flex": 4,
             "size": "sm"
@@ -307,6 +359,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
 
     const card = {
       "type": "bubble",
+      "size": "kilo",
       "body": {
         "type": "box",
         "layout": "vertical",
@@ -491,7 +544,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
             ],
             "margin": "md"
           },
-          message,
+          bookingMessage,
           {
             "type": "separator",
             "margin": "md"
@@ -516,6 +569,8 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
             "margin": "lg",
             "spacing": "sm",
             "contents": [
+              ...arrival,
+              ...driverMessage,
               ...pricesFlexObj,
               {
                 "type": "separator",
@@ -546,53 +601,44 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
                 "alignItems": "flex-end"
               }
             ]
-          }
+          },
         ],
-        "paddingBottom": "lg"
+        "paddingBottom": "1px"
       },
       "footer": {
         "type": "box",
         "layout": "vertical",
+        "spacing": "sm",
         "contents": [
-          {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-              {
-                "type": "button",
-                "action": {
-                  "type": "postback",
-                  "label": "Cancel",
-                  "data": `type=confirmCancel&bookingId=${driverInfo.bookingId}&carSize=${selectedCarType}`
-                },
-                "color": "#424242",
-                "height": "sm"
-              }
-            ],
-            "backgroundColor": "#e0e0e0",
-            "cornerRadius": "md"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "margin": "md",
-            "contents": [
-              {
-                "type": "button",
-                "action": {
-                  "type": "postback",
-                  "label": "Confirm",
-                  "data": `type=confirmSelectDriver&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}&carSize=${selectedCarType}`
-                },
-                "color": "#ffffff",
-                "height": "sm"
-              }
-            ],
-            "backgroundColor": "#1e3a8a",
-            "cornerRadius": "md",
-            "offsetBottom": "none",
-            "offsetTop": "none"
-          }
+            {
+                "type": "separator",
+                "margin": "sm",
+                "color": "#b8b8b8"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "margin": "lg",
+                "contents": [
+                    {
+                        "type": "text",
+                        "text": "BELL-MAN",
+                        "size": "xs",
+                        "flex": 0,
+                        "weight": "bold",
+                        "color": "#6e6e6e"
+                    },
+                    {
+                        "type": "text",
+                        "text": "Taxi for tourists and foreigners",
+                        "color": "#a8a8a8",
+                        "size": "xs",
+                        "align": "end"
+                    }
+                ],
+                "justifyContent": "flex-end",
+                "alignItems": "flex-start"
+            }
         ]
       },
       "styles": {
@@ -603,151 +649,4 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo) => {
     }
 
     return card
-}
-
-exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarType) => {
-  const vehicleInfo = JSON.parse(driverInfo.vehicleInfo)
-
-  console.log(prices)
-  const message = driverInfo.message ? {
-    "type": "text",
-    "text": driverInfo.message,
-    "wrap": true,
-    "size": "sm",
-    "margin": "lg"
-  } : {
-    "type": "filler"
-  }
-
-  const arrival = driverInfo.arrival ? {
-    "type": "text",
-    "text": `Arrive in ${driverInfo.arrival} mins`,
-    "margin": "none",
-    "size": "xs",
-    "color": "#fc433d",
-    "offsetEnd": "md",
-    "offsetBottom": "sm"
-  } : {
-    "type": "filler"
-  }
-
-  const pricesFlexObj = Object.keys(prices).map((title, index) => {
-    return {
-      "type": "box",
-      "layout": "horizontal",
-      "contents": [
-        {
-          "type": "text",
-          "text": `${title}`,
-          "size": "sm",
-          "color": "#555555",
-          "flex": 0,
-          "weight": "bold"
-        },
-        {
-          "type": "text",
-          "text": `฿${prices[title]}`,
-          "size": "sm",
-          "color": "#111111",
-          "align": "end"
-        }
-      ]
-    }
-  })
-
-  const card = {
-    "type": "bubble",
-    "size": "kilo",
-    "body": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "text",
-          "text": "OFFER PRICE",
-          "weight": "bold",
-          "color": "#1e3a8a",
-          "size": "xs"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            {
-              "type": "text",
-              "text": `Driver No.${number}`,
-              "weight": "bold",
-              "size": "lg",
-              "gravity": "bottom"
-            },
-            arrival
-          ],
-          "margin": "md",
-          "alignItems": "flex-end"
-        },
-        {
-          "type": "text",
-          "text": `${vehicleInfo.carSize}`,
-          "size": "sm",
-          "wrap": true,
-          "color": "#5c5c5c"
-        },
-        message,
-        
-      ],
-      "paddingBottom": "sm"
-    },
-    "footer": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "button",
-              "action": {
-                "type": "postback",
-                "label": "Exit All",
-                "data": `type=confirmCancel&bookingId=${driverInfo.bookingId}&carSize=${selectedCarType}`
-              },
-              "color": "#424242",
-              "height": "sm"
-            }
-          ],
-          "backgroundColor": "#e0e0e0",
-          "cornerRadius": "md"
-        },
-        {
-          "type": "box",
-          "layout": "vertical",
-          "margin": "md",
-          "contents": [
-            {
-              "type": "button",
-              "action": {
-                "type": "postback",
-                "label": "Book this driver",
-                "data": `type=confirmSelectDriver&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}&carSize=${selectedCarType}`
-              },
-              "color": "#ffffff",
-              "height": "sm"
-            }
-          ],
-          "backgroundColor": "#1e3a8a",
-          "cornerRadius": "md",
-          "offsetBottom": "none",
-          "offsetTop": "none"
-        }
-      ]
-    },
-    "styles": {
-      "footer": {
-        "separator": false
-      }
-    }
-  }
-
-  return card
 }

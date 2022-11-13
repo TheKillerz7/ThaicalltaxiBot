@@ -1,6 +1,6 @@
 const moment = require("moment")
 
-exports.userBooking = (bookingInfo) => {
+exports.startedJob = (bookingInfo) => {
   let startingDate = []
   let pickupDateStart = ""
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
@@ -13,9 +13,9 @@ exports.userBooking = (bookingInfo) => {
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
   const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
 
-    const message = bookingInfo.bookingInfo.message.en ? {
+    const message = bookingInfo.bookingInfo.message.th ? {
       "type": "text",
-      "text": `"${bookingInfo.bookingInfo.message.en}"`,
+      "text": `"${bookingInfo.bookingInfo.message.th}"`,
       "wrap": true,
       "size": "sm",
       "color": "#b58b0b",
@@ -284,6 +284,7 @@ exports.userBooking = (bookingInfo) => {
 
     const card = {
       "type": "bubble",
+      "size": "kilo",
       "body": {
         "type": "box",
         "layout": "vertical",
@@ -483,33 +484,24 @@ exports.userBooking = (bookingInfo) => {
             ]
           },
           {
-            "type": "separator",
-            "margin": "xl"
-          },
-          {
             "type": "box",
             "layout": "vertical",
-            "margin": "lg",
             "contents": [
               {
-                "type": "text",
-                "text": "BELL-MAN",
-                "size": "xs",
-                "flex": 0,
-                "weight": "bold",
-                "color": "#6e6e6e"
-              },
-              {
-                "type": "text",
-                "text": "Taxi for tourists and foreigners",
-                "color": "#a8a8a8",
-                "size": "xs",
-                "align": "end"
+                "type": "button",
+                "action": {
+                  "type": "postback",
+                  "label": "Finish Job",
+                  "data": `type=finishJob&bookingId=${bookingInfo.bookingId}`
+                },
+                "color": "#ffffff",
+                "height": "sm"
               }
             ],
-            "justifyContent": "flex-end",
-            "alignItems": "flex-start"
-          }
+            "margin": "xl",
+            "backgroundColor": "#1e3a8a",
+            "cornerRadius": "md"
+          },
         ],
         "paddingBottom": "lg"
       },

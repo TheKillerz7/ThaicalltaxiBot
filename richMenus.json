@@ -1,6 +1,6 @@
 {
     "user" : {
-        "defaultMenu": [
+        "client": [
           "",
           {
             "size": {
@@ -8,15 +8,15 @@
               "height": 1686
             },
             "selected": true,
-            "name": "Default Menu",
+            "name": "client",
             "chatBarText": "Bulletin",
             "areas": [
               {
                 "bounds": {
                   "x": 0,
                   "y": 0,
-                  "width": 2497,
-                  "height": 839
+                  "width": 2500,
+                  "height": 846
                 },
                 "action": {
                   "type": "uri",
@@ -26,9 +26,9 @@
               {
                 "bounds": {
                   "x": 0,
-                  "y": 842,
-                  "width": 628,
-                  "height": 844
+                  "y": 844,
+                  "width": 623,
+                  "height": 838
                 },
                 "action": {
                   "type": "uri",
@@ -37,108 +37,56 @@
               },
               {
                 "bounds": {
-                  "x": 1881,
-                  "y": 842,
-                  "width": 619,
-                  "height": 844
-                },
-                "action": {
-                  "type": "message",
-                  "text": "Action 3"
-                }
-              },
-              {
-                "bounds": {
-                  "x": 623,
-                  "y": 835,
-                  "width": 622,
-                  "height": 847
+                  "x": 616,
+                  "y": 843,
+                  "width": 623,
+                  "height": 839
                 },
                 "action": {
                   "type": "postback",
-                  "text": "Action 4",
+                  "text": "",
                   "data": "type=currentBooking"
                 }
               },
               {
                 "bounds": {
-                  "x": 1245,
+                  "x": 1238,
                   "y": 843,
-                  "width": 631,
-                  "height": 839
+                  "width": 622,
+                  "height": 843
                 },
                 "action": {
                   "type": "postback",
-                  "text": "Action 5",
+                  "text": "",
                   "data": "type=bookingHistory"
+                }
+              },
+              {
+                "bounds": {
+                  "x": 1864,
+                  "y": 851,
+                  "width": 636,
+                  "height": 835
+                },
+                "action": {
+                  "type": "message",
+                  "text": "Q&A"
                 }
               }
             ]
           }
-        ],
-        "afterBooked": [
-            "richmenu-52e396ce7d754e4b19a90a85eabc1c1a",
-            {
-              "size": {
-                "width": 2500,
-                "height": 843
-              },
-              "selected": true,
-              "name": "After Booked",
-              "chatBarText": "Bulletin",
-              "areas": [
-                {
-                  "bounds": {
-                    "x": 178,
-                    "y": 365,
-                    "width": 1004,
-                    "height": 393
-                  },
-                  "action": {
-                    "type": "postback",
-                    "text": "",
-                    "data": "type=currentBooking"
-                  }
-                },
-                {
-                  "bounds": {
-                    "x": 174,
-                    "y": 59,
-                    "width": 1004,
-                    "height": 225
-                  },
-                  "action": {
-                    "type": "richmenuswitch",
-                    "richMenuAliasId": "richmenu-alias-a",
-                    "data": "richmenu-changed-to-a"
-                  }
-                },
-                {
-                  "bounds": {
-                    "x": 1301,
-                    "y": 364,
-                    "width": 1030,
-                    "height": 395
-                  },
-                  "action": {
-                    "type": "uri",
-                    "uri": "https://liff.line.me/1657246657-zkQEeOoL"
-                  }
-                }
-              ]
-            }
         ]
     },
     "driver" : {
-        "afterRegistered" : [
-            "richmenu-b13e5a7208b13956c662dab982a245ee",
+        "driver" : [
+            "",
             {
               "size": {
                 "width": 2500,
                 "height": 1686
               },
               "selected": true,
-              "name": "After Registered",
+              "name": "driver",
               "chatBarText": "Bulletin",
               "areas": [
                 {
@@ -173,8 +121,8 @@
                     "height": 844
                   },
                   "action": {
-                    "type": "message",
-                    "text": "Action 3"
+                    "type": "uri",
+                    "uri": "https://liff.line.me/1657246657-Z5Ea5vgm"
                   }
                 },
                 {
@@ -186,7 +134,7 @@
                   },
                   "action": {
                     "type": "postback",
-                    "text": "Action 4",
+                    "text": "",
                     "data": "type=currentJob"
                   }
                 },
@@ -199,7 +147,7 @@
                   },
                   "action": {
                     "type": "postback",
-                    "text": "Action 5",
+                    "text": "",
                     "data": "type=jobHistory"
                   }
                 }

@@ -1,12 +1,12 @@
 exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarType) => {
   const vehicleInfo = JSON.parse(driverInfo.vehicleInfo)
 
-  console.log(prices)
   const message = driverInfo.message ? {
     "type": "text",
-    "text": driverInfo.message,
+    "text": `"${driverInfo.message.en}"`,
     "wrap": true,
     "size": "sm",
+    "color": "#b58b0b",
     "margin": "lg"
   } : {
     "type": "filler"
@@ -24,14 +24,14 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
     "type": "filler"
   }
 
-  const pricesFlexObj = Object.keys(prices).map((title, index) => {
+  const pricesFlexObj = prices.map((price, index) => {
     return {
       "type": "box",
       "layout": "horizontal",
       "contents": [
         {
           "type": "text",
-          "text": `${title}`,
+          "text": `${Object.keys(prices[index])}`,
           "size": "sm",
           "color": "#555555",
           "flex": 0,
@@ -39,7 +39,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
         },
         {
           "type": "text",
-          "text": `฿${prices[title]}`,
+          "text": `฿${price[Object.keys(prices[index])]}`,
           "size": "sm",
           "color": "#111111",
           "align": "end"
@@ -80,7 +80,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
         },
         {
           "type": "text",
-          "text": `${vehicleInfo.carSize}`,
+          "text": `${vehicleInfo.carType}`,
           "size": "sm",
           "wrap": true,
           "color": "#5c5c5c"
@@ -138,32 +138,14 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
         {
           "type": "box",
           "layout": "vertical",
-          "contents": [
-            {
-              "type": "button",
-              "action": {
-                "type": "postback",
-                "label": "Exit All",
-                "data": `type=confirmCancel&bookingId=${driverInfo.bookingId}&carSize=${selectedCarType}`
-              },
-              "color": "#424242",
-              "height": "sm"
-            }
-          ],
-          "backgroundColor": "#e0e0e0",
-          "cornerRadius": "md"
-        },
-        {
-          "type": "box",
-          "layout": "vertical",
           "margin": "md",
           "contents": [
             {
               "type": "button",
               "action": {
                 "type": "postback",
-                "label": "Book this driver",
-                "data": `type=confirmSelectDriver&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}&carSize=${selectedCarType}`
+                "label": "Choose this driver",
+                "data": `type=confirmSelectDriver&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}&carType=${selectedCarType}`
               },
               "color": "#ffffff",
               "height": "sm"

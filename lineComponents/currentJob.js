@@ -1,8 +1,10 @@
 const moment = require("moment")
 
-exports.userBooking = (bookingInfo) => {
+exports.currentJob = (bookingInfo, prices, total, driverInfo, carType, roomId) => {
+
   let startingDate = []
   let pickupDateStart = ""
+
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
     pickupDateStart = "As soon as possible"
   } else {
@@ -13,16 +15,89 @@ exports.userBooking = (bookingInfo) => {
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
   const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
 
-    const message = bookingInfo.bookingInfo.message.en ? {
-      "type": "text",
-      "text": `"${bookingInfo.bookingInfo.message.en}"`,
-      "wrap": true,
-      "size": "sm",
-      "color": "#b58b0b",
-      "margin": "md"
-    } : {
-      "type": "filler"
-    }
+  const bookingMessage = bookingInfo.bookingInfo.message ? {
+    "type": "text",
+    "text": `"${bookingInfo.bookingInfo.message.en}"`,
+    "color": "#b58b0b",
+    "size": "sm",
+    "wrap": true,
+    "margin": "md"
+  } : {
+    "type": "filler"
+  }
+
+  const arrival = bookingInfo.arrival ? [{
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Arrival Time`,
+        "size": "sm",
+        "color": "#555555",
+        "flex": 0,
+        "weight": "bold"
+      },
+      {
+        "type": "text",
+        "text": `${bookingInfo.arrival} mins`,
+        "size": "sm",
+        "color": "#111111",
+        "align": "end"
+      }
+    ]
+  }] : [{
+    "type": "filler"
+  }]
+
+  const driverMessage = bookingInfo.message.en ? [{
+    "type": "box",
+    "layout": "horizontal",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Message`,
+        "size": "sm",
+        "color": "#555555",
+        "flex": 0,
+        "weight": "bold"
+      },
+      {
+        "type": "text",
+        "text": `${bookingInfo.message.en}`,
+        "size": "sm",
+        "wrap": true,
+        "color": "#111111",
+        "align": "end"
+      }
+    ]
+  }] : [{
+    "type": "filler"
+  }]
+
+    const pricesFlexObj = prices.map((price, index) => {
+      return {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
+            "type": "text",
+            "text": `${Object.keys(prices[index])}`,
+            "size": "sm",
+            "color": "#555555",
+            "flex": 0,
+            "weight": "bold"
+          },
+          {
+            "type": "text",
+            "text": `฿${price[Object.keys(prices[index])]}`,
+            "size": "sm",
+            "color": "#111111",
+            "align": "end"
+          }
+        ]
+      }
+    })
 
     const bookingFlex = bookingInfo.bookingType === "A2B" ? 
     {
@@ -87,7 +162,7 @@ exports.userBooking = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carType,
+                  "text": carType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -207,7 +282,7 @@ exports.userBooking = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carType,
+                  "text": carType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -284,6 +359,7 @@ exports.userBooking = (bookingInfo) => {
 
     const card = {
       "type": "bubble",
+      "size": "kilo",
       "body": {
         "type": "box",
         "layout": "vertical",
@@ -468,7 +544,7 @@ exports.userBooking = (bookingInfo) => {
             ],
             "margin": "md"
           },
-          message,
+          bookingMessage,
           {
             "type": "separator",
             "margin": "md"
@@ -484,34 +560,98 @@ exports.userBooking = (bookingInfo) => {
           },
           {
             "type": "separator",
-            "margin": "xl"
+            "margin": "lg",
+            "color": "#b8b8b8"
           },
           {
             "type": "box",
             "layout": "vertical",
             "margin": "lg",
+            "spacing": "sm",
             "contents": [
+              ...arrival,
+              ...driverMessage,
+              ...pricesFlexObj,
               {
-                "type": "text",
-                "text": "BELL-MAN",
-                "size": "xs",
-                "flex": 0,
-                "weight": "bold",
-                "color": "#6e6e6e"
+                "type": "separator",
+                "margin": "lg",
+                "color": "#b8b8b8"
               },
               {
-                "type": "text",
-                "text": "Taxi for tourists and foreigners",
-                "color": "#a8a8a8",
-                "size": "xs",
-                "align": "end"
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "TOTAL",
+                    "size": "md",
+                    "color": "#555555",
+                    "flex": 0,
+                    "weight": "bold"
+                  },
+                  {
+                    "type": "text",
+                    "text": `฿${total}`,
+                    "size": "md",
+                    "color": "#111111",
+                    "align": "end"
+                  }
+                ],
+                "margin": "lg",
+                "alignItems": "flex-end"
               }
-            ],
-            "justifyContent": "flex-end",
-            "alignItems": "flex-start"
+            ]
           }
         ],
-        "paddingBottom": "lg"
+        "paddingBottom": "1px"
+      },
+      "footer": {
+        "type": "box",
+        "layout": "vertical",
+        "contents": [
+            {
+                "type": "box",
+                "layout": "vertical",
+                "margin": "md",
+                "contents": [
+                    {
+                        "type": "button",
+                        "action": {
+                        "type": "uri",
+                        "label": "Chat",
+                        "uri": `https://liff.line.me/1657246657-1A9WmnMw?roomId=${bookingInfo.roomId}`
+                        },
+                        "color": "#424242",
+                        "height": "sm"
+                    }
+                ],
+                "backgroundColor": "#e0e0e0",
+                "cornerRadius": "md",
+                "offsetBottom": "none",
+                "offsetTop": "none"
+            },
+            {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                    {
+                    "type": "button",
+                    "action": {
+                        "type": "postback",
+                        "label": "Start Job",
+                        "data": `type=startJob&bookingId=${bookingInfo.bookingId}`
+                    },
+                    "color": "#ffffff",
+                    "height": "sm"
+                    }
+                ],
+                "margin": "md",
+                "backgroundColor": "#1e3a8a",
+                "cornerRadius": "md",
+                "offsetBottom": "none",
+                "offsetTop": "none"
+            }
+        ]
       },
       "styles": {
         "footer": {

@@ -8,7 +8,7 @@ const getRoomByRoomIdDB = async (roomId) => {
     .select()
 }
 
-const getRoomsByUserIdDB = async (userId, userType) => {
+const getRoomsByUserIdDB = (userId, userType) => {
 
     const userIdWithType = userType === "driver" ? { driverId: userId } : { userId: userId }
     return knex("chatrooms")
@@ -17,6 +17,12 @@ const getRoomsByUserIdDB = async (userId, userType) => {
         status: "open"
     })
     .orderBy("updatedDate", "desc")
+    .select()
+}
+
+const getRoomsByBookingIdDB = (bookingId) => {
+    return knex("chatrooms")
+    .where("bookingId", bookingId)
     .select()
 }
 
@@ -65,6 +71,7 @@ const createChatRoom = (data) => {
 module.exports = {
     getRoomByRoomIdDB,
     getRoomsByUserIdDB,
+    getRoomsByBookingIdDB,
     getMessagesByRoomId,
     createChatRoom,
     storeMessage,

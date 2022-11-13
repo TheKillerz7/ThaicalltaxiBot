@@ -17,12 +17,18 @@ const getRegisteredDriversWithDriverInfo = (bookingId, sort) => {
     .select()
 }
 
-const getSelectedRegisterByBookingId = (bookingId) => {
+const getRegisteredDriversByBookingIdandDriverId = (bookingId, driverId) => {
     return knex("bookingdrivers")
     .where({
         bookingId,
-        status: "selected"
+        driverId
     })
+    .select()
+}
+
+const getSelectedRegisterByBookingIdDB = (bookingId) => {
+    return knex("bookingdrivers")
+    .where("bookingId", bookingId)
     .select()
 }
 
@@ -61,8 +67,9 @@ const updateBookingdriverByBookingId = (bookingId, data) => {
 
 module.exports = {
     getRegisteredDrivers,
-    getSelectedRegisterByBookingId,
+    getSelectedRegisterByBookingIdDB,
     getRegisteresByDriverId,
+    getRegisteredDriversByBookingIdandDriverId,
     selectedDriver,
     getRegisteredDriversWithDriverInfo,
     updateBookingdriverByDriverId,

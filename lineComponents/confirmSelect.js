@@ -8,13 +8,13 @@
           "contents": [
             {
               "type": "text",
-              "text": "Confimation",
+              "text": "Terms & Conditions",
               "weight": "bold",
               "size": "lg"
             },
             {
               "type": "text",
-              "text": "If you book with this driver, you will get this exact price.",
+              "text": "If you book, it means you have agreed to the terms and conditions.",
               "wrap": true,
               "margin": "sm"
             }
@@ -36,7 +36,7 @@
                   "height": "sm",
                   "action": {
                     "type": "postback",
-                    "label": "Back",
+                    "label": "Read",
                     "data": `type=selectDriver&value=back&bookingId=${bookingId}`
                   },
                   "color": "#424242"

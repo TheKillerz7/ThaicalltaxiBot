@@ -17,6 +17,30 @@ const getAllDriverDB = (option, value) => {
   }
 }
 
+const getCurrentJobsDB = (driverId) => {
+  return knex("booking")
+  .where("booking.status", "ongoing")
+  .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
+  .where({
+    driverId,
+    "bookingdrivers.status": "selected"
+  })
+  .orderBy("booking.createdDate")
+  .select()
+}
+
+const getAllJobByDriverIdDB = (driverId) => {
+  return knex("booking")
+  // .whereNot("booking.status", "canceled")
+  .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
+  .where({
+    driverId,
+    "bookingdrivers.status": "selected"
+  })
+  .orderBy("booking.createdDate")
+  .select()
+}
+
 const getDriverByIdDB = (id) => {
   return knex("drivers")
   .where("driverId", id)
@@ -57,6 +81,8 @@ module.exports = {
     getAllDriverDB,
     getDriverByIdDB,
     createDriverDB,
+    getCurrentJobsDB,
+    getAllJobByDriverIdDB,
     finishingJobDB,
     updateDriverDB,
     deleteDriverDB

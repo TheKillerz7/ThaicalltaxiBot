@@ -29,7 +29,6 @@ const getBookingById = async (req, res) => {
     res.send(bookings)
   } catch (error) {
     console.log(error)
-    res.send(error)
   }
 }
 
@@ -43,7 +42,7 @@ const createBooking = async (req, res) => {
     flexMessage,
     {
       type: "text",
-      text: "Please wait 3 minutes and we'll send you drivers"
+      text: "Please wait 2 minutes and we'll send you drivers"
     }
   ]
   try {
@@ -61,13 +60,13 @@ const createBooking = async (req, res) => {
           return
         } 
         const hasVIPCar = driversRegisters.map((register) => register.vehicleInfo).includes("VIP")
-        const selectedCarType = driversRegisters.filter((register) => register.vehicleInfo.includes(req.body.bookingInfo.carSize) && JSON.parse(register.vehicleInfo).carSize)
+        const selectedCarType = driversRegisters.filter((register) => register.vehicleInfo.includes(req.body.bookingInfo.carType) && JSON.parse(register.vehicleInfo).carType)
         const otherCarType = driversRegisters.filter((register) => {
           if (hasVIPCar) {
             if (register.vehicleInfo.includes("VIP")) return register
             return
           }
-          return !register.vehicleInfo.includes(req.body.bookingInfo.carSize) && JSON.parse(register.vehicleInfo).carSize
+          return !register.vehicleInfo.includes(req.body.bookingInfo.carType) && JSON.parse(register.vehicleInfo).carType
         })
         
         let selectedRegisters = []
@@ -75,22 +74,29 @@ const createBooking = async (req, res) => {
         for (let i = selectedRegisters.length; i < 3;i++) otherCarType[i] && selectedRegisters.push(otherCarType[i])
 
         const cards = selectedRegisters.map((register, index) => {
-          let extraObj = {}
+          let extraObj = []
           let extraPrice = 0
           register.extra = JSON.parse(register.extra)
+          register.message = JSON.parse(register.message)
           register.extra.map((extra) => {
             if (extra.title) {
+              const extraTemp = {}
               extraPrice += parseInt(extra.price)
-              extraObj[extra.title] = parseInt(extra.price)
+              extraTemp[extra.title] = parseInt(extra.price)
+              extraObj.push(extraTemp)
             }
           })
-          const prices = {
-            "Course Price": register.trip,
-            "Tollway": register.tollway,
+          const prices = [
+            {
+              "Course Price": register.course
+            },
+            {
+              "Tollway": register.tollway
+            },
             ...extraObj
-          }
-          const totalPrice = parseInt(register.trip) + parseInt(register.tollway) + extraPrice
-          return driverRegisteredCard(prices, totalPrice, register, index + 1, req.body.bookingInfo.carSize)
+          ]
+          const totalPrice = parseInt(register.course) + parseInt(register.tollway) + extraPrice
+          return driverRegisteredCard(prices, totalPrice, register, index + 1, req.body.bookingInfo.carType)
         })
         const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
         messageToUser.push(cardsWrapped)
@@ -100,9 +106,9 @@ const createBooking = async (req, res) => {
       } catch (error) {
         console.log(error)
       }
-    }, 120000);
+    }, 20000);
   } catch (error) {
-    console.log(error)
+    console.log(error.response.data.details)
   }
 }
 

@@ -1,11 +1,12 @@
 const express = require('express')
-const { getAllDriver, getDriverById, getCurrentJobs, createDriver, actionToDriver } = require('../controllers/driverController')
+const { getAllDriver, getDriverById, getCurrentJobs, createDriver, actionToDriver, getSelectedRegisterByBookingId } = require('../controllers/driverController')
 
 //init packages
 const router = express.Router()
 
 router.get('/', getAllDriver)
 router.get('/:id', getDriverById)
+router.get('/register/:id', getSelectedRegisterByBookingId)
 router.get('/jobs/:id', getCurrentJobs)
 
 router.post('/', createDriver)
