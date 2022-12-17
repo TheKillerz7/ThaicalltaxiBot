@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllBooking, getBookingByStatus, createBooking, updatePrivateInfo, getBookingById } = require('../controllers/bookingController')
+const { getAllBooking, getBookingByStatus, createBooking, getBookingById, updateBooking, updatePrice } = require('../controllers/bookingController')
 
 //init packages
 const router = express.Router()
@@ -10,6 +10,7 @@ router.get('/id/:id', getBookingById)
 
 router.post('/', createBooking)
 
-router.patch('/', updatePrivateInfo)
+router.patch('/', updateBooking)
+router.patch('/price', updatePrice)
 
 module.exports = router

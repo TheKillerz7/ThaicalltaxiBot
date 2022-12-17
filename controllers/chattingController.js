@@ -1,4 +1,6 @@
+const { getBookingByIdDB } = require("../models/booking")
 const { getRoomsByUserIdDB, getMessagesByRoomId, storeMessage, updateChatMessages, getRoomByRoomIdDB } = require("../models/chatting")
+const moment = require("moment")
 
 const getChattingMessages = async (req, res) => {
     const { roomId } = req.params
@@ -28,18 +30,29 @@ const getRoomsByUserId = async (req, res) => {
         if (rooms.length === 0) return res.send("No rooms are open.")
         const roomsWithMessage = await Promise.all(rooms.map(async (room, index) => {
             const messages = await getMessagesByRoomId(room.roomId, 10)
+            const booking = (await getBookingByIdDB(room.bookingId))[0]
+            booking.bookingInfo = JSON.parse(booking.bookingInfo)
+            let startingDate = []
+            let pickupDateStart = ""
+            if (booking.bookingInfo.start?.pickupDate === "ASAP" || booking.bookingInfo.pickupDate === "ASAP") {
+                pickupDateStart = "As soon as possible"
+            } else {
+                startingDate = booking.bookingInfo.start?.pickupDate.split("/").reverse() || booking.bookingInfo.pickupDate.split("/").reverse()
+                pickupDateStart = moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM")
+            }
             const latestMessage = messages[0]
             const unreadMessages = messages.filter((message) => {
-                if (message.senderType != userType && message.status === "unread") return message
+                if (message.senderType != userType && message.chatStatus === "unread") return message
             })
             const obj = {
                 ...room,
                 messages: {
                     latestMessage: latestMessage,
                     unreadMessages: [...unreadMessages]
-                }
+                },
+                pickupDate: pickupDateStart,
+                pickupTime: booking.bookingInfo.start?.pickupTime || booking.bookingInfo.pickupTime
             }
-            console.log(rooms)
             return obj
         }))
         res.send(roomsWithMessage)  
@@ -60,12 +73,12 @@ const readChatMessages = async (req, res) => {
     const { roomId, userType } = req.body
     console.log(req.body)
     const data = {
-        status: "read"
+        chatStatus: "read"
     }
     const option = {
         where: {
             roomId,
-            status: "unread"
+            chatStatus: "unread"
         },
         whereNot: {
             senderType: userType

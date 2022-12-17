@@ -6,13 +6,20 @@ const getAllBookingDB = () => {
 
 const getBookingByStatus = (status) => {
   return knex("booking")
-  .where("status", status)
+  .where("bookingStatus", status)
   .select()
 }
 
 const getBookingByIdDB = (id) => {
   return knex("booking")
   .where("bookingId", id)
+  .select()
+}
+
+const getBookingWithPricesByIdDB = (id) => {
+  return knex("booking")
+  .where("booking.bookingId", id)
+  .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
   .select()
 }
 
@@ -49,6 +56,12 @@ const updateBookingDB = (id, data) => {
     .update({...data})
 }
 
+const updatePriceDB = (id, data) => {
+  return knex("bookingdrivers")
+  .where("bookingId", id)
+  .update({...data})
+}
+
 const deleteBookingDB = (id) => {
     res.json({
       status: 200,
@@ -59,9 +72,11 @@ const deleteBookingDB = (id) => {
 module.exports = {
     getAllBookingDB,
     getBookingByStatus,
+    getBookingWithPricesByIdDB,
     getBookingByIdDB,
     createBookingDB,
     driverRegisterToBookingDB,
     updateBookingDB,
+    updatePriceDB,
     deleteBookingDB
 }

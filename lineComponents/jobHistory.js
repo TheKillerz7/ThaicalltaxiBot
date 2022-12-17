@@ -1,6 +1,6 @@
 const moment = require("moment")
 
-exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
+exports.jobHistory = (bookingInfo, prices, total) => {
 
   let startingDate = []
   let pickupDateStart = ""
@@ -12,12 +12,14 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
     pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM YYYY")}`
   }
 
+  console.log(bookingInfo)
+
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
   const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
 
   const bookingMessage = bookingInfo.bookingInfo.message ? {
     "type": "text",
-    "text": `"${bookingInfo.bookingInfo.message.en}"`,
+    "text": `Your Message: "${bookingInfo.bookingInfo.message.en}"`,
     "color": "#b58b0b",
     "size": "sm",
     "wrap": true,
@@ -26,78 +28,82 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
     "type": "filler"
   }
 
-  const arrival = bookingInfo.arrival ? [{
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "text",
-        "text": `Arrival Time`,
-        "size": "sm",
-        "color": "#555555",
-        "flex": 0,
-        "weight": "bold"
-      },
-      {
-        "type": "text",
-        "text": `${bookingInfo.arrival} mins`,
-        "size": "sm",
-        "color": "#111111",
-        "align": "end"
-      }
-    ]
-  }] : [{
+  const driverMessage = bookingInfo.message.en ? {
+    "type": "text",
+    "text": `Driver Message: "${bookingInfo.message.en}"`,
+    "color": "#b58b0b",
+    "size": "sm",
+    "wrap": true,
+    "margin": "sm"
+  } : {
     "type": "filler"
-  }]
+  }
 
-  const driverMessage = bookingInfo.message.en ? [{
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "text",
-        "text": `Message`,
-        "size": "sm",
-        "color": "#555555",
-        "flex": 0,
-        "weight": "bold"
-      },
-      {
-        "type": "text",
-        "text": `${bookingInfo.message.en}`,
-        "size": "sm",
-        "wrap": true,
-        "color": "#111111",
-        "align": "end"
-      }
-    ]
-  }] : [{
-    "type": "filler"
-  }]
+  const pricesTitle = prices.map((price, index) => {
+    return {
+      "type": "text",
+      "text": `${Object.keys(prices[index])}`,
+      "size": "sm",
+      "color": "#555555",
+      "flex": 0,
+      "weight": "bold"
+    }
+  })
+  
+  const pricesValue = prices.map((price, index) => {
+    return {
+      "type": "text",
+      "text": `฿${price[Object.keys(prices[index])]}`,
+      "size": "sm",
+      "color": "#111111",
+      "align": "start"
+    }
+  })
 
-    const pricesFlexObj = prices.map((price, index) => {
-      return {
+    const pricesFlexObj = {
         "type": "box",
         "layout": "horizontal",
         "contents": [
           {
-            "type": "text",
-            "text": `${Object.keys(prices[index])}`,
-            "size": "sm",
-            "color": "#555555",
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              bookingInfo.arrival ? {
+                "type": "text",
+                "text": `Arrival Time`,
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0,
+                "weight": "bold"
+              } : {
+                "type": "filler"
+              },
+              ...pricesTitle
+            ],
             "flex": 0,
-            "weight": "bold"
+            "spacing": "xs"
           },
           {
-            "type": "text",
-            "text": `฿${price[Object.keys(prices[index])]}`,
-            "size": "sm",
-            "color": "#111111",
-            "align": "end"
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              bookingInfo.arrival ? {
+                "type": "text",
+                "text": `${bookingInfo.arrival} mins`,
+                "size": "sm",
+                "color": "#111111",
+                "align": "start"
+              } : {
+                "type": "filler"
+              },
+              ...pricesValue
+            ],
+            "margin": "xl",
+            "spacing": "xs"
           }
         ]
-      }
-    })
+    }
+
 
     const bookingFlex = bookingInfo.bookingType === "A2B" ? 
     {
@@ -162,7 +168,7 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": carType,
+                  "text": bookingInfo.bookingInfo.carType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -282,7 +288,7 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": carType,
+                  "text": bookingInfo.bookingInfo.carType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -365,11 +371,40 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
         "layout": "vertical",
         "contents": [
           {
-            "type": "text",
-            "text": bookingInfo.bookingType === "A2B" ? "A to B Course" : "Rent & Hire",
-            "weight": "bold",
-            "color": "#1DB446",
-            "size": "sm"
+            "type": "box",
+            "layout": "horizontal",
+            "contents": [
+              {
+                "type": "text",
+                "text": bookingInfo.bookingType === "A2B" ? "A to B Course" : "Rent & Hire",
+                "weight": "bold",
+                "color": "#1DB446",
+                "size": "sm",
+                "flex": 0,
+              },
+              {
+                "type": "box",
+                "layout": "vertical",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": bookingInfo.bookingStatus.charAt(0).toUpperCase() + bookingInfo.bookingStatus.slice(1),
+                    "size": "sm",
+                    "color": "#ffffff",
+                    "weight": "regular"
+                  }
+                ],
+                "flex": 0,
+                "cornerRadius": "sm",
+                "backgroundColor": bookingInfo.bookingStatus === "finished" ? "#15a128" : "#cc2727",
+                "paddingTop": "xs",
+                "paddingBottom": "xs",
+                "paddingStart": "sm",
+                "paddingEnd": "sm",
+                "margin": "md"
+              }
+            ],
+            "alignItems": "center"
           },
           {
             "type": "box",
@@ -545,6 +580,7 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
             "margin": "md"
           },
           bookingMessage,
+          driverMessage,
           {
             "type": "separator",
             "margin": "md"
@@ -561,7 +597,7 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
           {
             "type": "separator",
             "margin": "lg",
-            "color": "#b8b8b8"
+            "color": "#828282"
           },
           {
             "type": "box",
@@ -569,13 +605,11 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
             "margin": "lg",
             "spacing": "sm",
             "contents": [
-              ...arrival,
-              ...driverMessage,
-              ...pricesFlexObj,
+              pricesFlexObj,
               {
                 "type": "separator",
                 "margin": "lg",
-                "color": "#b8b8b8"
+                "color": "#828282"
               },
               {
                 "type": "box",
@@ -613,7 +647,7 @@ exports.jobHistory = (bookingInfo, prices, total, driverInfo, carType) => {
             {
                 "type": "separator",
                 "margin": "sm",
-                "color": "#b8b8b8"
+                "color": "#828282"
             },
             {
                 "type": "box",

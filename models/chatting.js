@@ -14,7 +14,7 @@ const getRoomsByUserIdDB = (userId, userType) => {
     return knex("chatrooms")
     .where({
         ...userIdWithType,
-        status: "open"
+        roomStatus: "open"
     })
     .orderBy("updatedDate", "desc")
     .select()

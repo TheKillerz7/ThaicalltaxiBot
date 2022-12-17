@@ -10,7 +10,7 @@ const getRegisteredDriversWithDriverInfo = (bookingId, sort) => {
     return knex("bookingdrivers")
     .where({
         bookingId,
-        "bookingdrivers.status": "selecting"
+        "bookingdrivers.offerStatus": "selecting"
     })
     .join("drivers", "bookingdrivers.driverId", "drivers.driverId")
     .orderBy(sort || "createdDate")
@@ -45,11 +45,11 @@ const selectedDriver = async (selectedDriverId, bookingId) => {
     await knex("bookingdrivers")
     .where("bookingId", bookingId)
     .whereNot("driverId", selectedDriverId)
-    .update("status", "rejected")
+    .update("offerStatus", "rejected")
 
     await knex("bookingdrivers")
     .where("driverId", selectedDriverId)
-    .update("status", "selected")
+    .update("offerStatus", "selected")
 }
 
 const updateBookingdriverByDriverId = (bookingId, driverIds, data) => {

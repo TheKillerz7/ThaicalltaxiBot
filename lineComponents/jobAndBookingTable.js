@@ -86,7 +86,7 @@ const moment = require("moment")
                     {
                         "type": "separator",
                         "margin": "md",
-                        "color": "#b8b8b8"
+                        "color": "#828282"
                     }
                 ]
             }

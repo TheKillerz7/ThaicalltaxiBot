@@ -1,4 +1,4 @@
-  exports.confirmSelect = (bookingId, driverId) => {
+  exports.confirmSelect = (code) => {
     const card = {
         "type": "bubble",
         "size": "kilo",
@@ -8,13 +8,13 @@
           "contents": [
             {
               "type": "text",
-              "text": "Terms & Conditions",
+              "text": "ข้อกำหนดและเงื่อนไข",
               "weight": "bold",
               "size": "lg"
             },
             {
               "type": "text",
-              "text": "If you book, it means you have agreed to the terms and conditions.",
+              "text": "โปรดอ่านข้อกำหนด และกดตกลงเพื่อเป็นสมาชิก",
               "wrap": true,
               "margin": "sm"
             }
@@ -35,9 +35,9 @@
                   "style": "link",
                   "height": "sm",
                   "action": {
-                    "type": "postback",
-                    "label": "Read",
-                    "data": `type=selectDriver&value=back&bookingId=${bookingId}`
+                    "type": "uri",
+                    "label": "อ่าน",
+                    "uri": `https://liff.line.me/1657246657-1A9WmnMw`
                   },
                   "color": "#424242"
                 }
@@ -55,8 +55,8 @@
                   "height": "sm",
                   "action": {
                     "type": "postback",
-                    "label": "Book",
-                    "data": `type=selectDriver&value=select&bookingId=${bookingId}&driverId=${driverId}`
+                    "label": "ตกลง",
+                    "data": `type=agreeTerms&driverCode=${code}`
                   },
                   "color": "#ffffff"
                 }

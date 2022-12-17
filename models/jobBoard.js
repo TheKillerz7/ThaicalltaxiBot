@@ -2,7 +2,7 @@ const knex = require("./knexdb")
 
 const getBookingByStatusWithoutDriverIdDB = (status, driverId) => {
   return knex("booking")
-  .where("status", status)
+  .where("bookingStatus", status)
   .whereNotExists(
     knex('bookingdrivers')
       .whereRaw('bookingdrivers.bookingId = booking.bookingId')

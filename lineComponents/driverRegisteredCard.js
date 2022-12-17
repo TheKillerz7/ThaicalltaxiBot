@@ -19,7 +19,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
     "size": "xs",
     "color": "#fc433d",
     "offsetEnd": "md",
-    "offsetBottom": "sm"
+    "offsetBottom": "xs"
   } : {
     "type": "filler"
   }
@@ -89,7 +89,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
         {
           "type": "separator",
           "margin": "lg",
-          "color": "#b8b8b8"
+          "color": "#828282"
         },
         {
           "type": "box",
@@ -100,8 +100,8 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
             ...pricesFlexObj,
             {
               "type": "separator",
-              "margin": "lg",
-              "color": "#b8b8b8"
+              "margin": "xl",
+              "color": "#828282"
             },
             {
               "type": "box",
@@ -144,8 +144,8 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
               "type": "button",
               "action": {
                 "type": "postback",
-                "label": "Choose this driver",
-                "data": `type=confirmSelectDriver&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}&carType=${selectedCarType}`
+                "label": "I like this driver",
+                "data": `type=selectDriver&value=select&bookingId=${driverInfo.bookingId}&driverId=${driverInfo.driverId}`
               },
               "color": "#ffffff",
               "height": "sm"

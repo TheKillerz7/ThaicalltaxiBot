@@ -4,16 +4,15 @@ const getAllUserDB = () => {
     res.send(db.User())
 }
 
-const getUserByIdDB = () => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+const getUserByIdDB = (id) => {
+  return knex("users")
+  .where("userId", id)
+  .select()
 }
 
 const getCurrentBookingsDB = (userId) => {
   return knex("booking")
-  .where("booking.status", "ongoing")
+  .where("booking.bookingStatus", "ongoing")
   .where("booking.userId", userId)
   .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
   .orderBy("booking.createdDate")
@@ -42,11 +41,12 @@ const createUserDB = (data) => {
   })
 }
 
-const updateUserDB = () => {
-    res.json({
-      status: 200,
-      message: "Get data has successfully",
-    });
+const updateUserDB = (data, id) => {
+  return knex("users")
+  .where("userId", id)
+  .update({
+    ...data
+  })
 }
 
 const deleteUserDB = (id) => {

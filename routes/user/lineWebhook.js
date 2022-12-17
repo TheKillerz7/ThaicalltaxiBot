@@ -6,24 +6,35 @@ const areaPrices = require('../../areaPrices.json')
 const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
 const { replyMessage } = require('../../js/linehelper/replyToLine.js')
 const userController = require('../../controllers/userController.js')
-const { getRegisteredDriversWithDriverInfo, selectedDriver, updateBookingdriverByBookingId, getSelectedRegisterByBookingId, getRegisteredDriversByBookingIdandDriverId } = require('../../models/bookingdrivers.js')
+const { updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB } = require('../../models/bookingdrivers.js')
 const { pushMessage } = require('../../js/linehelper/pushToLine.js')
 const { flexWrapper } = require('../../lineComponents/flexWrapper.js')
 const { confirmCancel } = require('../../lineComponents/confirmCancel.js')
 const { confirmSelect } = require('../../lineComponents/confirmSelect.js')
-const { driverRegisteredCard } = require('../../lineComponents/driverRegisteredCard.js')
-const { carouselWrapper } = require('../../lineComponents/carouselWrapper.js')
 const { textTemplate } = require('../../js/helper/textTemplate.js')
-const { confirmInfo } = require('../../lineComponents/confirmInfo.js')
 const { updateBookingDB, getBookingByIdDB } = require('../../models/booking.js')
-const { getDriverByIdDB } = require('../../models/driver.js')
 const { createRichMenu } = require('../../js/linehelper/createRichmenu.js')
 const { getAllBookingsByUserIdDB, getCurrentBookingsDB } = require('../../models/user.js')
 const { jobAndBookingTable } = require('../../lineComponents/jobAndBookingTable.js')
+const { afterConfirm } = require('../../lineComponents/afterConfirm.js')
+const { storeChatMessages } = require('../../controllers/chattingController.js')
+const he = require('he');
+const { default: ShortUniqueId } = require('short-unique-id')
+const axios = require('axios');
+const { createChatRoom } = require('../../models/chatting.js')
+const { bookingAction } = require('../../lineComponents/bookingAction.js')
 
 //init packages
 const router = express.Router()
 const myCache = new NodeCache();
+const translations = (text, target) => {
+  return axios.post("https://translation.googleapis.com/language/translate/v2", {}, {
+    params: {
+        q: text,
+        target,
+        key: "AIzaSyAyRniSWIgVCvj30C2q7d9YlMnN06ZzT_M"
+    }})
+}
 
 router.get('/', async (req, res) => {
   res.json({
@@ -66,10 +77,10 @@ router.post('/', async (req, res) => {
       case "postback":
         const params = new URLSearchParams(event.postback.data)
         try {
-          let booking
-          if (params.get("bookingId")) {
-            booking = (await getBookingByIdDB(params.get("bookingId")))[0]
-            if (booking.status === "canceled" || booking.status === "finished") return await pushMessage([textTemplate("This booking has already been canceled or closed.")], "user", event.source.userId)
+          const booking = params.get("bookingId") && (await getBookingByIdDB(params.get("bookingId")))[0]
+          booking.bookingInfo = JSON.parse(booking.bookingInfo)
+          if (params.get("type") !== "bookingHistoryInfo") {
+            if (booking.bookingStatus === "canceled" || booking.bookingStatus === "finished") return await pushMessage([textTemplate("This booking has already been canceled or closed.")], "user", event.source.userId)
           }
           switch (params.get("type")) {
             case "confirmCancel":
@@ -77,35 +88,90 @@ router.post('/', async (req, res) => {
               break;
           
             case "confirmSelectDriver":
-              if (booking.status === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
+              if (booking.bookingStatus === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
               await pushMessage([flexWrapper(confirmSelect(params.get("bookingId"), params.get("driverId")))], "user", event.source.userId)
               break;
           
             case "cancel":
               if (params.get("value") === "cancel") {
-                await updateBookingDB(params.get("bookingId"), {status: "canceled"})
-                await updateBookingdriverByBookingId(params.get("bookingId"), {status: "canceled"})
-                await pushMessage([textTemplate("The process has been exited. Thank you!")], "user", event.source.userId)
+                const driverId = (await getSelectedRegisterByBookingIdDB(params.get("bookingId")))[0]
+                await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
+                await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "user", event.source.userId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "driver", driverId.driverId)
               }
               break;
           
             case "selectDriver":
-              if (booking.status === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
+              if (booking.bookingStatus === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
               if (params.get("value") === "select") {
                 await userController.selectDriver(params.get("bookingId"), params.get("driverId"), event.source.userId)
               }
               break;
   
             case "confirmInfo":
-              if (booking.status === "ongoing") return await pushMessage([textTemplate("Sorry, you've already confirmed your infomation. If you are willing to change your info, please contact your driver in 'Chatting Room' menu")], "user", event.source.userId)
-              await updateBookingDB(params.get("bookingId"), {status: "ongoing"})
-              await pushMessage([textTemplate("You've been selected, Booking: " + params.get("bookingId"))], 'driver', params.get("driverId"))
-              await pushMessage([textTemplate("Thank you for booking with us! Please chat with our driver.")], "user", event.source.userId)
+              if (booking.bookingStatus === "ongoing") return await pushMessage([textTemplate("Sorry, you've already confirmed your infomation. If you are willing to change your info, please contact your driver in 'Chatting Room' menu")], "user", event.source.userId)
+              const uid = new ShortUniqueId({ length: 10 });
+              const roomId = uid()
+              booking.roomId = roomId
+              await updateBookingDB(params.get("bookingId"), {bookingStatus: "ongoing"})
+              await pushMessage([flexWrapper(bookingAction(booking, "select"))], 'driver', params.get("driverId"))
+              await pushMessage([flexWrapper(afterConfirm(params.get("bookingId"), roomId))], "user", event.source.userId)
+              const roomData = {
+                roomId,
+                bookingId: params.get("bookingId"),
+                userId: event.source.userId,
+                driverId: params.get("driverId")
+              }
+              try {
+                await createChatRoom(roomData)
+                if (booking.bookingInfo.from?.name.toLowerCase().includes("airport") || booking.bookingInfo.start?.place.toLowerCase().includes("airport")) {
+                  const meeting = {
+                    roomId,
+                    senderId: params.get("driverId"),
+                    senderType: "driver",
+                    messageType: "meeting"
+                  }
+                  const greeting = {
+                    roomId,
+                    senderId: params.get("driverId"),
+                    senderType: "driver",
+                    messageType: "greeting",
+                    translated: "If you have any questions or you want to change any booking info, you can message your driver here."
+                  }
+                  const translated = await translations(greeting.translated, "th")
+                  greeting.message = he.decode(translated.data.data.translations[0].translatedText)
+                  await storeChatMessages(greeting) 
+                  await storeChatMessages(meeting) 
+                } else {
+                  const greeting = {
+                    roomId,
+                    senderId: params.get("driverId"),
+                    senderType: "driver",
+                    messageType: "greeting",
+                    translated: "If you have any questions or you want to change any booking info, you can message your driver here."
+                  }
+                  const greeting1 = {
+                    roomId,
+                    senderId: params.get("driverId"),
+                    senderType: "driver",
+                    messageType: "greeting",
+                    translated: "For easy meeting, can you please type in your name and phone number(For urgent)?"
+                  }
+                  const translated = await translations(greeting.translated, "th")
+                  greeting.message = he.decode(translated.data.data.translations[0].translatedText)
+                  const translated1 = await translations(greeting.translated, "th")
+                  greeting1.message = he.decode(translated1.data.data.translations[0].translatedText)
+                  await storeChatMessages(greeting)
+                  await storeChatMessages(greeting1)
+                }
+              } catch (error) {
+                console.log(error)
+              }
               break;
 
             case "currentBooking": {
               const bookings = await getCurrentBookingsDB(event.source.userId)
-              console.log(bookings)
               if (bookings.length) {
                 await pushMessage([flexWrapper(jobAndBookingTable(bookings, "Current Booking", "currentBookingInfo"))], "user", event.source.userId)
               } else {
@@ -114,12 +180,11 @@ router.post('/', async (req, res) => {
             } break;
 
             case "currentBookingInfo":
-              await userController.getCurrentBooking(event.source.userId)
+              await userController.getCurrentBooking(event.source.userId, params.get("bookingId"))
               break;
 
             case "bookingHistory": {
               const bookings = await getAllBookingsByUserIdDB(event.source.userId)
-              console.log(bookings)
               if (bookings.length) {
                 await pushMessage([flexWrapper(jobAndBookingTable(bookings, "Booking History", "bookingHistoryInfo"))], "user", event.source.userId)
               } else {
@@ -128,7 +193,7 @@ router.post('/', async (req, res) => {
             } break;
 
             case "bookingHistoryInfo":
-              await userController.getBookingHistory(event.source.userId)
+              await userController.getBookingHistory(event.source.userId, params.get("bookingId"))
               break;
           
             default:

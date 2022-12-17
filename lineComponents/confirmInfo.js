@@ -16,7 +16,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
 
   const bookingMessage = bookingInfo.bookingInfo.message ? {
     "type": "text",
-    "text": `"${bookingInfo.bookingInfo.message.en}"`,
+    "text": `You: "${bookingInfo.bookingInfo.message.en}"`,
     "color": "#b58b0b",
     "size": "sm",
     "wrap": true,
@@ -25,78 +25,81 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
     "type": "filler"
   }
 
-  const arrival = driverInfo.arrival ? [{
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "text",
-        "text": `Arrival Time`,
-        "size": "sm",
-        "color": "#555555",
-        "flex": 0,
-        "weight": "bold"
-      },
-      {
-        "type": "text",
-        "text": `${driverInfo.arrival} mins`,
-        "size": "sm",
-        "color": "#111111",
-        "align": "end"
-      }
-    ]
-  }] : [{
+  const driverMessage = driverInfo.message.en ? {
+    "type": "text",
+    "text": `Driver: "${driverInfo.message.en}"`,
+    "color": "#b58b0b",
+    "size": "sm",
+    "wrap": true,
+    "margin": "sm"
+  } : {
     "type": "filler"
-  }]
+  }
 
-  const driverMessage = driverInfo.message.en ? [{
-    "type": "box",
-    "layout": "horizontal",
-    "contents": [
-      {
-        "type": "text",
-        "text": `Message`,
-        "size": "sm",
-        "color": "#555555",
-        "flex": 0,
-        "weight": "bold"
-      },
-      {
-        "type": "text",
-        "text": `${driverInfo.message.en}`,
-        "size": "sm",
-        "wrap": true,
-        "color": "#111111",
-        "align": "end"
-      }
-    ]
-  }] : [{
-    "type": "filler"
-  }]
+  const pricesTitle = prices.map((price, index) => {
+    return {
+      "type": "text",
+      "text": `${Object.keys(prices[index])}`,
+      "size": "sm",
+      "color": "#555555",
+      "flex": 0,
+      "weight": "bold"
+    }
+  })
+  
+  const pricesValue = prices.map((price, index) => {
+    return {
+      "type": "text",
+      "text": `฿${price[Object.keys(prices[index])]}`,
+      "size": "sm",
+      "color": "#111111",
+      "align": "start"
+    }
+  })
 
-    const pricesFlexObj = prices.map((price, index) => {
-      return {
+    const pricesFlexObj = {
         "type": "box",
         "layout": "horizontal",
         "contents": [
           {
-            "type": "text",
-            "text": `${Object.keys(prices[index])}`,
-            "size": "sm",
-            "color": "#555555",
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              driverInfo.arrival ? {
+                "type": "text",
+                "text": `Arrival Time`,
+                "size": "sm",
+                "color": "#555555",
+                "flex": 0,
+                "weight": "bold"
+              } : {
+                "type": "filler"
+              },
+              ...pricesTitle
+            ],
             "flex": 0,
-            "weight": "bold"
+            "spacing": "xs"
           },
           {
-            "type": "text",
-            "text": `฿${price[Object.keys(prices[index])]}`,
-            "size": "sm",
-            "color": "#111111",
-            "align": "end"
+            "type": "box",
+            "layout": "vertical",
+            "contents": [
+              driverInfo.arrival ? {
+                "type": "text",
+                "text": `${driverInfo.arrival} mins`,
+                "size": "sm",
+                "color": "#111111",
+                "align": "start"
+              } : {
+                "type": "filler"
+              },
+              ...pricesValue
+            ],
+            "margin": "xl",
+            "spacing": "xs"
           }
         ]
-      }
-    })
+    }
 
     const bookingFlex = bookingInfo.bookingType === "A2B" ? 
     {
@@ -112,6 +115,14 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "Course",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
                 {
                   "type": "text",
                   "text": "Time",
@@ -154,6 +165,13 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "contents": [
                 {
                   "type": "text",
+                  "text": `A to B`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
                   "text": `${pickupDateStart}`,
                   "size": "sm",
                   "color": "#111111",
@@ -182,7 +200,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 }
               ],
               "spacing": "xs",
-              "margin": "xl"
+              "margin": "xxl"
             }
           ]
         }
@@ -202,6 +220,14 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "Course",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
                 {
                   "type": "text",
                   "text": "Type",
@@ -258,6 +284,13 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "Rent & Hire",
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
                 {
                   "type": "text",
                   "text": bookingInfo.bookingInfo.type,
@@ -364,7 +397,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "text",
-            "text": bookingInfo.bookingType === "A2B" ? "A to B Course" : "Rent & Hire",
+            "text": "Please confirm your info",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
@@ -543,9 +576,11 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
             "margin": "md"
           },
           bookingMessage,
+          driverMessage,
           {
             "type": "separator",
-            "margin": "md"
+            "margin": "md",
+            "color": "#828282"
           },
           {
             "type": "box",
@@ -558,23 +593,16 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
           },
           {
             "type": "separator",
-            "margin": "lg",
-            "color": "#b8b8b8"
+            "margin": "xl",
+            "color": "#828282"
           },
           {
             "type": "box",
             "layout": "vertical",
-            "margin": "lg",
+            "margin": "xl",
             "spacing": "sm",
             "contents": [
-              ...arrival,
-              ...driverMessage,
-              ...pricesFlexObj,
-              {
-                "type": "separator",
-                "margin": "lg",
-                "color": "#b8b8b8"
-              },
+              pricesFlexObj,
               {
                 "type": "box",
                 "layout": "horizontal",
@@ -596,8 +624,21 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                   }
                 ],
                 "margin": "lg",
-                "alignItems": "flex-end"
-              }
+              },
+              {
+                "type": "separator",
+                "margin": "md",
+                "color": "#828282"
+              },
+              {
+                "type": "text",
+                "text": '*Function After Confirmation*\nChange info at "Chatting Room"\nCancellation at "Current Booking"',
+                "size": "xs",
+                "flex": 0,
+                "wrap": true,
+                "margin": "md",
+                "color": "#cc2727"
+              },
             ]
           }
         ],
@@ -607,28 +648,28 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "type": "box",
         "layout": "horizontal",
         "contents": [
+          // {
+          //   "type": "box",
+          //   "layout": "vertical",
+          //   "contents": [
+          //     {
+          //       "type": "button",
+          //       "action": {
+          //         "type": "postback",
+          //         "label": "Cancel",
+          //         "data": `type=cancel&value=cancel&bookingId=${driverInfo.bookingId}`
+          //       },
+          //       "color": "#424242",
+          //       "height": "sm"
+          //     }
+          //   ],
+          //   "backgroundColor": "#e0e0e0",
+          //   "cornerRadius": "md"
+          // },
           {
             "type": "box",
             "layout": "vertical",
-            "contents": [
-              {
-                "type": "button",
-                "action": {
-                  "type": "postback",
-                  "label": "Cancel",
-                  "data": `type=cancel&value=cancel&bookingId=${driverInfo.bookingId}`
-                },
-                "color": "#424242",
-                "height": "sm"
-              }
-            ],
-            "backgroundColor": "#e0e0e0",
-            "cornerRadius": "md"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "margin": "md",
+            // "margin": "md",
             "contents": [
               {
                 "type": "button",
@@ -656,151 +697,4 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
     }
 
     return card
-}
-
-driverRegisteredCard = (prices, total, driverInfo, number, selectedCarType) => {
-  const vehicleInfo = JSON.parse(driverInfo.vehicleInfo)
-
-  console.log(prices)
-  const message = driverInfo.message ? {
-    "type": "text",
-    "text": driverInfo.message,
-    "wrap": true,
-    "size": "sm",
-    "margin": "lg"
-  } : {
-    "type": "filler"
-  }
-
-  const arrival = driverInfo.arrival ? {
-    "type": "text",
-    "text": `Arrive in ${driverInfo.arrival} mins`,
-    "margin": "none",
-    "size": "xs",
-    "color": "#fc433d",
-    "offsetEnd": "md",
-    "offsetBottom": "sm"
-  } : {
-    "type": "filler"
-  }
-
-  const pricesFlexObj = Object.keys(prices).map((title, index) => {
-    return {
-      "type": "box",
-      "layout": "horizontal",
-      "contents": [
-        {
-          "type": "text",
-          "text": `${title}`,
-          "size": "sm",
-          "color": "#555555",
-          "flex": 0,
-          "weight": "bold"
-        },
-        {
-          "type": "text",
-          "text": `฿${prices[title]}`,
-          "size": "sm",
-          "color": "#111111",
-          "align": "end"
-        }
-      ]
-    }
-  })
-
-  const card = {
-    "type": "bubble",
-    "size": "kilo",
-    "body": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "text",
-          "text": "OFFER PRICE",
-          "weight": "bold",
-          "color": "#1e3a8a",
-          "size": "xs"
-        },
-        {
-          "type": "box",
-          "layout": "horizontal",
-          "contents": [
-            {
-              "type": "text",
-              "text": `Driver No.${number}`,
-              "weight": "bold",
-              "size": "lg",
-              "gravity": "bottom"
-            },
-            arrival
-          ],
-          "margin": "md",
-          "alignItems": "flex-end"
-        },
-        {
-          "type": "text",
-          "text": `${vehicleInfo.carType}`,
-          "size": "sm",
-          "wrap": true,
-          "color": "#5c5c5c"
-        },
-        message,
-        
-      ],
-      "paddingBottom": "sm"
-    },
-    "footer": {
-      "type": "box",
-      "layout": "vertical",
-      "contents": [
-        {
-          "type": "box",
-          "layout": "vertical",
-          "contents": [
-            {
-              "type": "button",
-              "action": {
-                "type": "postback",
-                "label": "Exit All",
-                "data": `type=confirmCancel&bookingId=${driverInfo.bookingId}&carType=${selectedCarType}`
-              },
-              "color": "#424242",
-              "height": "sm"
-            }
-          ],
-          "backgroundColor": "#e0e0e0",
-          "cornerRadius": "md"
-        },
-        {
-          "type": "box",
-          "layout": "vertical",
-          "margin": "md",
-          "contents": [
-            {
-              "type": "button",
-              "action": {
-                "type": "postback",
-                "label": "Book this driver",
-                "data": `type=confirmSelectDriver&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}&carType=${selectedCarType}`
-              },
-              "color": "#ffffff",
-              "height": "sm"
-            }
-          ],
-          "backgroundColor": "#1e3a8a",
-          "cornerRadius": "md",
-          "offsetBottom": "none",
-          "offsetTop": "none"
-        }
-      ]
-    },
-    "styles": {
-      "footer": {
-        "separator": false
-      }
-    }
-  }
-
-  return card
 }

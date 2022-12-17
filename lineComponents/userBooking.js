@@ -15,7 +15,7 @@ exports.userBooking = (bookingInfo) => {
 
     const message = bookingInfo.bookingInfo.message.en ? {
       "type": "text",
-      "text": `"${bookingInfo.bookingInfo.message.en}"`,
+      "text": `Message: "${bookingInfo.bookingInfo.message.en}"`,
       "wrap": true,
       "size": "sm",
       "color": "#b58b0b",
@@ -38,6 +38,14 @@ exports.userBooking = (bookingInfo) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "Course",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
                 {
                   "type": "text",
                   "text": "Time",
@@ -78,6 +86,13 @@ exports.userBooking = (bookingInfo) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "A to B",
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
                 {
                   "type": "text",
                   "text": `${pickupDateStart}`,
@@ -128,6 +143,14 @@ exports.userBooking = (bookingInfo) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "Course",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
                 {
                   "type": "text",
                   "text": "Type",
@@ -184,6 +207,13 @@ exports.userBooking = (bookingInfo) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
+                {
+                  "type": "text",
+                  "text": "Rent & Hire",
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
                 {
                   "type": "text",
                   "text": bookingInfo.bookingInfo.type,
@@ -290,7 +320,7 @@ exports.userBooking = (bookingInfo) => {
         "contents": [
           {
             "type": "text",
-            "text": bookingInfo.bookingType === "A2B" ? "A to B Course" : "Rent & Hire",
+            "text": "Your Info",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
@@ -482,34 +512,6 @@ exports.userBooking = (bookingInfo) => {
               bookingFlex
             ]
           },
-          {
-            "type": "separator",
-            "margin": "xl"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "margin": "lg",
-            "contents": [
-              {
-                "type": "text",
-                "text": "BELL-MAN",
-                "size": "xs",
-                "flex": 0,
-                "weight": "bold",
-                "color": "#6e6e6e"
-              },
-              {
-                "type": "text",
-                "text": "Taxi for tourists and foreigners",
-                "color": "#a8a8a8",
-                "size": "xs",
-                "align": "end"
-              }
-            ],
-            "justifyContent": "flex-end",
-            "alignItems": "flex-start"
-          }
         ],
         "paddingBottom": "lg"
       },

@@ -1,5 +1,12 @@
 const knex = require("./knexdb")
 
+const getAllDriverLightDB = (option) => {
+  return knex("drivers")
+  .where({...option})
+  .orderBy('jobDone')
+  .select()
+}
+
 const getAllDriverDB = (option, value) => {
   switch (option) {
     case "where":
@@ -17,13 +24,19 @@ const getAllDriverDB = (option, value) => {
   }
 }
 
+const getDriverImageDB = (driverId) => {
+  return knex("driverimg")
+  .where("driverId", driverId)
+  .select()
+}
+
 const getCurrentJobsDB = (driverId) => {
   return knex("booking")
-  .where("booking.status", "ongoing")
+  .where("booking.bookingStatus", "ongoing")
   .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
   .where({
     driverId,
-    "bookingdrivers.status": "selected"
+    "bookingdrivers.offerStatus": "selected"
   })
   .orderBy("booking.createdDate")
   .select()
@@ -31,15 +44,21 @@ const getCurrentJobsDB = (driverId) => {
 
 const getAllJobByDriverIdDB = (driverId) => {
   return knex("booking")
-  // .whereNot("booking.status", "canceled")
   .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
   .where({
     driverId,
-    "bookingdrivers.status": "selected"
+    "bookingdrivers.offerStatus": "selected"
   })
   .orderBy("booking.createdDate")
   .select()
 }
+
+const getDriverByCodeDB = (code) => {
+  return knex("drivers")
+  .where("driverCode", code)
+  .select()
+}
+
 
 const getDriverByIdDB = (id) => {
   return knex("drivers")
@@ -63,11 +82,24 @@ const updateDriverDB = (id, data) => {
 const finishingJobDB = async (bookingId) => {
   await knex("booking")
   .where("bookingId", bookingId)
-  .update("status", "finished")
+  .update("bookingStatus", "finished")
 
   await knex("bookingdrivers")
   .where("bookingId", bookingId)
-  .update("status", "finished")
+  .update("offerStatus", "finished")
+}
+
+const uploadImageNameDB = (data) => {
+  return knex("driverimg")
+  .insert({
+    ...data
+  })
+}
+
+const deleteImageDB = (driverId) => {
+  return knex("driverimg")
+  .where("driverId", driverId)
+  .del()
 }
 
 const deleteDriverDB = async () => {
@@ -78,12 +110,17 @@ const deleteDriverDB = async () => {
 }
 
 module.exports = {
+    getAllDriverLightDB,
     getAllDriverDB,
     getDriverByIdDB,
+    getDriverImageDB,
     createDriverDB,
     getCurrentJobsDB,
     getAllJobByDriverIdDB,
+    getDriverByCodeDB,
     finishingJobDB,
     updateDriverDB,
+    uploadImageNameDB,
+    deleteImageDB,
     deleteDriverDB
 }
