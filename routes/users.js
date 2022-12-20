@@ -1,5 +1,5 @@
 const express = require('express');
-const { getUserById, updateUser } = require('../controllers/userController');
+const { getUserById, updateUser, ratingDriver } = require('../controllers/userController');
 const router = express.Router();
 
 /* GET users listing. */
@@ -8,6 +8,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/:id', getUserById)
+
+router.post('/comment', ratingDriver)
 
 router.patch('/:id', updateUser)
 

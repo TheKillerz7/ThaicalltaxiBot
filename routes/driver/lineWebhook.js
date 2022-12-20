@@ -11,6 +11,8 @@ const { getCurrentJobsDB, getAllJobByDriverIdDB, updateDriverDB, getDriverByIdDB
 const { textTemplate } = require('../../js/helper/textTemplate.js')
 const axios = require('axios');
 const fs = require('fs');
+const { currentJobsTable } = require('../../lineComponents/currentJobsTable.js')
+const { getSelectedRegisterByBookingIdDB } = require('../../models/bookingdrivers.js')
 
 //init packages
 const router = express.Router()
@@ -59,10 +61,13 @@ router.post('/', async (req, res) => {
         const type = new URLSearchParams(event.postback.data)
         switch (type.get('type')) {
           case "currentJob": {
-            const bookings = await getCurrentJobsDB(event.source.userId)
-            console.log(bookings)
+            const bookings = (await getCurrentJobsDB(event.source.userId)).map((booking) => {
+              const bookingTemp = booking
+              bookingTemp.bookingInfo = JSON.parse(bookingTemp.bookingInfo)
+              return bookingTemp
+            })
             if (bookings.length) {
-              await pushMessage([flexWrapper(jobAndBookingTable(bookings, "Current Jobs", "currentJobInfo"))], "driver", event.source.userId)
+              await pushMessage([flexWrapper(currentJobsTable(bookings))], "driver", event.source.userId)
             } else {
               await pushMessage([textTemplate("Sorry, you have no job yet.")], "driver", event.source.userId)
             }

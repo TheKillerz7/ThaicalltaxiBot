@@ -18,6 +18,7 @@ const async = require('async');
 const db = require('../models/driver')
 const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
 const { confirmSelect } = require('../lineComponents/confirmSelect')
+const { commentFlex } = require('../lineComponents/commentFlex')
 
 const getAllDriver = async (req, res) => {
   try {
@@ -125,7 +126,7 @@ const getCurrentJobWithLineFlex = async (driverId, bookingId) => {
   try {
     await pushMessage([flex], "driver", driverId)
   } catch (error) {
-    console.log(error)
+    console.log(error.response.data.details)
   }
 }
 
@@ -216,7 +217,9 @@ const transferJob = async (req, res) => {
 
 const startJob = async (bookingId, driverId) => {
   try {
-    const booking = (await getBookingByIdDB(bookingId))[0]
+    const booking = (await getBookingWithPricesByIdDB(bookingId))[0]
+    const carType = JSON.parse((await db.getDriverByIdDB(booking.driverId))[0].vehicleInfo).carType
+    booking.selectedCarType = carType
     if (booking.bookingStatus !== "ongoing") {
       return await pushMessage([textTemplate("This job has already been canceled or finished")], "driver", driverId)
     }
@@ -235,7 +238,7 @@ const finishingJob = async (bookingId, driverId) => {
       return await pushMessage([textTemplate("This job has already been canceled or finished")], "driver", driverId)
     }
     await db.finishingJobDB(bookingId)
-    await pushMessage([textTemplate("Thank you for using our service! Have a great course!")], "user", booking.userId) 
+    await pushMessage([flexWrapper(commentFlex())], "user", booking.userId) 
     await pushMessage([textTemplate("Thank you for giving out such great service! We are greatful to work with you.")], "driver", driverId)
     // res.send("ok")
   } catch (error) {

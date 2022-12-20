@@ -8,21 +8,42 @@
           "contents": [
             {
               "type": "text",
-              "text": "Processing...",
+              "text": "Please wait 1 min...",
               "weight": "bold",
               "color": "#1DB446",
               "size": "lg"
             },
             {
               "type": "text",
-              "text": "1. Please wait for 1 min\n2. You will get a driver's price\n3. Choose one driver in 1 min",
+              "text": "(For Price)",
+              "margin": "sm",
+              "weight": "bold",
+              "wrap": true,
+              "size": "md"
+            },
+            {
+              "type": "text",
+              "text": "1. Drivers' price & car type will be arrived within 1 min",
               "margin": "xs",
               "wrap": true,
               "size": "md"
             },
             {
               "type": "text",
-              "text": "If you don't do anything, all info will be invalid after 1 minute.",
+              "text": "(For Booking)",
+              "weight": "bold",
+              "margin": "md",
+              "size": "md"
+            },
+            {
+              "type": "text",
+              "text": "2. Choose a driver you like within 1 min",
+              "margin": "xs",
+              "size": "md"
+            },
+            {
+              "type": "text",
+              "text": "Time to choose a driver will be expired after 1 min.",
               "wrap": true,
               "margin": "md",
               "size": "sm",

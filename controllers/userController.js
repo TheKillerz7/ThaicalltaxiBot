@@ -151,6 +151,15 @@ const selectDriver = async (bookingId, driverId, userId) => {
   }
 }
 
+const ratingDriver = async (req, res) => {
+  try {
+    await db.ratingDriverDB(req.body)
+    res.send("Succesful!")
+  } catch (error) {
+    res.send(error)
+  }
+}
+
 const createUser = async (req, res) => {
   let data = {
     userId: req.body.events[0].source.userId
@@ -191,6 +200,7 @@ module.exports = {
     getUserById,
     getCurrentBooking,
     getBookingHistory,
+    ratingDriver,
     createUser,
     updateUser,
     deleteUser

@@ -11,7 +11,7 @@ const moment = require("moment")
             pickupDateStart = "As soon as possible"
         } else {
             startingDate = booking.bookingInfo.start?.pickupDate.split("/").reverse() || booking.bookingInfo.pickupDate.split("/").reverse()
-            pickupDateStart = `${booking.bookingInfo.start?.pickupTime || booking.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM YYYY")}`
+            pickupDateStart = `${booking.bookingInfo.start?.pickupTime || booking.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM YYYY")}`
         }
 
         return (

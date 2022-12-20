@@ -8,14 +8,22 @@ exports.afterConfirm = (bookingId, roomId) => {
           "contents": [
             {
               "type": "text",
-              "text": `Booking Code: ${bookingId}`,
+              "text": `Succeeded!`,
               "weight": "bold",
-              "size": "md"
+              "color": "#1DB446",
+              "size": "lg"
             },
             {
               "type": "text",
-              "text": "Your booking is finished.\nNow, you can see your booking info at \"Current Booking\" and use \"Chatting Room\" for real-time and auto-translated chat.",
-              "margin": "sm",
+              "text": `Your Booking Code: ${bookingId}`,
+              "weight": "bold",
+              "margin": "md",
+              "wrap": true
+            },
+            {
+              "type": "text",
+              "text": "Now, you can chat with driver.",
+              "margin": "xs",
               "wrap": true
             }
           ],

@@ -7,11 +7,11 @@ exports.startedJob = (bookingInfo) => {
     pickupDateStart = "As soon as possible"
   } else {
     startingDate = bookingInfo.bookingInfo.start?.pickupDate.split("/").reverse() || bookingInfo.bookingInfo.pickupDate.split("/").reverse()
-    pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM YYYY")}`
+    pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM YYYY")}`
   }
 
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
-  const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
+  const pickupDateEnd = moment(new Date(endingDate[0], (parseInt(endingDate[1]) - 1).toString(), endingDate[2])).format("DD MMM YYYY")
 
     const message = bookingInfo.bookingInfo.message.th ? {
       "type": "text",
@@ -56,7 +56,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passengers",
+                  "text": "Passenger",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -64,7 +64,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggages",
+                  "text": "Luggage",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -87,7 +87,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carType,
+                  "text": bookingInfo.selectedCarType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -162,7 +162,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passengers",
+                  "text": "Passenger",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -170,7 +170,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggages",
+                  "text": "Luggage",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -207,7 +207,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carType,
+                  "text": bookingInfo.selectedCarType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"

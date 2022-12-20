@@ -34,6 +34,13 @@ const getAllBookingsByUserIdWithPriceDB = (userId) => {
   .select()
 }
 
+const ratingDriverDB = (data) => {
+  return knex("comments")
+  .insert({
+    ...data
+  })
+}
+
 const createUserDB = (data) => {
   return knex("users")
   .insert({
@@ -59,6 +66,7 @@ module.exports = {
     getAllUserDB,
     getUserByIdDB,
     getCurrentBookingsDB,
+    ratingDriverDB,
     getAllBookingsByUserIdDB,
     getAllBookingsByUserIdWithPriceDB,
     createUserDB,

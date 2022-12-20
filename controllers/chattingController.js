@@ -38,7 +38,7 @@ const getRoomsByUserId = async (req, res) => {
                 pickupDateStart = "As soon as possible"
             } else {
                 startingDate = booking.bookingInfo.start?.pickupDate.split("/").reverse() || booking.bookingInfo.pickupDate.split("/").reverse()
-                pickupDateStart = moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM")
+                pickupDateStart = moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM")
             }
             const latestMessage = messages[0]
             const unreadMessages = messages.filter((message) => {

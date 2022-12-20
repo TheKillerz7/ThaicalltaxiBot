@@ -8,13 +8,13 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
     pickupDateStart = "As soon as possible"
   } else {
     startingDate = bookingInfo.bookingInfo.start?.pickupDate.split("/").reverse() || bookingInfo.bookingInfo.pickupDate.split("/").reverse()
-    pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], startingDate[1], startingDate[2])).format("DD MMM YYYY")}`
+    pickupDateStart = `${moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM YYYY")}`
   }
 
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
-  const pickupDateEnd = moment(new Date(endingDate[0], endingDate[1], endingDate[2])).format("DD MMM YYYY")
+  const pickupDateEnd = moment(new Date(endingDate[0], (parseInt(endingDate[1]) - 1).toString(), endingDate[2])).format("DD MMM YYYY")
 
-  const bookingMessage = bookingInfo.bookingInfo.message ? {
+  const bookingMessage = bookingInfo.bookingInfo.message.en ? {
     "type": "text",
     "text": `You: "${bookingInfo.bookingInfo.message.en}"`,
     "color": "#b58b0b",
@@ -125,6 +125,14 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
+                  "text": "Date",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
                   "text": "Time",
                   "size": "sm",
                   "color": "#555555",
@@ -133,7 +141,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": "Car Type",
+                  "text": "Passenger",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -141,15 +149,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passengers",
-                  "size": "sm",
-                  "color": "#555555",
-                  "flex": 0,
-                  "weight": "bold"
-                },
-                {
-                  "type": "text",
-                  "text": "Luggages",
+                  "text": "Luggage",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -179,7 +179,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": carType,
+                  "text": `${bookingInfo.bookingInfo.pickupTime}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -246,6 +246,14 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
+                  "text": "Starting Time",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
                   "text": "Ending Date",
                   "size": "sm",
                   "color": "#555555",
@@ -254,7 +262,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": "Car Type",
+                  "text": "Ending Time",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -262,7 +270,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passengers",
+                  "text": "Passenger",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -270,7 +278,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggages",
+                  "text": "Luggage",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -307,14 +315,21 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.start.pickupTime}, ${pickupDateEnd}`,
+                  "text": `${bookingInfo.bookingInfo.start.pickupTime}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
                 },
                 {
                   "type": "text",
-                  "text": bookingInfo.bookingInfo.carType,
+                  "text": `${pickupDateEnd}`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${bookingInfo.bookingInfo.end.pickupTime}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -397,7 +412,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "text",
-            "text": "Please confirm your info",
+            "text": "Confirm your info",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
@@ -424,7 +439,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                         "cornerRadius": "30px",
                         "height": "14px",
                         "width": "14px",
-                        "borderColor": "#6486E3",
+                        "borderColor": "#EF454D",
                         "borderWidth": "2px"
                       },
                       {
@@ -575,8 +590,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
             ],
             "margin": "md"
           },
-          bookingMessage,
-          driverMessage,
           {
             "type": "separator",
             "margin": "md",
@@ -599,7 +612,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
           {
             "type": "box",
             "layout": "vertical",
-            "margin": "xl",
+            "margin": "lg",
             "spacing": "sm",
             "contents": [
               pricesFlexObj,
@@ -619,7 +632,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                     "type": "text",
                     "text": `฿${total}`,
                     "size": "md",
-                    "color": "#111111",
+                    "color": "#1DB446",
                     "align": "end"
                   }
                 ],
@@ -630,15 +643,8 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 "margin": "md",
                 "color": "#828282"
               },
-              {
-                "type": "text",
-                "text": '*Function After Confirmation*\nChange info at "Chatting Room"\nCancellation at "Current Booking"',
-                "size": "xs",
-                "flex": 0,
-                "wrap": true,
-                "margin": "md",
-                "color": "#cc2727"
-              },
+              bookingMessage,
+              driverMessage,
             ]
           }
         ],

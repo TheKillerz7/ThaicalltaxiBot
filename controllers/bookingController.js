@@ -2,7 +2,7 @@ const ShortUniqueId = require('short-unique-id');
 const { pushMessage } = require('../js/linehelper/pushToLine');
 const { flexWrapper } = require('../lineComponents/flexWrapper');
 const { driverRegisteredCard } = require('../lineComponents/driverRegisteredCard');
-const { getRegisteredDriversWithDriverInfo, updateBookingdriverByDriverId } = require('../models/bookingdrivers');
+const { getRegisteredDriversWithDriverInfo, updateBookingdriverByDriverId, getSelectedRegisterByBookingIdDB, updateBookingdriverByBookingId } = require('../models/bookingdrivers');
 const { createBookingDB, updateBookingDB, getBookingByIdDB, updatePriceDB } = require('../models/booking');
 const { userBooking } = require('../lineComponents/userBooking');
 const { textTemplate } = require('../js/helper/textTemplate');
@@ -43,13 +43,11 @@ const createBooking = async (req, res) => {
   req.body.bookingId = id
 
   const flexMessage = flexWrapper(waitForDriver())
-  let messageToUser = [
-    flexMessage
-  ]
+  let messageToUser = []
   try {
     await createBookingDB(req.body)
     const drivers = await getAllDriverLightDB({
-      jobNotification: true,
+      // jobNotification: true,
       driverStatus: "active"
     })
     let ids = []
@@ -62,7 +60,7 @@ const createBooking = async (req, res) => {
         from: req.body.bookingInfo.from.province.th,
         to: req.body.bookingInfo.to.province.th
       }
-      await multicastMessage([flexWrapper(jobNotification(id, provinceTitle))], "driver", ids)
+      if (ids.length) await multicastMessage([flexWrapper(jobNotification(id, provinceTitle))], "driver", ids)
     } else {
       ids = [...drivers.filter((driver, index) => {
         driver.provinceNotification = JSON.parse(driver.provinceNotification)
@@ -72,17 +70,17 @@ const createBooking = async (req, res) => {
         from: req.body.bookingInfo.start.place.province.th,
         to: req.body.bookingInfo.end.place.province.th
       }
-      await multicastMessage([flexWrapper(jobNotification(id, provinceTitle))], "driver", ids)
+      if (ids.length) await multicastMessage([flexWrapper(jobNotification(id, provinceTitle))], "driver", ids)
     }
     
-    await pushMessage(messageToUser, "user", req.body.userId)
+    await pushMessage([flexMessage], "user", req.body.userId)
     console.log("Create booking successfully!")
     res.send("Create booking successfully!")
     setTimeout(async () => {
       try {
         const driversRegisters = await getRegisteredDriversWithDriverInfo(id, "jobDone")
         if (!driversRegisters.length) {
-          await pushMessage([textTemplate("sorry no driver yet")], "user", req.body.userId)
+          await pushMessage([textTemplate("Sorry,\nNo driver at this moment, please try again later or during the daytime in Thailand.\n\n*Note*\nNow, it's on testing period\n(Dec, 2022 - May, 2023)")], "user", req.body.userId)
           await updateBookingDB(id, { bookingStatus: "closed" })
           return
         } 
@@ -95,7 +93,7 @@ const createBooking = async (req, res) => {
         }
         // if (req.body.bookingInfo.carType === "Any type") {
         //   const carTypes = driversRegisters.map((register) => JSON.parse(register.vehicleInfo).carType)
-        //   const selectedIndexes = [carTypes.indexOf("Economy type"), carTypes.indexOf("Sedan type"), carTypes.indexOf("Family type"), carTypes.indexOf("Minibus/Van type")]
+        //   const selectedIndexes = [carTypes.indexOf("Economy type"), carTypes.indexOf("Sedan type"), carTypes.indexOf("Family type"), carTypes.indexOf("Van/Van type")]
         //   let indexesStorage = [...selectedIndexes]
         //   selectedIndexes.forEach((selectedIndex, index) => {
         //     if (selectedIndex > -1) {
@@ -149,7 +147,6 @@ const createBooking = async (req, res) => {
         })
         const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
         messageToUser.push(cardsWrapped)
-        console.log(selectedRegisters)
         await updateBookingdriverByDriverId(id, selectedRegisters.map((register) => register.driverId), { offerStatus: "rejected" })
         driversRegisters.length && await multicastMessage([flexWrapper(bookingAction(req.body, "reject"))], "driver", driversRegisters.map((register) => register.driverId))
         await updateBookingDB(id, { bookingStatus: "selecting" })
@@ -157,9 +154,9 @@ const createBooking = async (req, res) => {
       } catch (error) {
         console.log(error)
       }
-    }, 90000);
+    }, 15000);
   } catch (error) {
-    console.log(error.response.data.details)
+    console.log(error)
   }
 }
 
@@ -172,6 +169,21 @@ const updatePrice = async (req, res) => {
   try {
     await updatePriceDB(req.body.bookingId, data)
     res.send(data)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const cancelBooking = async (req, res) => {
+  try {
+    const driverId = (await getSelectedRegisterByBookingIdDB(req.body.bookingId))[0]
+    const booking = (await getBookingByIdDB(req.body.bookingId))[0]
+    booking.bookingInfo = JSON.parse(booking.bookingInfo)
+    await updateBookingDB(req.body.bookingId, {bookingStatus: "canceled"})
+    await updateBookingdriverByBookingId(req.body.bookingId, {offerStatus: "canceled"})
+    await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "user", req.body.userId)
+    // await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "driver", driverId.driverId)
+    res.send('ok')
   } catch (error) {
     console.log(error)
   }
@@ -204,5 +216,6 @@ module.exports = {
     createBooking,
     updateBooking,
     updatePrice,
+    cancelBooking,
     deleteBooking
 }

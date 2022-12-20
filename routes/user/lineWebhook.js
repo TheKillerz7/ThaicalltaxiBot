@@ -78,8 +78,8 @@ router.post('/', async (req, res) => {
         const params = new URLSearchParams(event.postback.data)
         try {
           const booking = params.get("bookingId") && (await getBookingByIdDB(params.get("bookingId")))[0]
-          booking.bookingInfo = JSON.parse(booking.bookingInfo)
-          if (params.get("type") !== "bookingHistoryInfo") {
+          if (params.get("bookingId")) booking.bookingInfo = JSON.parse(booking.bookingInfo)
+          if (params.get("bookingId") && params.get("type") !== "bookingHistoryInfo") {
             if (booking.bookingStatus === "canceled" || booking.bookingStatus === "finished") return await pushMessage([textTemplate("This booking has already been canceled or closed.")], "user", event.source.userId)
           }
           switch (params.get("type")) {
@@ -126,18 +126,12 @@ router.post('/', async (req, res) => {
               try {
                 await createChatRoom(roomData)
                 if (booking.bookingInfo.from?.name.toLowerCase().includes("airport") || booking.bookingInfo.start?.place.toLowerCase().includes("airport")) {
-                  const meeting = {
-                    roomId,
-                    senderId: params.get("driverId"),
-                    senderType: "driver",
-                    messageType: "meeting"
-                  }
                   const greeting = {
                     roomId,
                     senderId: params.get("driverId"),
                     senderType: "driver",
-                    messageType: "greeting",
-                    translated: "If you have any questions or you want to change any booking info, you can message your driver here."
+                    messageType: "text",
+                    translated: "Hi,\nI am your duty driver and very pleased to serve you!\n\nIf you have any requests or issues, please let me know with your simple text for better translation."
                   }
                   const translated = await translations(greeting.translated, "th")
                   greeting.message = he.decode(translated.data.data.translations[0].translatedText)
@@ -149,21 +143,11 @@ router.post('/', async (req, res) => {
                     senderId: params.get("driverId"),
                     senderType: "driver",
                     messageType: "greeting",
-                    translated: "If you have any questions or you want to change any booking info, you can message your driver here."
-                  }
-                  const greeting1 = {
-                    roomId,
-                    senderId: params.get("driverId"),
-                    senderType: "driver",
-                    messageType: "greeting",
-                    translated: "For easy meeting, can you please type in your name and phone number(For urgent)?"
+                    translated: "Hi,\nI am your duty driver and very pleased to serve you!\n\nIf you have any requests or issues, please let me know with simple text for better translation."
                   }
                   const translated = await translations(greeting.translated, "th")
                   greeting.message = he.decode(translated.data.data.translations[0].translatedText)
-                  const translated1 = await translations(greeting.translated, "th")
-                  greeting1.message = he.decode(translated1.data.data.translations[0].translatedText)
                   await storeChatMessages(greeting)
-                  await storeChatMessages(greeting1)
                 }
               } catch (error) {
                 console.log(error)

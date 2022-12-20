@@ -3,7 +3,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
 
   const message = driverInfo.message ? {
     "type": "text",
-    "text": `"${driverInfo.message.en}"`,
+    "text": `Driver: "${driverInfo.message.en}"`,
     "wrap": true,
     "size": "sm",
     "color": "#b58b0b",
@@ -85,7 +85,6 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           "wrap": true,
           "color": "#5c5c5c"
         },
-        message,
         {
           "type": "separator",
           "margin": "lg",
@@ -98,11 +97,6 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           "spacing": "sm",
           "contents": [
             ...pricesFlexObj,
-            {
-              "type": "separator",
-              "margin": "xl",
-              "color": "#828282"
-            },
             {
               "type": "box",
               "layout": "horizontal",
@@ -123,9 +117,15 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
                   "align": "end"
                 }
               ],
-              "margin": "lg",
+              "margin": "xl",
               "alignItems": "flex-end"
-            }
+            },
+            {
+              "type": "separator",
+              "margin": "xl",
+              "color": "#828282"
+            },
+            message,
           ]
         }
       ],

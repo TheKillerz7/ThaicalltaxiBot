@@ -6,12 +6,11 @@ const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
 const getBookingByStatusWithoutDriverId = async (req, res) => {
     const status = req.params.status
     const driverId = req.params.driverId
-    const carType = JSON.parse((await getDriverByIdDB(driverId))[0].vehicleInfo).carType
     const bookings = await getBookingByStatusWithoutDriverIdDB(status, driverId)
-    const ParsedBookings = bookings.filter((booking, index) => {
+    const ParsedBookings = bookings.map((booking, index) => {
         const bookingTemp = booking
         bookingTemp.bookingInfo = JSON.parse(bookingTemp.bookingInfo)
-        if (bookingTemp.bookingInfo.carType === "Any type" || bookingTemp.bookingInfo.carType === carType) return true
+        return bookingTemp
     })
     res.send(ParsedBookings)
 }
