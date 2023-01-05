@@ -353,9 +353,9 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                         "layout": "vertical",
                         "contents": [],
                         "cornerRadius": "30px",
-                        "height": "14px",
-                        "width": "14px",
-                        "borderColor": "#6486E3",
+                        "height": "13px",
+                        "width": "13px",
+                        "borderColor": "#EF454D",
                         "borderWidth": "2px"
                       },
                       {
@@ -377,93 +377,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 "cornerRadius": "30px",
                 "margin": "none"
               },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                          {
-                            "type": "filler"
-                          },
-                          {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [],
-                            "width": "2px",
-                            "backgroundColor": "#B7B7B7"
-                          },
-                          {
-                            "type": "filler"
-                          }
-                        ],
-                        "flex": 1
-                      }
-                    ],
-                    "width": "12px"
-                  },
-                  {
-                    "type": "text",
-                    "gravity": "center",
-                    "flex": 4,
-                    "size": "xxs",
-                    "color": "#ffffff",
-                    "text": "."
-                  }
-                ],
-                "spacing": "lg",
-                "height": "8px"
-              },
               ...areaToVisit,
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                          {
-                            "type": "filler"
-                          },
-                          {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [],
-                            "width": "2px",
-                            "backgroundColor": "#B7B7B7"
-                          },
-                          {
-                            "type": "filler"
-                          }
-                        ],
-                        "flex": 1
-                      }
-                    ],
-                    "width": "12px"
-                  },
-                  {
-                    "type": "text",
-                    "gravity": "center",
-                    "flex": 4,
-                    "size": "xxs",
-                    "color": "#ffffff",
-                    "text": "."
-                  }
-                ],
-                "spacing": "lg",
-                "height": "8px"
-              },
               {
                 "type": "box",
                 "layout": "horizontal",
@@ -480,8 +394,8 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                         "layout": "vertical",
                         "contents": [],
                         "cornerRadius": "30px",
-                        "width": "14px",
-                        "height": "14px",
+                        "width": "13px",
+                        "height": "13px",
                         "borderColor": "#6486E3",
                         "borderWidth": "2px"
                       },

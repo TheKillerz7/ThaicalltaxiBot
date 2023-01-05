@@ -13,6 +13,10 @@ router.get('/bookings/:id', getAllBookingsByUserId)
 
 router.post('/comment', ratingDriver)
 
+router.post('/hook', (req, res) => {
+  console.log(req.body)
+})
+
 router.patch('/:id', updateUser)
 
 module.exports = router;

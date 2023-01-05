@@ -13,13 +13,25 @@
                 {
                   "type": "box",
                   "layout": "vertical",
-                  "contents": [],
-                  "flex": 0,
-                  "cornerRadius": "xxl",
-                  "borderWidth": "medium",
-                  "borderColor": "#1e3a8a",
-                  "height": "10px",
-                  "width": "10px"
+                  "contents": [
+                    {
+                      "type": "filler"
+                    },
+                    {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [],
+                      "cornerRadius": "30px",
+                      "height": "13px",
+                      "width": "13px",
+                      "borderColor": "#EF454D",
+                      "borderWidth": "2px"
+                    },
+                    {
+                      "type": "filler"
+                    }
+                  ],
+                  "flex": 0
                 },
                 {
                   "type": "text",
@@ -36,28 +48,30 @@
             },
             {
               "type": "box",
-              "layout": "vertical",
-              "contents": [],
-              "width": "2px",
-              "height": "10px",
-              "backgroundColor": "#1e3a8a",
-              "offsetStart": "sm",
-              "offsetBottom": "sm"
-            },
-            {
-              "type": "box",
               "layout": "horizontal",
               "contents": [
                 {
                   "type": "box",
                   "layout": "vertical",
-                  "contents": [],
-                  "flex": 0,
-                  "cornerRadius": "xxl",
-                  "borderWidth": "medium",
-                  "borderColor": "#1e3a8a",
-                  "height": "10px",
-                  "width": "10px"
+                  "contents": [
+                    {
+                      "type": "filler"
+                    },
+                    {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [],
+                      "cornerRadius": "30px",
+                      "width": "13px",
+                      "height": "13px",
+                      "borderColor": "#6486E3",
+                      "borderWidth": "2px"
+                    },
+                    {
+                      "type": "filler"
+                    }
+                  ],
+                  "flex": 0
                 },
                 {
                   "type": "text",
@@ -70,6 +84,7 @@
                 }
               ],
               "alignItems": "center",
+              "margin": "md",
               "offsetBottom": "md"
             },
             {

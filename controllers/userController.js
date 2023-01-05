@@ -144,12 +144,6 @@ const selectDriver = async (bookingId, driverId, userId) => {
       extraObj.push(extraTemp)
     }
   })
-  if (value === "yes") {
-    const extraTemp = {}
-    extraPrice += 100
-    extraTemp["Meeting"] = 100
-    extraObj.push(extraTemp)
-  }
   const prices = [
     {
       "Course Price": selectedRegister.course
@@ -168,7 +162,7 @@ const selectDriver = async (bookingId, driverId, userId) => {
       return
     }
     await selectedDriver(driverId, bookingId)
-    await updateBookingDB(bookingId, {bookingStatus: "selected", meetingService: value})
+    await updateBookingDB(bookingId, {bookingStatus: "selected"})
     await pushMessage([flex], 'user', userId)
   } catch (error) {
     console.log(error)

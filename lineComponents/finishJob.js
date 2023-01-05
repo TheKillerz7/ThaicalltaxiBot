@@ -12,53 +12,52 @@ exports.finishJob = (bookingInfo) => {
         "type": "filler"
     }
 
-    const hasFlightNoOrName = [
-        {
-            "type": "separator",
-            "margin": "xl"
-        },
-        {
+    const areaToVisit = bookingInfo.bookingType === "R&H" ? bookingInfo.bookingInfo.visit.map((area, index) => {
+      return {
+        "type": "box",
+        "layout": "horizontal",
+        "contents": [
+          {
             "type": "box",
             "layout": "horizontal",
             "contents": [
               {
-                "type": "text",
-                "text": "Name",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
+                "type": "filler"
               },
               {
-                "type": "text",
-                "text": bookingInfo.name || "no name",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
+                "type": "box",
+                "layout": "vertical",
+                "contents": [],
+                "cornerRadius": "xxl",
+                "width": "10px",
+                "height": "10px",
+                "borderColor": "#f29422",
+                "borderWidth": "2px"
+              },
+              {
+                "type": "filler"
               }
             ],
-            "margin": "xl"
-        },
-        {
-            "type": "box",
-            "layout": "horizontal",
-            "contents": [
-            {
-                "type": "text",
-                "text": "Flight No.",
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0
-            },
-            {
-                "type": "text",
-                "text": bookingInfo.flightNumber || "no flight",
-                "size": "sm",
-                "color": "#111111",
-                "align": "end"
-            }
-            ],
-            "margin": "sm"
-        }
+            "offsetTop": "5px",
+            "flex": 0,
+            "width": "20px"
+          },
+          {
+            "type": "text",
+            "text": area.place.name,
+            "flex": 4,
+            "size": "sm"
+          }
+        ],
+        "spacing": "lg",
+        "margin": "sm",
+        "alignItems": "flex-start",
+        "cornerRadius": "30px"
+      }
+    }) : [
+      {
+        "type": "filler"
+      }
     ]
 
     const card = {
@@ -82,12 +81,25 @@ exports.finishJob = (bookingInfo) => {
                 {
                   "type": "box",
                   "layout": "vertical",
-                  "contents": [],
-                  "width": "12px",
-                  "height": "12px",
-                  "borderColor": "#6486E3",
-                  "borderWidth": "3px",
-                  "cornerRadius": "xxl"
+                  "contents": [
+                    {
+                      "type": "filler"
+                    },
+                    {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [],
+                      "cornerRadius": "30px",
+                      "height": "13px",
+                      "width": "13px",
+                      "borderColor": "#EF454D",
+                      "borderWidth": "2px"
+                    },
+                    {
+                      "type": "filler"
+                    }
+                  ],
+                  "flex": 0
                 },
                 {
                   "type": "text",
@@ -103,15 +115,7 @@ exports.finishJob = (bookingInfo) => {
               "alignItems": "center",
               "margin": "md"
             },
-            {
-              "type": "box",
-              "layout": "vertical",
-              "contents": [],
-              "width": "2px",
-              "height": "12px",
-              "backgroundColor": "#6486E3",
-              "offsetStart": "5px"
-            },
+            ...areaToVisit,
             {
               "type": "box",
               "layout": "horizontal",
@@ -119,12 +123,25 @@ exports.finishJob = (bookingInfo) => {
                 {
                   "type": "box",
                   "layout": "vertical",
-                  "contents": [],
-                  "width": "12px",
-                  "height": "12px",
-                  "borderColor": "#6486E3",
-                  "borderWidth": "3px",
-                  "cornerRadius": "xxl"
+                  "contents": [
+                    {
+                      "type": "filler"
+                    },
+                    {
+                      "type": "box",
+                      "layout": "vertical",
+                      "contents": [],
+                      "cornerRadius": "30px",
+                      "width": "13px",
+                      "height": "13px",
+                      "borderColor": "#6486E3",
+                      "borderWidth": "2px"
+                    },
+                    {
+                      "type": "filler"
+                    }
+                  ],
+                  "flex": 0
                 },
                 {
                   "type": "text",
@@ -207,8 +224,7 @@ exports.finishJob = (bookingInfo) => {
                       "align": "end"
                     }
                   ]
-                },
-                ...hasFlightNoOrName
+                }
               ]
             },
             {
