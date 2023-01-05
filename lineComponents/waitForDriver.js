@@ -8,47 +8,26 @@
           "contents": [
             {
               "type": "text",
-              "text": "Please wait 1 min...",
+              "text": "Please wait 2 mins...",
               "weight": "bold",
               "color": "#1DB446",
               "size": "lg"
             },
             {
               "type": "text",
-              "text": "(For Price)",
-              "margin": "sm",
+              "text": "1. Get your price",
+              "margin": "md",
               "weight": "bold",
               "wrap": true,
               "size": "md"
             },
             {
               "type": "text",
-              "text": "1. Drivers' price & car type will be arrived within 1 min",
-              "margin": "xs",
-              "wrap": true,
-              "size": "md"
-            },
-            {
-              "type": "text",
-              "text": "(For Booking)",
+              "text": "2. Choose a driver within another 2 mins to book",
               "weight": "bold",
-              "margin": "md",
-              "size": "md"
-            },
-            {
-              "type": "text",
-              "text": "2. Choose a driver you like within 1 min",
-              "margin": "xs",
-              "size": "md"
-            },
-            {
-              "type": "text",
-              "text": "Time to choose a driver will be expired after 1 min.",
               "wrap": true,
-              "margin": "md",
-              "size": "sm",
-              "color": "#cc2727"
-            }
+              "size": "md"
+            },
           ],
           "paddingStart": "xl",
           "paddingEnd": "xl"

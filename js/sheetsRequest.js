@@ -18,7 +18,7 @@ const googleSheetsInstance = google.sheets({ version: "v4", auth: authClientObje
 const sheetsInfo = async () => {
     const sheetInfo = await googleSheetsInstance.spreadsheets.get({
       auth,
-      spreadsheetId,
+      spreadsheetId, 
     });
   
     return sheetInfo

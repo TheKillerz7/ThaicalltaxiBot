@@ -1,4 +1,4 @@
-  exports.confirmSelect = (code) => {
+exports.meetingServiceFlex = (bookingId, driverId) => {
     const card = {
         "type": "bubble",
         "size": "kilo",
@@ -8,14 +8,14 @@
           "contents": [
             {
               "type": "text",
-              "text": "ใบสมัครของคุณได้รับการอนุมัติ",
+              "text": "Do you need Airport Meeting Service by staff?",
               "weight": "bold",
-              "color": "#1DB446",
+              "wrap": true,
               "size": "lg"
             },
             {
               "type": "text",
-              "text": "โปรดอ่านข้อกำหนดและเงื่อนไช และกดตกลงเพื่อเป็นสมาชิก",
+              "text": "(100 Baht : to meeting staff directly)",
               "wrap": true,
               "margin": "sm"
             }
@@ -36,9 +36,9 @@
                   "style": "link",
                   "height": "sm",
                   "action": {
-                    "type": "uri",
-                    "label": "อ่าน",
-                    "uri": `https://www.thai-taxi.com/q-and-a`
+                    "type": "postback",
+                    "label": "No",
+                    "data": `type=meetingService&value=no&bookingId=${bookingId}&driverId=${driverId}`
                   },
                   "color": "#424242"
                 }
@@ -56,8 +56,8 @@
                   "height": "sm",
                   "action": {
                     "type": "postback",
-                    "label": "ตกลง",
-                    "data": `type=agreeTerms&driverCode=${code}`
+                    "label": "Yes",
+                    "data": `type=meetingService&value=yes&bookingId=${bookingId}&driverId=${driverId}`
                   },
                   "color": "#ffffff"
                 }

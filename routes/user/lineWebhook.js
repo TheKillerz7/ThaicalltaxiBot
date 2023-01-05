@@ -6,7 +6,7 @@ const areaPrices = require('../../areaPrices.json')
 const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
 const { replyMessage } = require('../../js/linehelper/replyToLine.js')
 const userController = require('../../controllers/userController.js')
-const { updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB } = require('../../models/bookingdrivers.js')
+const { updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB, getRegisteredDriversWithDriverInfo } = require('../../models/bookingdrivers.js')
 const { pushMessage } = require('../../js/linehelper/pushToLine.js')
 const { flexWrapper } = require('../../lineComponents/flexWrapper.js')
 const { confirmCancel } = require('../../lineComponents/confirmCancel.js')
@@ -52,7 +52,6 @@ router.post('/', async (req, res) => {
       case "message":
         if (event.message.type === "text") {
           try {
-            await createRichMenu()
             await postToDialogflow(req)
           } catch (error) {
             console.log(error)
@@ -97,25 +96,28 @@ router.post('/', async (req, res) => {
                 const driverId = (await getSelectedRegisterByBookingIdDB(params.get("bookingId")))[0]
                 await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
                 await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "user", event.source.userId)
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "driver", driverId.driverId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red"))], "user", event.source.userId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "งานถูกยกเลิก", "red"))], "driver", driverId.driverId)
               }
               break;
           
             case "selectDriver":
-              if (booking.bookingStatus === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
+              if (booking.bookingStatus === "selected") return
               if (params.get("value") === "select") {
                 await userController.selectDriver(params.get("bookingId"), params.get("driverId"), event.source.userId)
               }
               break;
   
             case "confirmInfo":
-              if (booking.bookingStatus === "ongoing") return await pushMessage([textTemplate("Sorry, you've already confirmed your infomation. If you are willing to change your info, please contact your driver in 'Chatting Room' menu")], "user", event.source.userId)
+              if (booking.bookingStatus === "ongoing") return 
               const uid = new ShortUniqueId({ length: 10 });
               const roomId = uid()
               booking.roomId = roomId
+              const driversRegisters = await getRegisteredDriversWithDriverInfo(params.get("driverId"), "jobDone")
+              driversRegisters.filter((register) => register.driverId !== params.get("driverId"))
               await updateBookingDB(params.get("bookingId"), {bookingStatus: "ongoing"})
-              await pushMessage([flexWrapper(bookingAction(booking, "select"))], 'driver', params.get("driverId"))
+              driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาของคุณไม่ได้รับการอนุมัติ")], "driver", driversRegisters.map((register) => register.driverId))
+              await pushMessage([flexWrapper(bookingAction(booking, "select", "คุณถูกรับเลือกในงานนี้", "green"))], 'driver', params.get("driverId"))
               await pushMessage([flexWrapper(afterConfirm(params.get("bookingId"), roomId))], "user", event.source.userId)
               const roomData = {
                 roomId,
@@ -125,30 +127,16 @@ router.post('/', async (req, res) => {
               }
               try {
                 await createChatRoom(roomData)
-                if (booking.bookingInfo.from?.name.toLowerCase().includes("airport") || booking.bookingInfo.start?.place.toLowerCase().includes("airport")) {
-                  const greeting = {
-                    roomId,
-                    senderId: params.get("driverId"),
-                    senderType: "driver",
-                    messageType: "text",
-                    translated: "Hi,\nI am your duty driver and very pleased to serve you!\n\nIf you have any requests or issues, please let me know with your simple text for better translation."
-                  }
-                  const translated = await translations(greeting.translated, "th")
-                  greeting.message = he.decode(translated.data.data.translations[0].translatedText)
-                  await storeChatMessages(greeting) 
-                  await storeChatMessages(meeting) 
-                } else {
-                  const greeting = {
-                    roomId,
-                    senderId: params.get("driverId"),
-                    senderType: "driver",
-                    messageType: "greeting",
-                    translated: "Hi,\nI am your duty driver and very pleased to serve you!\n\nIf you have any requests or issues, please let me know with simple text for better translation."
-                  }
-                  const translated = await translations(greeting.translated, "th")
-                  greeting.message = he.decode(translated.data.data.translations[0].translatedText)
-                  await storeChatMessages(greeting)
+                const greeting = {
+                  roomId,
+                  senderId: params.get("driverId"),
+                  senderType: "driver",
+                  messageType: "greeting",
+                  translated: "Hi,\nI am your driver and very pleased to serve you!\n\nIf you have any requests or issues, please let me know with simple text for better translation."
                 }
+                const translated = await translations(greeting.translated, "th")
+                greeting.message = he.decode(translated.data.data.translations[0].translatedText)
+                await storeChatMessages(greeting)
               } catch (error) {
                 console.log(error)
               }

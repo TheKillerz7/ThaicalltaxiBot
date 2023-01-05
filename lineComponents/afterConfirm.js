@@ -15,15 +15,15 @@ exports.afterConfirm = (bookingId, roomId) => {
             },
             {
               "type": "text",
-              "text": `Your Booking Code: ${bookingId}`,
-              "weight": "bold",
+              "text": `Your Booking Code:`,
               "margin": "md",
               "wrap": true
             },
             {
               "type": "text",
-              "text": "Now, you can chat with driver.",
-              "margin": "xs",
+              "text": `${bookingId}`,
+              "weight": "bold",
+              "color": "#1DB446",
               "wrap": true
             }
           ],

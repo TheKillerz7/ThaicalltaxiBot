@@ -47,7 +47,7 @@ const createBooking = async (req, res) => {
   try {
     await createBookingDB(req.body)
     const drivers = await getAllDriverLightDB({
-      // jobNotification: true,
+      jobNotification: true,
       driverStatus: "active"
     })
     let ids = []
@@ -80,7 +80,7 @@ const createBooking = async (req, res) => {
       try {
         const driversRegisters = await getRegisteredDriversWithDriverInfo(id, "jobDone")
         if (!driversRegisters.length) {
-          await pushMessage([textTemplate("Sorry,\nNo driver at this moment, please try again later or during the daytime in Thailand.\n\n*Note*\nNow, it's on testing period\n(Dec, 2022 - May, 2023)")], "user", req.body.userId)
+          await pushMessage([textTemplate("Sorry,\nNo driver at this moment")], "user", req.body.userId)
           await updateBookingDB(id, { bookingStatus: "closed" })
           return
         } 
@@ -89,35 +89,9 @@ const createBooking = async (req, res) => {
         for (let i = 0;i < 3;i++) {
           if (driversRegisters[i])  {
             selectedRegisters.push(driversRegisters[i])
+            driversRegisters.splice(i, 1);
           }
         }
-        // if (req.body.bookingInfo.carType === "Any type") {
-        //   const carTypes = driversRegisters.map((register) => JSON.parse(register.vehicleInfo).carType)
-        //   const selectedIndexes = [carTypes.indexOf("Economy type"), carTypes.indexOf("Sedan type"), carTypes.indexOf("Family type"), carTypes.indexOf("Van/Van type")]
-        //   let indexesStorage = [...selectedIndexes]
-        //   selectedIndexes.forEach((selectedIndex, index) => {
-        //     if (selectedIndex > -1) {
-        //       selectedRegisters.push(driversRegisters[selectedIndex])
-        //       driversRegisters.splice(selectedIndex, 1)
-        //     } else {
-        //       driversRegisters.find((el, index) => {
-        //         if(!indexesStorage.includes(index)) {
-        //           indexesStorage.push(index)
-        //           selectedRegisters.push(el)
-        //           driversRegisters.splice(index, 1)
-        //           return true
-        //         }
-        //       })
-        //     }
-        //   })
-        // } else {
-        //   for (let i = 0;i < 3;i++) {
-        //     if (driversRegisters[i])  {
-        //       selectedRegisters.push(driversRegisters[i])
-        //       driversRegisters.splice(i, 1)
-        //     }
-        //   }
-        // }
 
         const cards = selectedRegisters.map((register, index) => {
           if (!register) return
@@ -148,15 +122,15 @@ const createBooking = async (req, res) => {
         const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
         messageToUser.push(cardsWrapped)
         await updateBookingdriverByDriverId(id, selectedRegisters.map((register) => register.driverId), { offerStatus: "rejected" })
-        driversRegisters.length && await multicastMessage([flexWrapper(bookingAction(req.body, "reject"))], "driver", driversRegisters.map((register) => register.driverId))
+        driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
         await updateBookingDB(id, { bookingStatus: "selecting" })
         await pushMessage(messageToUser, "user", req.body.userId)
       } catch (error) {
-        console.log(error)
+        console.log(error.response.data.details)
       }
-    }, 15000);
+    }, 120000);
   } catch (error) {
-    console.log(error)
+    console.log(error.response.data.details)
   }
 }
 
@@ -181,8 +155,8 @@ const cancelBooking = async (req, res) => {
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
     await updateBookingDB(req.body.bookingId, {bookingStatus: "canceled"})
     await updateBookingdriverByBookingId(req.body.bookingId, {offerStatus: "canceled"})
-    await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "user", req.body.userId)
-    // await pushMessage([flexWrapper(bookingAction(booking, "cancel"))], "driver", driverId.driverId)
+    await pushMessage([flexWrapper(bookingAction(booking, "cancel", "Booking's been canceled", "red"))], "user", req.body.userId)
+    await pushMessage([flexWrapper(bookingAction(booking, "cancel", "งานถูกยกเลิก", "red"))], "driver", driverId.driverId)
     res.send('ok')
   } catch (error) {
     console.log(error)

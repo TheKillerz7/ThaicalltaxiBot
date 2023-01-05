@@ -43,22 +43,20 @@
                   "height": 839
                 },
                 "action": {
-                  "type": "postback",
-                  "text": "",
-                  "data": "type=currentBooking"
+                  "type": "uri",
+                  "uri": "https://liff.line.me/1657246657-vNZYz6PA"
                 }
               },
               {
                 "bounds": {
-                  "x": 1238,
-                  "y": 843,
+                  "x": 1234,
+                  "y": 839,
                   "width": 622,
                   "height": 843
                 },
                 "action": {
-                  "type": "postback",
-                  "text": "",
-                  "data": "type=bookingHistory"
+                  "type": "uri",
+                  "uri": "https://liff.line.me/1657246657-O8yWxGP5"
                 }
               },
               {
@@ -69,8 +67,8 @@
                   "height": 835
                 },
                 "action": {
-                  "type": "message",
-                  "text": "Q&A"
+                  "type": "uri",
+                  "uri": "https://www.thai-taxi.com/q-and-a"
                 }
               }
             ]
@@ -133,9 +131,8 @@
                     "height": 847
                   },
                   "action": {
-                    "type": "postback",
-                    "text": "",
-                    "data": "type=currentJob"
+                    "type": "uri",
+                    "uri": "https://liff.line.me/1657246657-84pVvG4y"
                   }
                 },
                 {
@@ -146,9 +143,8 @@
                     "height": 839
                   },
                   "action": {
-                    "type": "postback",
-                    "text": "",
-                    "data": "type=jobHistory"
+                    "type": "uri",
+                    "uri": "https://liff.line.me/1657246657-3pxo0X8W"
                   }
                 }
               ]

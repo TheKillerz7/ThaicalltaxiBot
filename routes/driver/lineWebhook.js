@@ -13,6 +13,8 @@ const axios = require('axios');
 const fs = require('fs');
 const { currentJobsTable } = require('../../lineComponents/currentJobsTable.js')
 const { getSelectedRegisterByBookingIdDB } = require('../../models/bookingdrivers.js')
+const { actionToDriverFlex } = require('../../lineComponents/actionToDriverFlex.js')
+const { defaultDriverMessage } = require('../../lineComponents/defaultDriverMessage.js')
 
 //init packages
 const router = express.Router()
@@ -22,6 +24,7 @@ router.post('/', async (req, res) => {
   if (req.method === "POST") {
     let event = req.body.events[0]
     const id = event.source.userId
+    console.log(event.type)
     switch (event.type) {
       case "message":
         const driver = await getDriverByIdDB(event.source.userId)
@@ -37,7 +40,8 @@ router.post('/', async (req, res) => {
             // if (driver[0].driverStatus !== "registering") return await replyMessage(req, "driver", "คุณ");
             const messageId = event.message.id
             const images = await getDriverImageDB(id)
-            if (images.length >= 2) await updateDriverDB(id, { driverStatus: "pending" })
+            if (images.length == 2) await updateDriverDB(id, { driverStatus: "registering" })
+            // if (images.length >= 3) return await replyMessage(req, "driver", "เรากำลังตรวจสอบข้อมูลของคุณ และจะติดต่อกลับไปอีกครั้ง");
             const fileName = `${event.source.userId}-${Date.now()}.jpg`
             const image = await axios.get(`https://api-data.line.me/v2/bot/message/${messageId}/content`, { responseType: 'arraybuffer', headers: {
               'Content-Type': 'application/json',
@@ -54,6 +58,15 @@ router.post('/', async (req, res) => {
           } catch (error) {
             console.log(error)
           }
+        }
+        break;
+
+      case "follow":
+        console.log('dsa')
+        try {
+          await pushMessage([flexWrapper(defaultDriverMessage())], "driver", event.source.userId);
+        } catch (error) {
+          console.log(error)
         }
         break;
 
@@ -99,8 +112,12 @@ router.post('/', async (req, res) => {
             break;
 
           case "agreeTerms":
-            await updateDriverDB(event.source.userId, { driverTermsAndCon: true })
-            await pushMessage([flexWrapper(actionToDriverFlex("รหัสสมาชิกของคุณ: " + type.get('driverCode'), "คุณสามารถเข้ารับงานในเมนู \"Job Board\" หรือกดปุ่มด้านล่างได้", "#1DB446", "jobBoard"))], "driver", req.body.id)
+            try {
+              await updateDriverDB(event.source.userId, { driverTermsAndCon: true })
+              await pushMessage([flexWrapper(actionToDriverFlex("รหัสสมาชิกของคุณ: " + type.get('driverCode'), "คุณสามารถเข้ารับงานในเมนู \"Job Board\" หรือกดปุ่มด้านล่างได้", "#000000", "jobBoard"))], "driver", event.source.userId)
+            } catch (error) {
+              console.log(error)
+            }
             break;
 
           default:

@@ -31,6 +31,7 @@ const getRoomsByUserId = async (req, res) => {
         const roomsWithMessage = await Promise.all(rooms.map(async (room, index) => {
             const messages = await getMessagesByRoomId(room.roomId, 10)
             const booking = (await getBookingByIdDB(room.bookingId))[0]
+            console.log(booking)
             booking.bookingInfo = JSON.parse(booking.bookingInfo)
             let startingDate = []
             let pickupDateStart = ""

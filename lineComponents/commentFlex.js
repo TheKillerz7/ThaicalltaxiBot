@@ -1,5 +1,5 @@
 
-  exports.commentFlex = () => {
+  exports.commentFlex = (driverId, bookingId) => {
     const card = {
         "type": "bubble",
         "size": "kilo",
@@ -17,10 +17,17 @@
             },
             {
                 "type": "text",
-                "text": "Hope to see you again.\nHave a nice time!\n- Duty Driver -",
+                "text": "Hope to see you again.\nHave a nice time!",
                 "margin": "md",
                 "wrap": true,
                 "size": "md",
+            },
+            {
+              "type": "text",
+              "text": "- Duty Driver -",
+              "margin": "md",
+              "wrap": true,
+              "size": "md",
             },
             {
                 "type": "text",
@@ -39,7 +46,7 @@
                   "action": {
                     "type": "uri",
                     "label": "Rate Driver",
-                    "uri": "https://liff.line.me/1657246657-bq6mzakA"
+                    "uri": `https://liff.line.me/1657246657-bq6mzakA?bookingId=${bookingId}&driverId=${driverId}`
                   },
                   "height": "sm",
                   "color": "#ffffff"

@@ -6,10 +6,11 @@ const { carouselWrapper } = require('../lineComponents/carouselWrapper');
 const { confirmInfo } = require('../lineComponents/confirmInfo');
 const { currentBooking } = require('../lineComponents/currentBooking');
 const { flexWrapper } = require('../lineComponents/flexWrapper');
-const { getBookingByIdDB, updateBookingDB, getBookingWithPricesByIdDB } = require('../models/booking');
-const { selectedDriver, getRegisteredDriversByBookingIdandDriverId } = require('../models/bookingdrivers');
+const { meetingServiceFlex } = require('../lineComponents/meetingServiceFlex');
+const { getBookingByIdDB, updateBookingDB, getBookingWithPricesByIdDB, getBookingByStatusAndUserId } = require('../models/booking');
+const { selectedDriver, getRegisteredDriversByBookingIdandDriverId, updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB } = require('../models/bookingdrivers');
 const { createChatRoom, getRoomsByBookingIdDB } = require('../models/chatting');
-const { getDriverByIdDB } = require('../models/driver');
+const { getDriverByIdDB, updateDriverDB } = require('../models/driver');
 const db = require('../models/user')
 
 const getAllUser = (req, res) => {
@@ -26,6 +27,25 @@ const getUserById = async (req, res) => {
     console.log(error)
   }
 }
+
+const getCurrentBookingsByUserId = async (req, res) => {
+  try {
+    const bookings = await getBookingByStatusAndUserId("ongoing", req.params.id)
+    res.send(bookings)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+const getAllBookingsByUserId = async (req, res) => {
+  try {
+    const bookings = await getBookingByStatusAndUserId("", req.params.id)
+    res.send(bookings)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 
 const getCurrentBooking = async (userId, bookingId) => {
   const booking = (await getBookingWithPricesByIdDB(bookingId))[0]
@@ -124,6 +144,12 @@ const selectDriver = async (bookingId, driverId, userId) => {
       extraObj.push(extraTemp)
     }
   })
+  if (value === "yes") {
+    const extraTemp = {}
+    extraPrice += 100
+    extraTemp["Meeting"] = 100
+    extraObj.push(extraTemp)
+  }
   const prices = [
     {
       "Course Price": selectedRegister.course
@@ -139,20 +165,95 @@ const selectDriver = async (bookingId, driverId, userId) => {
   try {
     const bookingStatus = (await getBookingByIdDB(bookingId))[0].bookingStatus
     if (bookingStatus !== 'selecting') {
-      await pushMessage([textTemplate("You've already selected driver")], 'user', userId)
       return
     }
     await selectedDriver(driverId, bookingId)
-    await updateBookingDB(bookingId, {bookingStatus: "selected"})
+    await updateBookingDB(bookingId, {bookingStatus: "selected", meetingService: value})
     await pushMessage([flex], 'user', userId)
-    console.log("success")
   } catch (error) {
     console.log(error)
   }
 }
 
+const meetingService = async (bookingId, driverId, value, userId) => {
+  const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
+  const driver = (await getDriverByIdDB(driverId))[0]
+  const booking = (await getBookingByIdDB(bookingId))[0]
+  let extraObj = []
+  let extraPrice = 0
+
+  booking.bookingInfo = JSON.parse(booking.bookingInfo)
+  selectedRegister.extra = JSON.parse(selectedRegister.extra)
+  selectedRegister.message = JSON.parse(selectedRegister.message)
+  selectedRegister.extra.map((extra) => {
+    if (extra.title) {
+      const extraTemp = {}
+      extraPrice += parseInt(extra.price)
+      extraTemp[extra.title] = parseInt(extra.price)
+      extraObj.push(extraTemp)
+    }
+  })
+  if (value === "yes") {
+    const extraTemp = {}
+    extraPrice += 100
+    extraTemp["Meeting"] = 100
+    extraObj.push(extraTemp)
+  }
+  const prices = [
+    {
+      "Course Price": selectedRegister.course
+    },
+    {
+      "Tollway": selectedRegister.tollway
+    },
+    ...extraObj
+  ]
+  const totalPrice = parseInt(selectedRegister.course) + parseInt(selectedRegister.tollway) + extraPrice
+  const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegister, JSON.parse(driver.vehicleInfo).carType))
+
+  try {
+    const bookingStatus = (await getBookingByIdDB(bookingId))[0].bookingStatus
+    if (bookingStatus !== 'selecting') {
+      return
+    }
+    await selectedDriver(driverId, bookingId)
+    await updateBookingDB(bookingId, {bookingStatus: "selected", meetingService: value})
+    await pushMessage([flex], 'user', userId)
+    console.log("success")
+  } catch (error) {
+    console.log(error.response.data.details)
+  }
+}
+
 const ratingDriver = async (req, res) => {
   try {
+    const driver = (await getDriverByIdDB(req.body.driverId))[0]
+    let score = 0
+    switch (req.body.starRate) {
+      case 5:
+        score = 3
+        break;
+
+      case 4:
+        score = 1
+        break;
+
+      case 3:
+        score = 0
+        break;
+
+      case 2:
+        score = -3
+        break;
+
+      case 1:
+        score = -5
+        break;
+    
+      default:
+        break;
+    }
+    await updateDriverDB(driver.driverId, { driverRating: parseInt(driver.driverRating) - score })
     await db.ratingDriverDB(req.body)
     res.send("Succesful!")
   } catch (error) {
@@ -196,12 +297,15 @@ const deleteUser = async (req, res) => {
 
 module.exports = {
     getAllUser,
+    getAllBookingsByUserId,
+    getCurrentBookingsByUserId,
     selectDriver,
     getUserById,
     getCurrentBooking,
     getBookingHistory,
     ratingDriver,
     createUser,
+    meetingService,
     updateUser,
     deleteUser
 }

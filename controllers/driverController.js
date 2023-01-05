@@ -10,7 +10,7 @@ const { finishJob } = require('../lineComponents/finishJob')
 const { flexWrapper } = require('../lineComponents/flexWrapper')
 const { jobHistory } = require('../lineComponents/jobHistory')
 const { startedJob } = require('../lineComponents/startedJob')
-const { getBookingByIdDB, updateBookingDB, getBookingWithPricesByIdDB, updatePriceDB } = require('../models/booking')
+const { getBookingByIdDB, updateBookingDB, getBookingWithPricesByIdDB, updatePriceDB, transferJobDB } = require('../models/booking')
 const { getSelectedRegisterByBookingIdDB } = require('../models/bookingdrivers')
 const { getRoomsByBookingIdDB } = require('../models/chatting')
 const fs = require('fs')
@@ -19,6 +19,7 @@ const db = require('../models/driver')
 const { getBookingByStatusWithoutDriverIdDB } = require('../models/jobBoard')
 const { confirmSelect } = require('../lineComponents/confirmSelect')
 const { commentFlex } = require('../lineComponents/commentFlex')
+const { bookingAction } = require('../lineComponents/bookingAction')
 
 const getAllDriver = async (req, res) => {
   try {
@@ -60,7 +61,8 @@ const getSelectedRegisterByBookingId = async (req, res) => {
 const getCurrentJobs = async (req, res) => {
   try {
     const driverId = req.params.id || req.driverId
-    const currentJobs = await getBookingByStatusWithoutDriverIdDB("selected", driverId)
+    const currentJobs = await getBookingByStatusWithoutDriverIdDB("ongoing", driverId)
+    console.log(currentJobs)
     if (res) {
       return res.send(currentJobs)
     }
@@ -97,32 +99,6 @@ const getCurrentJobWithLineFlex = async (driverId, bookingId) => {
   const carType = JSON.parse((await db.getDriverByIdDB(booking.driverId))[0].vehicleInfo).carType
   booking.selectedCarType = carType
 
-  let extraObj = []
-  let extraPrice = 0
-
-  booking.extra = JSON.parse(booking.extra)
-  booking.message = JSON.parse(booking.message)
-  booking.bookingInfo = JSON.parse(booking.bookingInfo)
-  booking.extra.map((extra) => {
-    if (extra.title) {
-      const extraTemp = {}
-      extraPrice += parseInt(extra.price)
-      extraTemp[extra.title] = parseInt(extra.price)
-      extraObj.push(extraTemp)
-    }
-  })
-  const prices = [
-    {
-      "Course": booking.course
-    },
-    {
-      "Tollway": booking.tollway
-    },
-    ...extraObj
-  ]
-  const totalPrice = parseInt(booking.course) + parseInt(booking.tollway) + extraPrice
-
-  const flex = flexWrapper(currentJob(booking, prices, totalPrice))
   try {
     await pushMessage([flex], "driver", driverId)
   } catch (error) {
@@ -204,30 +180,37 @@ const transferJob = async (req, res) => {
   try {
     const driver = await db.getDriverByCodeDB(req.body.driverId)
     if (!driver.length) return res.send("Driver not found.")
+    const booking = (await getBookingByIdDB(req.body.bookingId))[0]
+    booking.bookingInfo = JSON.parse(booking.bookingInfo)
     let data = {
       driverId: driver[0].driverId,
+      newMessage: req.body.newMessage,
       updatedDate: new Date()
     }
-    await updatePriceDB(req.body.bookingId, data)
+    await transferJobDB(req.body.bookingId, req.body.driverId, data)
+    await pushMessage([flexWrapper(bookingAction(booking, "select", "งานนี้ถูกโอนมาให้คุณ", "green"))], 'driver', driver[0].driverId)
     res.send("Successful")
   } catch (error) {
     console.log(error)
   }
 }
 
-const startJob = async (bookingId, driverId) => {
+const startJob = async (req, res) => {
   try {
-    const booking = (await getBookingWithPricesByIdDB(bookingId))[0]
-    const carType = JSON.parse((await db.getDriverByIdDB(booking.driverId))[0].vehicleInfo).carType
+    console.log('ddsa')
+    const booking = (await getBookingByIdDB(req.body.bookingId))[0]
+    const carType = JSON.parse((await db.getDriverByIdDB(req.body.userId))[0].vehicleInfo).carType
     booking.selectedCarType = carType
+    console.log(carType)
     if (booking.bookingStatus !== "ongoing") {
-      return await pushMessage([textTemplate("This job has already been canceled or finished")], "driver", driverId)
+      return await pushMessage([textTemplate("This job has already been canceled or finished")], "driver", req.body.userId)
     }
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
-    await updateBookingDB(bookingId, {bookingStatus: "started"})
-    await pushMessage([flexWrapper(startedJob(booking))], "driver", driverId)
+    await updateBookingDB(req.body.bookingId, {bookingStatus: "started"})
+    await pushMessage([flexWrapper(startedJob(booking))], "driver", req.body.userId)
+    res.send('ok')
   } catch (error) {
-    console.log(error)
+    console.log(error.response.data.details)
   }
 }
 
@@ -235,12 +218,11 @@ const finishingJob = async (bookingId, driverId) => {
   try {
     const booking = (await getBookingByIdDB(bookingId))[0]
     if (booking.bookingStatus !== "started") {
-      return await pushMessage([textTemplate("This job has already been canceled or finished")], "driver", driverId)
+      return
     }
     await db.finishingJobDB(bookingId)
-    await pushMessage([flexWrapper(commentFlex())], "user", booking.userId) 
-    await pushMessage([textTemplate("Thank you for giving out such great service! We are greatful to work with you.")], "driver", driverId)
-    // res.send("ok")
+    await pushMessage([flexWrapper(commentFlex(driverId, bookingId))], "user", booking.userId) 
+    await pushMessage([textTemplate("เยี่ยม!\nภารกิจของคุณสิ้นสุดลงแล้ว")], "driver", driverId)
   } catch (error) {
     console.log(error)
   }
@@ -250,8 +232,14 @@ const createDriver = async (req, res) => {
   const flexMessage = flexWrapper(driverRegistration(req.body))
   console.log(req.body)
   try {
-    await db.createDriverDB(req.body)
-    await pushMessage([textTemplate("โปรดส่งรูป")], 'driver', req.body.driverId)
+    const driver = await db.getDriverByIdDB(req.body.driverId)
+    if (!driver.length) {
+      await db.createDriverDB(req.body)
+      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปคุณคู่กับใบขับขี่\n2. รูปใบทะเบียนรถ\n3. รูปรถของคุณในมุมเฉียง")], 'driver', req.body.driverId)
+    } else {
+      await db.updateDriverDB(req.body.driverId, { personalInfo: JSON.stringify(req.body.personalInfo), vehicleInfo: JSON.stringify(req.body.vehicleInfo) })
+      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปคุณคู่กับใบขับขี่\n2. รูปใบทะเบียนรถ\n3. รูปรถของคุณในมุมเฉียง")], 'driver', req.body.driverId)
+    }
     res.send("Create driver succesfully!")
   } catch (error) {
     console.log(error)

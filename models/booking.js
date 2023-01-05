@@ -4,6 +4,22 @@ const getAllBookingDB = () => {
   return knex("booking").select()
 }
 
+const getBookingByStatusAndUserId = (status, userId) => {
+  if (status) {
+    return knex("booking")
+    .where({
+      userId: userId,
+      bookingStatus: status
+    })
+    .select()
+  }
+  return knex("booking")
+  .where({
+    userId: userId,
+  })
+  .select()
+}
+
 const getBookingByStatus = (status) => {
   return knex("booking")
   .where("bookingStatus", status)
@@ -62,6 +78,15 @@ const updatePriceDB = (id, data) => {
   .update({...data})
 }
 
+const transferJobDB = (bookingId, driverId, data) => {
+  return knex("bookingdrivers")
+  .where({
+    bookingId,
+    driverId
+  })
+  .update({...data})
+}
+
 const deleteBookingDB = (id) => {
     res.json({
       status: 200,
@@ -72,11 +97,13 @@ const deleteBookingDB = (id) => {
 module.exports = {
     getAllBookingDB,
     getBookingByStatus,
+    getBookingByStatusAndUserId,
     getBookingWithPricesByIdDB,
     getBookingByIdDB,
     createBookingDB,
     driverRegisterToBookingDB,
     updateBookingDB,
     updatePriceDB,
+    transferJobDB,
     deleteBookingDB
 }

@@ -1,6 +1,6 @@
 const moment = require("moment")
 
-exports.bookingAction = (bookingInfo, action) => {
+exports.bookingAction = (bookingInfo, action, title, color) => {
   let startingDate = []
   let pickupDateStart = ""
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
@@ -24,7 +24,7 @@ exports.bookingAction = (bookingInfo, action) => {
       "type": "filler"
     }
     
-    const footer = action === "select" ? 
+    const footer = action === "select" ?
     {
         "type": "box",
         "layout": "vertical",
@@ -200,14 +200,6 @@ exports.bookingAction = (bookingInfo, action) => {
                 },
                 {
                   "type": "text",
-                  "text": "Car Type",
-                  "size": "sm",
-                  "color": "#555555",
-                  "flex": 0,
-                  "weight": "bold"
-                },
-                {
-                  "type": "text",
                   "text": "Passengers",
                   "size": "sm",
                   "color": "#555555",
@@ -254,13 +246,6 @@ exports.bookingAction = (bookingInfo, action) => {
                 {
                   "type": "text",
                   "text": `${bookingInfo.bookingInfo.start.pickupTime}, ${pickupDateEnd}`,
-                  "size": "sm",
-                  "color": "#111111",
-                  "align": "start"
-                },
-                {
-                  "type": "text",
-                  "text": bookingInfo.bookingInfo.carType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -320,7 +305,7 @@ exports.bookingAction = (bookingInfo, action) => {
           },
           {
             "type": "text",
-            "text": area.name,
+            "text": area.place.name,
             "gravity": "center",
             "flex": 4,
             "size": "sm"
@@ -343,9 +328,9 @@ exports.bookingAction = (bookingInfo, action) => {
         "contents": [
           {
             "type": "text",
-            "text": action === "select" ? action === "reject" ? "You've been rejected" : "You've been selected" : "Booking's been canceled",
+            "text": title,
             "weight": "bold",
-            "color": action === "select" ? "#1DB446" : "#cc2727",
+            "color": color === "green" ? "#1DB446" : "#cc2727",
             "size": "sm"
           },
           {

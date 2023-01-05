@@ -117,14 +117,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Course",
-                  "size": "sm",
-                  "color": "#555555",
-                  "flex": 0,
-                  "weight": "bold"
-                },
-                {
-                  "type": "text",
                   "text": "Date",
                   "size": "sm",
                   "color": "#555555",
@@ -163,13 +155,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
-                {
-                  "type": "text",
-                  "text": `A to B`,
-                  "size": "sm",
-                  "color": "#111111",
-                  "align": "start"
-                },
                 {
                   "type": "text",
                   "text": `${pickupDateStart}`,
@@ -220,14 +205,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "type": "box",
               "layout": "vertical",
               "contents": [
-                {
-                  "type": "text",
-                  "text": "Course",
-                  "size": "sm",
-                  "color": "#555555",
-                  "flex": 0,
-                  "weight": "bold"
-                },
                 {
                   "type": "text",
                   "text": "Type",
@@ -294,13 +271,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Rent & Hire",
-                  "size": "sm",
-                  "color": "#111111",
-                  "align": "start"
-                },
-                {
-                  "type": "text",
                   "text": bookingInfo.bookingInfo.type,
                   "size": "sm",
                   "color": "#111111",
@@ -364,7 +334,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "box",
-            "layout": "vertical",
+            "layout": "horizontal",
             "contents": [
               {
                 "type": "filler"
@@ -373,29 +343,30 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 "type": "box",
                 "layout": "vertical",
                 "contents": [],
-                "cornerRadius": "30px",
+                "cornerRadius": "xxl",
                 "width": "10px",
                 "height": "10px",
                 "borderColor": "#f29422",
-                "borderWidth": "2px",
-                "offsetStart": "1px"
+                "borderWidth": "2px"
               },
               {
                 "type": "filler"
               }
             ],
+            "offsetTop": "5px",
             "flex": 0,
             "width": "20px"
           },
           {
             "type": "text",
-            "text": area.name,
-            "gravity": "center",
+            "text": area.place.name,
             "flex": 4,
             "size": "sm"
           }
         ],
         "spacing": "lg",
+        "margin": "sm",
+        "alignItems": "flex-start",
         "cornerRadius": "30px"
       }
     }) : [
@@ -412,7 +383,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "text",
-            "text": "Confirm your info",
+            "text": "Confirm your final info",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
@@ -437,8 +408,8 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                         "layout": "vertical",
                         "contents": [],
                         "cornerRadius": "30px",
-                        "height": "14px",
-                        "width": "14px",
+                        "height": "13px",
+                        "width": "13px",
                         "borderColor": "#EF454D",
                         "borderWidth": "2px"
                       },
@@ -461,93 +432,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 "cornerRadius": "30px",
                 "margin": "none"
               },
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                          {
-                            "type": "filler"
-                          },
-                          {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [],
-                            "width": "2px",
-                            "backgroundColor": "#B7B7B7"
-                          },
-                          {
-                            "type": "filler"
-                          }
-                        ],
-                        "flex": 1
-                      }
-                    ],
-                    "width": "12px"
-                  },
-                  {
-                    "type": "text",
-                    "gravity": "center",
-                    "flex": 4,
-                    "size": "xxs",
-                    "color": "#ffffff",
-                    "text": "."
-                  }
-                ],
-                "spacing": "lg",
-                "height": "8px"
-              },
               ...areaToVisit,
-              {
-                "type": "box",
-                "layout": "horizontal",
-                "contents": [
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "box",
-                        "layout": "horizontal",
-                        "contents": [
-                          {
-                            "type": "filler"
-                          },
-                          {
-                            "type": "box",
-                            "layout": "vertical",
-                            "contents": [],
-                            "width": "2px",
-                            "backgroundColor": "#B7B7B7"
-                          },
-                          {
-                            "type": "filler"
-                          }
-                        ],
-                        "flex": 1
-                      }
-                    ],
-                    "width": "12px"
-                  },
-                  {
-                    "type": "text",
-                    "gravity": "center",
-                    "flex": 4,
-                    "size": "xxs",
-                    "color": "#ffffff",
-                    "text": "."
-                  }
-                ],
-                "spacing": "lg",
-                "height": "8px"
-              },
               {
                 "type": "box",
                 "layout": "horizontal",
@@ -564,8 +449,8 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                         "layout": "vertical",
                         "contents": [],
                         "cornerRadius": "30px",
-                        "width": "14px",
-                        "height": "14px",
+                        "width": "13px",
+                        "height": "13px",
                         "borderColor": "#6486E3",
                         "borderWidth": "2px"
                       },
@@ -585,6 +470,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                   }
                 ],
                 "spacing": "lg",
+                "margin": "sm",
                 "cornerRadius": "30px"
               }
             ],
