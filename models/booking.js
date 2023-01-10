@@ -9,8 +9,8 @@ const getBookingByStatusAndUserId = (status, userId) => {
     return knex("booking")
     .where({
       userId: userId,
-      bookingStatus: status
     })
+    .whereIn("bookingStatus", [...status])
     .select()
   }
   return knex("booking")
@@ -78,13 +78,19 @@ const updatePriceDB = (id, data) => {
   .update({...data})
 }
 
-const transferJobDB = (bookingId, driverId, data) => {
-  return knex("bookingdrivers")
+const transferJobDB = async (bookingId, driverId, data) => {
+  await knex("bookingdrivers")
   .where({
     bookingId,
     driverId
   })
   .update({...data})
+
+  return await knex("chatrooms")
+  .where({
+    bookingId
+  })
+  .update({driverId: data.driverId})
 }
 
 const deleteBookingDB = (id) => {

@@ -10,8 +10,8 @@ const getRegisteredDriversWithDriverInfo = (bookingId, sort) => {
     return knex("bookingdrivers")
     .where({
         bookingId,
-        "bookingdrivers.offerStatus": "selecting"
     })
+    .whereIn("bookingdrivers.offerStatus", ["selecting", "selected"])
     .join("drivers", "bookingdrivers.driverId", "drivers.driverId")
     .orderBy(sort || "createdDate")
     .select()

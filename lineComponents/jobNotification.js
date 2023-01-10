@@ -37,7 +37,7 @@
                   "type": "text",
                   "text": province.from,
                   "weight": "bold",
-                  "size": "lg",
+                  "size": "md",
                   "wrap": true,
                   "margin": "md",
                   "offsetBottom": "xs"
@@ -77,7 +77,7 @@
                   "type": "text",
                   "text": province.to,
                   "weight": "bold",
-                  "size": "lg",
+                  "size": "md",
                   "wrap": true,
                   "margin": "md",
                   "offsetBottom": "xs"
@@ -88,14 +88,6 @@
               "offsetBottom": "md"
             },
             {
-              "type": "text",
-              "text": "กดปุ่มด้านล่างหรือใช้เมนู \"Job Board\" เพื่อดูรายละเอียดงาน",
-              "wrap": true,
-              "size": "sm",
-              "margin": "none",
-              "offsetBottom": "xs"
-            },
-            {
               "type": "box",
               "layout": "vertical",
               "contents": [
@@ -103,7 +95,7 @@
                   "type": "button",
                   "action": {
                     "type": "uri",
-                    "label": "Job Board",
+                    "label": "บอร์ดงาน",
                     "uri": `https://liff.line.me/1657246657-XxVxBO25?bookingId=${bookingId}`
                   },
                   "color": "#ffffff",
@@ -112,7 +104,7 @@
               ],
               "backgroundColor": "#1e3a8a",
               "cornerRadius": "md",
-              "margin": "lg"
+              "margin": "sm"
             }
           ]
         }

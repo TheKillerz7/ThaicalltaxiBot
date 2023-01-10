@@ -4,7 +4,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
   let startingDate = []
   let pickupDateStart = ""
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
-    pickupDateStart = "As soon as possible"
+    pickupDateStart = "เร็วที่สุดเท่าที่จะเป็นไปได้"
   } else {
     startingDate = bookingInfo.bookingInfo.start?.pickupDate.split("/").reverse() || bookingInfo.bookingInfo.pickupDate.split("/").reverse()
     pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM YYYY")}`
@@ -15,7 +15,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
 
     const message = bookingInfo.bookingInfo.message.en ? {
       "type": "text",
-      "text": `Message: "${bookingInfo.bookingInfo.message.en}"`,
+      "text": `ผู้โดยสาร: "${bookingInfo.bookingInfo.message.en}"`,
       "wrap": true,
       "size": "sm",
       "color": "#b58b0b",
@@ -38,7 +38,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                         "type": "button",
                         "action": {
                           "type": "uri",
-                          "label": "Chat",
+                          "label": "แชทตอนนี้",
                           "uri": `https://liff.line.me/1657246657-1A9WmnMw?roomId=${bookingInfo.roomId}`
                         },
                         "color": "#ffffff",
@@ -78,7 +78,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Course",
+                  "text": "คอร์ส",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -86,7 +86,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Time",
+                  "text": "วันที่และเวลา",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -94,7 +94,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passengers",
+                  "text": "ผู้โดยสาร",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -102,7 +102,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggages",
+                  "text": "สัมภาระ",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -132,14 +132,14 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.passenger.adult} Adults, ${bookingInfo.bookingInfo.passenger.child} Children`,
+                  "text": `ผู้ใหญ่ ${bookingInfo.bookingInfo.passenger.adult}, เด็ก ${bookingInfo.bookingInfo.passenger.child}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "text": `ใหญ่ ${bookingInfo.bookingInfo.luggage.big}, กลาง ${bookingInfo.bookingInfo.luggage.medium}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -168,7 +168,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Course",
+                  "text": "คอร์ส",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -176,7 +176,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Type",
+                  "text": "ประเภท",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -184,7 +184,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Starting Date",
+                  "text": "วันเริ่มงาน",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -192,7 +192,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Ending Date",
+                  "text": "วันจบงาน",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -200,7 +200,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passengers",
+                  "text": "ผู้โดยสาร",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -208,7 +208,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggages",
+                  "text": "สัมภาระ",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -245,21 +245,21 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.start.pickupTime}, ${pickupDateEnd}`,
+                  "text": `${bookingInfo.bookingInfo.end.pickupTime}, ${pickupDateEnd}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.passenger.adult} Adults, ${bookingInfo.bookingInfo.passenger.child} Children`,
+                  "text": `ผู้ใหญ่ ${bookingInfo.bookingInfo.passenger.adult}, เด็ก ${bookingInfo.bookingInfo.passenger.child}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "text": `ใหญ่ ${bookingInfo.bookingInfo.luggage.big}, กลาง ${bookingInfo.bookingInfo.luggage.medium}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"

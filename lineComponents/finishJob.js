@@ -1,10 +1,10 @@
 exports.finishJob = (bookingInfo) => {
-    const hasMessage = bookingInfo.message ? {
+    const hasMessage = bookingInfo.message.en ? {
         "type": "text",
         "size": "xs",
         "color": "#828282",
         "wrap": true,
-        "text": bookingInfo.message,
+        "text": 'ผู่โดยสาร: "' + bookingInfo.message + '"',
         "margin": "sm"
     } 
     :
@@ -68,7 +68,7 @@ exports.finishJob = (bookingInfo) => {
           "contents": [
             {
               "type": "text",
-              "text": `Booking: ${bookingInfo.bookingId}`,
+              "text": `ไอดีงาน: #${bookingInfo.bookingId}`,
               "weight": "bold",
               "color": "#1DB446",
               "size": "xs",
@@ -172,7 +172,7 @@ exports.finishJob = (bookingInfo) => {
                   "contents": [
                     {
                       "type": "text",
-                      "text": "Pick up",
+                      "text": "วันที่และเวลา",
                       "size": "sm",
                       "color": "#555555",
                       "flex": 0
@@ -192,14 +192,14 @@ exports.finishJob = (bookingInfo) => {
                   "contents": [
                     {
                       "type": "text",
-                      "text": "Passenger",
+                      "text": "ผู้โดยสาร",
                       "size": "sm",
                       "color": "#555555",
                       "flex": 0
                     },
                     {
                       "type": "text",
-                      "text": `${bookingInfo.passenger} people`,
+                      "text": `${bookingInfo.passenger} คน`,
                       "size": "sm",
                       "color": "#111111",
                       "align": "end"
@@ -212,13 +212,13 @@ exports.finishJob = (bookingInfo) => {
                   "contents": [
                     {
                       "type": "text",
-                      "text": "Luggage",
+                      "text": "สัมภาระ",
                       "size": "sm",
                       "color": "#555555"
                     },
                     {
                       "type": "text",
-                      "text": `${bookingInfo.luggage} luggages`,
+                      "text": `${bookingInfo.luggage} ชิ้น`,
                       "size": "sm",
                       "color": "#111111",
                       "align": "end"
@@ -235,7 +235,7 @@ exports.finishJob = (bookingInfo) => {
                     "type": "button",
                     "action": {
                       "type": "postback",
-                      "label": "Finish This Job",
+                      "label": "จบงานนี้",
                       "data": `type=finishJob&bookingId=${bookingInfo.bookingId}`
                     },
                     "color": "#ffffff",

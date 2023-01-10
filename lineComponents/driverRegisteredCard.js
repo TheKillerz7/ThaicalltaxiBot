@@ -1,7 +1,7 @@
 exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarType) => {
   const vehicleInfo = JSON.parse(driverInfo.vehicleInfo)
 
-  const message = driverInfo.message ? {
+  const message = driverInfo.message.en ? {
     "type": "text",
     "text": `Driver: "${driverInfo.message.en}"`,
     "wrap": true,
@@ -123,6 +123,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           "text": `${vehicleInfo.carType}`,
           "size": "md",
           "wrap": true,
+          "weight": "bold",
           "color": "#5c5c5c"
         },
         {

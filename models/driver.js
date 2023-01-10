@@ -49,6 +49,7 @@ const getAllJobByDriverIdDB = (driverId) => {
     driverId,
     "bookingdrivers.offerStatus": "selected"
   })
+  .whereIn("booking.bookingStatus", ["canceled", "finished"])
   .orderBy("booking.createdDate")
   .select()
 }

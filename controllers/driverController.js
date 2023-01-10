@@ -178,7 +178,7 @@ const actionToDriver = async (req, res) => {
 
 const transferJob = async (req, res) => {
   try {
-    const driver = await db.getDriverByCodeDB(req.body.driverId)
+    const driver = await db.getDriverByCodeDB(req.body.driverCode)
     if (!driver.length) return res.send("Driver not found.")
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
@@ -201,10 +201,6 @@ const startJob = async (req, res) => {
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
     const carType = JSON.parse((await db.getDriverByIdDB(req.body.userId))[0].vehicleInfo).carType
     booking.selectedCarType = carType
-    console.log(carType)
-    if (booking.bookingStatus !== "ongoing") {
-      return await pushMessage([textTemplate("This job has already been canceled or finished")], "driver", req.body.userId)
-    }
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
     await updateBookingDB(req.body.bookingId, {bookingStatus: "started"})
     await pushMessage([flexWrapper(startedJob(booking))], "driver", req.body.userId)
@@ -235,10 +231,10 @@ const createDriver = async (req, res) => {
     const driver = await db.getDriverByIdDB(req.body.driverId)
     if (!driver.length) {
       await db.createDriverDB(req.body)
-      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปคุณคู่กับใบขับขี่\n2. รูปใบทะเบียนรถ\n3. รูปรถของคุณในมุมเฉียง")], 'driver', req.body.driverId)
+      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปใบขับขี่(ต้องชัดเจน)\n2. รูปสำเนาใบทะเบียนรถ(ต้องชัดเจน)\n3. รูปคุณคู่กับรถของคุณ(ต้องเห็นป้ายทะเบียนและหน้าชัดเจน)")], 'driver', req.body.driverId)
     } else {
       await db.updateDriverDB(req.body.driverId, { personalInfo: JSON.stringify(req.body.personalInfo), vehicleInfo: JSON.stringify(req.body.vehicleInfo) })
-      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปคุณคู่กับใบขับขี่\n2. รูปใบทะเบียนรถ\n3. รูปรถของคุณในมุมเฉียง")], 'driver', req.body.driverId)
+      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปใบขับขี่(ต้องชัดเจน)\n2. รูปสำเนาใบทะเบียนรถ(ต้องชัดเจน)\n3. รูปคุณคู่กับรถของคุณ(ต้องเห็นป้ายทะเบียนชัดเจน)")], 'driver', req.body.driverId)
     }
     res.send("Create driver succesfully!")
   } catch (error) {

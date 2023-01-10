@@ -30,14 +30,6 @@
               "size": "md",
             },
             {
-                "type": "text",
-                "text": "Leave your rating and comment about driver services.",
-                "margin": "md",
-                "color": "#1DB446",
-                "wrap": true,
-                "size": "xs",
-            },
-            {
               "type": "box",
               "layout": "vertical",
               "contents": [
@@ -45,7 +37,7 @@
                   "type": "button",
                   "action": {
                     "type": "uri",
-                    "label": "Rate Driver",
+                    "label": "How's your driver?",
                     "uri": `https://liff.line.me/1657246657-bq6mzakA?bookingId=${bookingId}&driverId=${driverId}`
                   },
                   "height": "sm",

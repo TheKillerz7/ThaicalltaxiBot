@@ -84,16 +84,9 @@ const createBooking = async (req, res) => {
           await updateBookingDB(id, { bookingStatus: "closed" })
           return
         } 
+        const splicedRegisters = driversRegisters.splice(0, 3)
 
-        let selectedRegisters = []
-        for (let i = 0;i < 3;i++) {
-          if (driversRegisters[i])  {
-            selectedRegisters.push(driversRegisters[i])
-            driversRegisters.splice(i, 1);
-          }
-        }
-
-        const cards = selectedRegisters.map((register, index) => {
+        const cards = splicedRegisters.map((register, index) => {
           if (!register) return
           let extraObj = []
           let extraPrice = 0
@@ -121,16 +114,26 @@ const createBooking = async (req, res) => {
         })
         const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
         messageToUser.push(cardsWrapped)
-        await updateBookingdriverByDriverId(id, selectedRegisters.map((register) => register.driverId), { offerStatus: "rejected" })
-        driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
+        await updateBookingdriverByDriverId(id, splicedRegisters.map((register) => register.driverId), { offerStatus: "rejected" })
+        driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
         await updateBookingDB(id, { bookingStatus: "selecting" })
         await pushMessage(messageToUser, "user", req.body.userId)
+        setTimeout(async () => {
+          const booking = (await getBookingByIdDB(id))[0]
+          if (booking.bookingStatus !== "ongoing") {
+            const driversRegisters = await getRegisteredDriversWithDriverInfo(id, "jobDone")
+            await updateBookingDB(id, { bookingStatus: "closed" })
+            await pushMessage([textTemplate("Sorry, the time has run out. The process has been exited.")], "user", req.body.userId)
+            driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
+            return
+          }
+        }, 120000);
       } catch (error) {
-        console.log(error.response.data.details)
+        console.log(error)
       }
-    }, 120000);
+    }, 180000);
   } catch (error) {
-    console.log(error.response.data.details)
+    console.log(error)
   }
 }
 

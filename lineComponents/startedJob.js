@@ -4,7 +4,7 @@ exports.startedJob = (bookingInfo) => {
   let startingDate = []
   let pickupDateStart = ""
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
-    pickupDateStart = "As soon as possible"
+    pickupDateStart = "ตอนนี้"
   } else {
     startingDate = bookingInfo.bookingInfo.start?.pickupDate.split("/").reverse() || bookingInfo.bookingInfo.pickupDate.split("/").reverse()
     pickupDateStart = `${bookingInfo.bookingInfo.start?.pickupTime || bookingInfo.bookingInfo.pickupTime}, ${moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM YYYY")}`
@@ -40,7 +40,7 @@ exports.startedJob = (bookingInfo) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Time",
+                  "text": "วันที่และเวลา",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -48,7 +48,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Car Type",
+                  "text": "ประเภทรถ",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -56,7 +56,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passenger",
+                  "text": "ผู้โดยสาร",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -64,7 +64,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggage",
+                  "text": "สัมภาระ",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -94,14 +94,14 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.passenger.adult} Adults, ${bookingInfo.bookingInfo.passenger.child} Children`,
+                  "text": `ผู้ใหญ่ ${bookingInfo.bookingInfo.passenger.adult}, เด็ก ${bookingInfo.bookingInfo.passenger.child}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "text": `ใหญ่ ${bookingInfo.bookingInfo.luggage.big}, กลาง ${bookingInfo.bookingInfo.luggage.medium}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -130,7 +130,7 @@ exports.startedJob = (bookingInfo) => {
               "contents": [
                 {
                   "type": "text",
-                  "text": "Type",
+                  "text": "ประเภท",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -138,7 +138,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Starting Date",
+                  "text": "วันเริ่มงาน",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -146,7 +146,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Ending Date",
+                  "text": "วันจบงาน",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -154,7 +154,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Car Type",
+                  "text": "ประเภทรถ",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -162,7 +162,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Passenger",
+                  "text": "ผู้โดยสาร",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -170,7 +170,7 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": "Luggage",
+                  "text": "สัมภาระ",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -214,14 +214,14 @@ exports.startedJob = (bookingInfo) => {
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.passenger.adult} Adults, ${bookingInfo.bookingInfo.passenger.child} Children`,
+                  "text": `ผู้ใหญ่ ${bookingInfo.bookingInfo.passenger.adult}, เด็ก ${bookingInfo.bookingInfo.passenger.child}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
                 },
                 {
                   "type": "text",
-                  "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "text": `ใหญ่ ${bookingInfo.bookingInfo.luggage.big}, กลาง ${bookingInfo.bookingInfo.luggage.medium}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -267,7 +267,7 @@ exports.startedJob = (bookingInfo) => {
           },
           {
             "type": "text",
-            "text": area.name,
+            "text": area.place.name,
             "gravity": "center",
             "flex": 4,
             "size": "sm"
@@ -491,7 +491,7 @@ exports.startedJob = (bookingInfo) => {
                 "type": "button",
                 "action": {
                   "type": "postback",
-                  "label": "Finish Job",
+                  "label": "จบงานนี้",
                   "data": `type=finishJob&bookingId=${bookingInfo.bookingId}`
                 },
                 "color": "#ffffff",

@@ -1,3 +1,5 @@
+const { textTemplate } = require('../js/helper/textTemplate')
+const { pushMessage } = require('../js/linehelper/pushToLine')
 const { driverRegisterToBookingDB, getBookingByIdDB } = require('../models/booking')
 const { getRegisteredDrivers } = require('../models/bookingdrivers')
 const { getDriverByIdDB } = require('../models/driver')
@@ -22,17 +24,18 @@ const driverRegisterToBooking = async (req, res) => {
         const driversRegisters = await getRegisteredDrivers(data.bookingId)
         const driverIds = driversRegisters.map(driver => driver.driverId)
         if (booking.bookingStatus !== "waiting") {
-            res.send("This job has been closed.")
+            res.send("งานนี้ได้หมดเวลาแล้ว")
             return
         }
         if (driverIds.includes(data.driverId)) {
-            res.send("You've already registered to this job.")
+            res.send("คุณเสนอราคาไปเรียบร้อยแล้ว")
             return
         }
         data.extra = JSON.stringify(data.extra)
         await driverRegisterToBookingDB(data)
+        await pushMessage([textTemplate("ผู้โดยสารกำลังเลือกราคา กรุณารอประมาณ 2 นาที")], "driver", data.driverId)
         console.log("Registration success!")
-        res.send("Registration success!")
+        res.send("การเสนอราคาเสร็จสิ้น")
     } catch (error) {
         console.log(error)
     }

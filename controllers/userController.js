@@ -39,7 +39,7 @@ const getCurrentBookingsByUserId = async (req, res) => {
 
 const getAllBookingsByUserId = async (req, res) => {
   try {
-    const bookings = await getBookingByStatusAndUserId("", req.params.id)
+    const bookings = await getBookingByStatusAndUserId(["canceled", "finished"], req.params.id)
     res.send(bookings)
   } catch (error) {
     console.log(error)
@@ -222,6 +222,7 @@ const meetingService = async (bookingId, driverId, value, userId) => {
 const ratingDriver = async (req, res) => {
   try {
     const driver = (await getDriverByIdDB(req.body.driverId))[0]
+    if (!driver) return res.send("Driver or Booking not found.")
     let score = 0
     switch (req.body.starRate) {
       case 5:
@@ -247,11 +248,11 @@ const ratingDriver = async (req, res) => {
       default:
         break;
     }
-    await updateDriverDB(driver.driverId, { driverRating: parseInt(driver.driverRating) - score })
+    await updateDriverDB(driver.driverId, { driverRating: parseInt(driver.driverRating) + score })
     await db.ratingDriverDB(req.body)
     res.send("Succesful!")
   } catch (error) {
-    res.send(error)
+    console.log(error)
   }
 }
 

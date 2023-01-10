@@ -8,7 +8,7 @@
           "contents": [
             {
               "type": "text",
-              "text": "Please wait 2 mins...",
+              "text": "Please wait 3 mins...",
               "weight": "bold",
               "color": "#1DB446",
               "size": "lg"
@@ -23,10 +23,16 @@
             },
             {
               "type": "text",
-              "text": "2. Choose a driver within another 2 mins to book",
+              "text": "2. Choose a driver to book",
               "weight": "bold",
               "wrap": true,
               "size": "md"
+            },
+            {
+              "type": "text",
+              "text": "*Choose within another 2 mins*",
+              "color": "#ff334b",
+              "size": "sm"
             },
           ],
           "paddingStart": "xl",

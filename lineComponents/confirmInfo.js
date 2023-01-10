@@ -383,7 +383,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "text",
-            "text": "Confirm your final info",
+            "text": "Please confirm your final info",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
