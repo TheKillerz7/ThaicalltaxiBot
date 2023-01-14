@@ -1,7 +1,6 @@
 const express = require('express')
 const { getBookingById } = require('../../controllers/bookingController.js')
 const { finishingJob, getCurrentJobWithLineFlex, getJobHistory, startJob } = require('../../controllers/driverController.js')
-const { createRichMenu } = require('../../js/linehelper/createRichmenu.js')
 const { pushMessage } = require('../../js/linehelper/pushToLine.js')
 const { replyMessage } = require('../../js/linehelper/replyToLine.js')
 const { jobAndBookingTable } = require('../../lineComponents/jobAndBookingTable.js')
@@ -41,8 +40,8 @@ router.post('/', async (req, res) => {
             const images = await getDriverImageDB(id)
             const driver = (await getDriverByIdDB(event.source.userId))[0]
             if (driver.driverStatus === "active" || driver.driverStatus === "banned") return await replyMessage(req, "driver", "คุณเป็นสมาชิกเรียบร้อยแล้ว");
-            if (images.length >= 3) return await replyMessage(req, "driver", "เรากำลังตรวจสอบข้อมูลของคุณ และจะติดต่อกลับไปอีกครั้งภายใน 1-2 วันทำการ");
-            if (images.length == 2) {
+            if (images.length >= 4) return await replyMessage(req, "driver", "เรากำลังตรวจสอบข้อมูลของคุณ และจะติดต่อกลับไปอีกครั้งภายใน 1-2 วันทำการ");
+            if (images.length == 3) {
               await updateDriverDB(id, { driverStatus: "registering" })
               await replyMessage(req, "driver", "เรากำลังตรวจสอบข้อมูลของคุณ และจะติดต่อกลับไปอีกครั้งภายใน 1-2 วันทำการ");
             } else {
