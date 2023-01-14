@@ -56,17 +56,19 @@
       try {
         const translated = await translations(chatObj.message, chatObj.senderType === "user" ? "th" : "en")
         chatObj.translated = he.decode(translated.data.data.translations[0].translatedText)
-        await storeChatMessages(chatObj) 
         const clients = await socket.in(obj.roomId).fetchSockets()
-        console.log(clients)
         if (clients.length < 1) {
+          await storeChatMessages(chatObj) 
           if (chatObj.senderType === "driver") {
             const booking = (await getBookingByIdDB(obj.bookingId))[0]
-            await pushMessage([textTemplate("new message")], "user", booking.userId)
+            await pushMessage([flexWrapper(chatNotification("user"))], "user", booking.userId)
           } else {
             const booking = (await getBookingWithPricesByIdDB(obj.bookingId))[0]
-            await pushMessage([textTemplate("new message")], "driver", booking.driverId)
+            await pushMessage([flexWrapper(chatNotification("driver"))], "driver", booking.driverId)
           }
+        } else {
+          chatObj.chatStatus = "read"
+          await storeChatMessages(chatObj) 
         }
         io.to(obj.roomId).emit("message", chatObj);
         console.log('a user: ', socket.id,  ' send message: ' + obj.inputValue)
@@ -93,6 +95,8 @@
   const { getBookingByIdDB, getBookingWithPricesByIdDB } = require('./models/booking.js');
   const { pushMessage } = require('./js/linehelper/pushToLine.js');
   const { textTemplate } = require('./js/helper/textTemplate.js');
+const { flexWrapper } = require('./lineComponents/flexWrapper.js');
+const { chatNotification } = require('./lineComponents/chatNotification.js');
 
   //app use
   app.use(bodyParser.json())

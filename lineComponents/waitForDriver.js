@@ -15,6 +15,14 @@
             },
             {
               "type": "text",
+              "text": "After that:",
+              "margin": "md",
+              "weight": "bold",
+              "wrap": true,
+              "size": "md"
+            },
+            {
+              "type": "text",
               "text": "1. Get your price",
               "margin": "md",
               "weight": "bold",

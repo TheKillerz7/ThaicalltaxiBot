@@ -231,10 +231,10 @@ const createDriver = async (req, res) => {
     const driver = await db.getDriverByIdDB(req.body.driverId)
     if (!driver.length) {
       await db.createDriverDB(req.body)
-      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปใบขับขี่(ต้องชัดเจน)\n2. รูปสำเนาใบทะเบียนรถ(ต้องชัดเจน)\n3. รูปคุณคู่กับรถของคุณ(ต้องเห็นป้ายทะเบียนและหน้าชัดเจน)")], 'driver', req.body.driverId)
+      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปใบขับขี่(ต้องชัดเจน)\n2. รูปสำเนาใบทะเบียนรถ(ต้องชัดเจน)\n3. รูปใบหน้าคุณ(เห็นใบหน้าชัดเจน)\n4. รูปรถของคุณ(ต้องเห็นป้ายทะเบียนชัดเจน)")], 'driver', req.body.driverId)
     } else {
       await db.updateDriverDB(req.body.driverId, { personalInfo: JSON.stringify(req.body.personalInfo), vehicleInfo: JSON.stringify(req.body.vehicleInfo) })
-      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปใบขับขี่(ต้องชัดเจน)\n2. รูปสำเนาใบทะเบียนรถ(ต้องชัดเจน)\n3. รูปคุณคู่กับรถของคุณ(ต้องเห็นป้ายทะเบียนชัดเจน)")], 'driver', req.body.driverId)
+      await pushMessage([textTemplate("ขั้นตอนต่อไป: โปรดส่งรูปดังกล่าวทีละรูปและตามลำดับ\n\n1. รูปใบขับขี่(ต้องชัดเจน)\n2. รูปสำเนาใบทะเบียนรถ(ต้องชัดเจน)\n3. รูปใบหน้าคุณ(เห็นใบหน้าชัดเจน)\n4. รูปรถของคุณ(ต้องเห็นป้ายทะเบียนชัดเจน)")], 'driver', req.body.driverId)
     }
     res.send("Create driver succesfully!")
   } catch (error) {
