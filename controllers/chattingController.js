@@ -72,7 +72,6 @@ const storeChatMessages = async (req, res) => {
 
 const readChatMessages = async (req, res) => {
     const { roomId, userType } = req.body
-    console.log(req.body)
     const data = {
         chatStatus: "read"
     }
