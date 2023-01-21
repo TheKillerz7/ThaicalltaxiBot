@@ -20,6 +20,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
     "color": "#b58b0b",
     "size": "sm",
     "wrap": true,
+    "weight": "bold",
     "margin": "md"
   } : {
     "type": "filler"
@@ -31,6 +32,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
     "color": "#b58b0b",
     "size": "sm",
     "wrap": true,
+    "weight": "bold",
     "margin": "sm"
   } : {
     "type": "filler"

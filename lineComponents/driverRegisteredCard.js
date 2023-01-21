@@ -7,6 +7,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
     "wrap": true,
     "size": "sm",
     "color": "#b58b0b",
+    "weight": "bold",
     "margin": "lg"
   } : {
     "type": "filler"

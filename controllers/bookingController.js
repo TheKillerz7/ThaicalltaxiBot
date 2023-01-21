@@ -14,7 +14,7 @@ const { jobNotification } = require('../lineComponents/jobNotification');
 const { waitForDriver } = require('../lineComponents/waitForDriver');
 
 const getAllBooking = (req, res) => {
-    
+res.send("ok")
 }
 
 const getBookingByStatus = async (req, res) => {
@@ -60,7 +60,7 @@ const createBooking = async (req, res) => {
         from: req.body.bookingInfo.from.province.th,
         to: req.body.bookingInfo.to.province.th
       }
-      if (ids.length) await multicastMessage([flexWrapper(jobNotification(id, provinceTitle))], "driver", ids)
+      if (ids.length) await multicastMessage([flexWrapper(jobNotification(req.body))], "driver", ids)
     } else {
       ids = [...drivers.filter((driver, index) => {
         driver.provinceNotification = JSON.parse(driver.provinceNotification)
@@ -70,7 +70,7 @@ const createBooking = async (req, res) => {
         from: req.body.bookingInfo.start.place.province.th,
         to: req.body.bookingInfo.end.place.province.th
       }
-      if (ids.length) await multicastMessage([flexWrapper(jobNotification(id, provinceTitle))], "driver", ids)
+      if (ids.length) await multicastMessage([flexWrapper(jobNotification(req.body))], "driver", ids)
     }
     
     await pushMessage([flexMessage], "user", req.body.userId)

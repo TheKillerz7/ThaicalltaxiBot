@@ -1,23 +1,32 @@
 exports.chatNotification = (type) => {
     const card = {
         "type": "bubble",
+        "size": "kilo",
         "body": {
           "type": "box",
-          "layout": "vertical",
+          "layout": "horizontal",
           "contents": [
             {
               "type": "box",
               "layout": "baseline",
-              "margin": "md",
               "contents": [
                 {
                   "type": "icon",
                   "size": "xl",
                   "url": "https://cdn-icons-png.flaticon.com/512/724/724715.png"
-                },
+                }
+              ],
+              "paddingBottom": "xs",
+              "flex": 0,
+              "paddingTop": "md"
+            },
+            {
+              "type": "box",
+              "layout": "vertical",
+              "contents": [
                 {
                   "type": "text",
-                  "text": type === "driver" ? "มีข้อความใหม่ เข้าไปเช็คเลย!" : "New message in Chatting Room!",
+                  "text": type === "driver" ? "มีข้อความใหม่เข้าไปเช็คเลย!" : "New message in Chat Room!",
                   "size": type === "driver" ? "md" : "sm",
                   "margin": "lg",
                   "flex": 0,
@@ -25,11 +34,12 @@ exports.chatNotification = (type) => {
                   "offsetBottom": "sm"
                 }
               ],
-              "paddingBottom": "xs"
+              "margin": "md",
+              "paddingBottom": "sm"
             }
           ],
-          "paddingTop": "md",
-          "paddingBottom": "md"
+          "paddingTop": "xs",
+          "paddingBottom": "xs"
         }
       }
 

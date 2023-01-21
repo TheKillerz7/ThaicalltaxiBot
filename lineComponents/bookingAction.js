@@ -19,6 +19,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
       "wrap": true,
       "size": "sm",
       "color": "#b58b0b",
+      "weight": "bold",
       "margin": "md"
     } : {
       "type": "filler"
