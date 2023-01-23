@@ -110,9 +110,9 @@ const { chatNotification } = require('./lineComponents/chatNotification.js');
   app.use('/driver/lineWebhook', lineDriverWebhook)
   app.use('/driver', driver)
   app.use('/driver/jobBoard', jobBoard)
-  app.use('/user', user)
   app.use('/user/dialogflowWebhook', dialogflowUserWebhook)
   app.use('/user/lineWebhook', lineUserWebhook)
+  app.use('/user', user)
   app.use('/booking', booking)
   app.use('/chat', chat)
   
