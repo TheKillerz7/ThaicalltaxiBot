@@ -127,36 +127,35 @@ const getBookingHistory = async (userId, bookingId) => {
 }
 
 const selectDriver = async (bookingId, driverId, userId) => {
-  const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
-  const driver = (await getDriverByIdDB(driverId))[0]
-  const booking = (await getBookingByIdDB(bookingId))[0]
-  let extraObj = []
-  let extraPrice = 0
-
-  booking.bookingInfo = JSON.parse(booking.bookingInfo)
-  selectedRegister.extra = JSON.parse(selectedRegister.extra)
-  selectedRegister.message = JSON.parse(selectedRegister.message)
-  selectedRegister.extra.map((extra) => {
-    if (extra.title) {
-      const extraTemp = {}
-      extraPrice += parseInt(extra.price)
-      extraTemp[extra.title] = parseInt(extra.price)
-      extraObj.push(extraTemp)
-    }
-  })
-  const prices = [
-    {
-      "Course Price": selectedRegister.course
-    },
-    {
-      "Tollway": selectedRegister.tollway
-    },
-    ...extraObj
-  ]
-  const totalPrice = parseInt(selectedRegister.course) + parseInt(selectedRegister.tollway) + extraPrice
-  const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegister, JSON.parse(driver.vehicleInfo).carType))
-
   try {
+    const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
+    const driver = (await getDriverByIdDB(driverId))[0]
+    const booking = (await getBookingByIdDB(bookingId))[0]
+    let extraObj = []
+    let extraPrice = 0
+
+    booking.bookingInfo = JSON.parse(booking.bookingInfo)
+    selectedRegister.extra = JSON.parse(selectedRegister.extra)
+    selectedRegister.message = JSON.parse(selectedRegister.message)
+    selectedRegister.extra.map((extra) => {
+      if (extra.title) {
+        const extraTemp = {}
+        extraPrice += parseInt(extra.price)
+        extraTemp[extra.title] = parseInt(extra.price)
+        extraObj.push(extraTemp)
+      }
+    })
+    const prices = [
+      {
+        "Course Price": selectedRegister.course
+      },
+      {
+        "Tollway": selectedRegister.tollway
+      },
+      ...extraObj
+    ]
+    const totalPrice = parseInt(selectedRegister.course) + parseInt(selectedRegister.tollway) + extraPrice
+    const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegister, JSON.parse(driver.vehicleInfo).carType))
     const bookingStatus = (await getBookingByIdDB(bookingId))[0].bookingStatus
     if (bookingStatus !== 'selecting') {
       return
