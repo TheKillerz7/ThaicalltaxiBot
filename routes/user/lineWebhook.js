@@ -36,6 +36,7 @@ const translations = (text, target) => {
 }
 
 router.get('/', async (req, res) => {
+  console.log("dsa")
   res.json({
     status: 200,
     message: "Get data has successfully",
@@ -44,6 +45,7 @@ router.get('/', async (req, res) => {
 
 //webhook from line
 router.post('/', async (req, res) => {
+  console.log("dsa")
   if (req.method === "POST") {
     let event = req.body.events[0]
     console.log(event)
