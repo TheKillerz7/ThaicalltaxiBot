@@ -128,6 +128,9 @@ const getBookingHistory = async (userId, bookingId) => {
 
 const selectDriver = async (bookingId, driverId, userId) => {
   try {
+    console.log(userId)
+    console.log(driverId)
+    console.log(bookingId)
     const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
     const driver = (await getDriverByIdDB(driverId))[0]
     const booking = (await getBookingByIdDB(bookingId))[0]
