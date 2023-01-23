@@ -20,7 +20,6 @@ res.send("ok")
 const getBookingByStatus = async (req, res) => {
   try {
     const bookings = await getBookingByStatus(req.params.status)
-    console.log(bookings)
     res.send(bookings)
   } catch (error) {
     res.send(error)
@@ -29,7 +28,6 @@ const getBookingByStatus = async (req, res) => {
 
 const getBookingById = async (req, res) => {
   try {
-    console.log(req.params)
     const bookings = await getBookingByIdDB(req.params.id)
     res.send(bookings)
   } catch (error) {

@@ -2,7 +2,7 @@ const axios = require('axios')
 
 exports.postToDialogflow = req => {
   req.headers.host = "dialogflow.cloud.google.com";
-  console.log(req.body)
+
   let config = {
     headers: {
         ...req.headers

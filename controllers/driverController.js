@@ -62,7 +62,6 @@ const getCurrentJobs = async (req, res) => {
   try {
     const driverId = req.params.id || req.driverId
     const currentJobs = await getBookingByStatusWithoutDriverIdDB("ongoing", driverId)
-    console.log(currentJobs)
     if (res) {
       return res.send(currentJobs)
     }

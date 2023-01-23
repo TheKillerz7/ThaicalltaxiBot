@@ -9,7 +9,6 @@ const moment = require("moment")
       startingDate = bookingData.bookingInfo.start?.pickupDate.split("/").reverse() || bookingData.bookingInfo.pickupDate.split("/").reverse()
       pickupDateStart = `${moment(new Date(startingDate[0], (parseInt(startingDate[1]) - 1).toString(), startingDate[2])).format("DD MMM")}`
     }
-    console.log(bookingData.bookingInfo.luggage.big)
 
     const card = {
       "type": "bubble",
