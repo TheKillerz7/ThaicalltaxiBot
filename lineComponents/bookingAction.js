@@ -13,9 +13,9 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
   const pickupDateEnd = moment(new Date(endingDate[0], (parseInt(endingDate[1]) - 1).toString(), endingDate[2])).format("DD MMM YYYY")
 
-    const message = bookingInfo.bookingInfo.message.en ? {
+    const message = bookingInfo.bookingInfo.message.th ? {
       "type": "text",
-      "text": `ผู้โดยสาร: "${bookingInfo.bookingInfo.message.en}"`,
+      "text": `ผู้โดยสาร: "${bookingInfo.bookingInfo.message.th}"`,
       "wrap": true,
       "size": "sm",
       "color": "#b58b0b",

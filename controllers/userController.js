@@ -30,7 +30,7 @@ const getUserById = async (req, res) => {
 
 const getCurrentBookingsByUserId = async (req, res) => {
   try {
-    const bookings = await getBookingByStatusAndUserId("ongoing", req.params.id)
+    const bookings = await getBookingByStatusAndUserId(["ongoing"], req.params.id)
     res.send(bookings)
   } catch (error) {
     console.log(error)
@@ -128,9 +128,6 @@ const getBookingHistory = async (userId, bookingId) => {
 
 const selectDriver = async (bookingId, driverId, userId) => {
   try {
-    console.log(userId)
-    console.log(driverId)
-    console.log(bookingId)
     const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
     const driver = (await getDriverByIdDB(driverId))[0]
     const booking = (await getBookingByIdDB(bookingId))[0]

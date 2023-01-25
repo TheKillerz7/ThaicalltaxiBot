@@ -24,7 +24,7 @@ const uploading = (req, res, next) => {
         //listing all files using forEach
         files.forEach((file) => {
             if (file.includes(req.query.driverId)) {
-            fs.unlink(`${__dirname}../../imgs/uploads/${file}`, (err) => {})
+                fs.unlink(`${__dirname}../../imgs/uploads/${file}`, (err) => {})
             }
         });
         multipleUpload(req, res, next)

@@ -58,7 +58,7 @@ const createBooking = async (req, res) => {
         from: req.body.bookingInfo.from.province.th,
         to: req.body.bookingInfo.to.province.th
       }
-      if (ids.length) await pushMessage([flexWrapper(jobNotification(req.body))], "driver", "U2330f4924d1d5faa190c556e978bee23")
+      if (ids.length) await multicastMessage([flexWrapper(jobNotification(req.body))], "driver", ids)
     } else {
       ids = [...drivers.filter((driver, index) => {
         driver.provinceNotification = JSON.parse(driver.provinceNotification)

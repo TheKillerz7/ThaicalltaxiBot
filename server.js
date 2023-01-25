@@ -106,12 +106,12 @@ const { chatNotification } = require('./lineComponents/chatNotification.js');
   app.set('socketio', io);
   
   //use routes
-  app.use('/driver/dialogflowWebhook', dialogflowDriverWebhook)
-  app.use('/driver/lineWebhook', lineDriverWebhook)
+  app.use('/dialogflowDriverWebhook', dialogflowDriverWebhook)
+  app.use('/lineDriverWebhook', lineDriverWebhook)
   app.use('/driver', driver)
   app.use('/driver/jobBoard', jobBoard)
-  app.use('/user/dialogflowWebhook', dialogflowUserWebhook)
-  app.use('/user/lineWebhook', lineUserWebhook)
+  app.use('/dialogflowUserWebhook', dialogflowUserWebhook)
+  app.use('/lineUserWebhook', lineUserWebhook)
   app.use('/user', user)
   app.use('/booking', booking)
   app.use('/chat', chat)

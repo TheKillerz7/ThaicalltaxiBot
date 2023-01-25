@@ -115,25 +115,6 @@ const moment = require("moment")
                     "contents": [
                       {
                         "type": "text",
-                        "text": bookingData.bookingType,
-                        "size": "xs",
-                        "color": "#ffffff",
-                        "weight": "bold"
-                      }
-                    ],
-                    "flex": 0,
-                    "cornerRadius": "sm",
-                    "backgroundColor": bookingData.bookingType === "A2B" ? "#24a647" : "#632791",
-                    "paddingAll": "xs",
-                    "paddingStart": "sm",
-                    "paddingEnd": "sm"
-                  },
-                  {
-                    "type": "box",
-                    "layout": "vertical",
-                    "contents": [
-                      {
-                        "type": "text",
                         "text": pickupDateStart,
                         "size": "xs",
                         "color": "#ffffff",
@@ -142,11 +123,34 @@ const moment = require("moment")
                     ],
                     "flex": 0,
                     "cornerRadius": "sm",
-                    "backgroundColor": pickupDateStart === "ASAP" ? "#c22f2f" : "#945226",
+                    "backgroundColor": pickupDateStart === "ASAP" ? "#c22f2f" : "#24a647",
+                    "paddingAll": "xs",
+                    "paddingStart": "sm",
+                    "paddingEnd": "sm"
+                  },
+                  pickupDateStart !== "ASAP" ? 
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": bookingData.bookingInfo.start?.pickupTime || bookingData.bookingInfo.pickupTime,
+                        "size": "xs",
+                        "color": "#ffffff",
+                        "weight": "bold"
+                      }
+                    ],
+                    "flex": 0,
+                    "cornerRadius": "sm",
+                    "backgroundColor": "#24a647",
                     "paddingAll": "xs",
                     "paddingStart": "sm",
                     "paddingEnd": "sm",
                     "margin": "sm"
+                  } : 
+                  {
+                    "type": "filler"
                   },
                   {
                     "type": "box",
@@ -167,7 +171,7 @@ const moment = require("moment")
                       },
                       {
                         "type": "text",
-                        "text": `${bookingData.bookingInfo.passenger.adult + bookingData.bookingInfo.passenger.child}`,
+                        "text": `${parseInt(bookingData.bookingInfo.passenger.adult) + parseInt(bookingData.bookingInfo.passenger.child)}`,
                         "size": "xs",
                         "color": "#ffffff",
                         "weight": "bold",
@@ -204,7 +208,7 @@ const moment = require("moment")
                       },
                       {
                         "type": "text",
-                        "text": `${bookingData.bookingInfo.luggage.big + bookingData.bookingInfo.luggage.medium}`,
+                        "text": `${parseInt(bookingData.bookingInfo.luggage.big) + parseInt(bookingData.bookingInfo.luggage.medium)}`,
                         "size": "xs",
                         "color": "#ffffff",
                         "flex": 0,
