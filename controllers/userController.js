@@ -1,5 +1,6 @@
 const { default: ShortUniqueId } = require('short-unique-id');
 const { textTemplate } = require('../js/helper/textTemplate');
+const { multicastMessage } = require('../js/linehelper/multicastToLine');
 const { pushMessage } = require('../js/linehelper/pushToLine');
 const { bookingHistory } = require('../lineComponents/bookingHistory');
 const { carouselWrapper } = require('../lineComponents/carouselWrapper');
@@ -8,7 +9,7 @@ const { currentBooking } = require('../lineComponents/currentBooking');
 const { flexWrapper } = require('../lineComponents/flexWrapper');
 const { meetingServiceFlex } = require('../lineComponents/meetingServiceFlex');
 const { getBookingByIdDB, updateBookingDB, getBookingWithPricesByIdDB, getBookingByStatusAndUserId } = require('../models/booking');
-const { selectedDriver, getRegisteredDriversByBookingIdandDriverId, updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB } = require('../models/bookingdrivers');
+const { selectedDriver, getRegisteredDriversByBookingIdandDriverId, updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB, getRegisteredDriversWithDriverInfo, updateBookingdriverByDriverId } = require('../models/bookingdrivers');
 const { createChatRoom, getRoomsByBookingIdDB } = require('../models/chatting');
 const { getDriverByIdDB, updateDriverDB } = require('../models/driver');
 const db = require('../models/user')
@@ -128,16 +129,18 @@ const getBookingHistory = async (userId, bookingId) => {
 
 const selectDriver = async (bookingId, driverId, userId) => {
   try {
-    const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
+    const selectedRegister = await getRegisteredDriversWithDriverInfo(bookingId)
+    const index = selectedRegister.findIndex((register) => register.driverId === driverId)
+    const selectedRegisteredDriver = (selectedRegister.splice(index, 1))[0]
     const driver = (await getDriverByIdDB(driverId))[0]
     const booking = (await getBookingByIdDB(bookingId))[0]
     let extraObj = []
     let extraPrice = 0
 
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
-    selectedRegister.extra = JSON.parse(selectedRegister.extra)
-    selectedRegister.message = JSON.parse(selectedRegister.message)
-    selectedRegister.extra.map((extra) => {
+    selectedRegisteredDriver.extra = JSON.parse(selectedRegisteredDriver.extra)
+    selectedRegisteredDriver.message = JSON.parse(selectedRegisteredDriver.message)
+    selectedRegisteredDriver.extra.map((extra) => {
       if (extra.title) {
         const extraTemp = {}
         extraPrice += parseInt(extra.price)
@@ -147,18 +150,22 @@ const selectDriver = async (bookingId, driverId, userId) => {
     })
     const prices = [
       {
-        "Course Price": selectedRegister.course
+        "Course Price": selectedRegisteredDriver.course
       },
       {
-        "Tollway": selectedRegister.tollway
+        "Tollway": selectedRegisteredDriver.tollway
       },
       ...extraObj
     ]
-    const totalPrice = parseInt(selectedRegister.course) + parseInt(selectedRegister.tollway) + extraPrice
-    const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegister, JSON.parse(driver.vehicleInfo).carType))
+    const totalPrice = parseInt(selectedRegisteredDriver.course) + parseInt(selectedRegisteredDriver.tollway) + extraPrice
+    const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegisteredDriver, JSON.parse(driver.vehicleInfo).carType))
     const bookingStatus = (await getBookingByIdDB(bookingId))[0].bookingStatus
     if (bookingStatus !== 'selecting') {
       return
+    }
+    if (selectedRegister.length) {
+      await updateBookingdriverByDriverId(bookingId, selectedRegister.map((register) => register.driverId), { offerStatus: "rejected" })
+      await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", selectedRegister.map((register) => register.driverId))
     }
     await selectedDriver(driverId, bookingId)
     await updateBookingDB(bookingId, {bookingStatus: "selected"})

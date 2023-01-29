@@ -21,7 +21,7 @@
             key: "AIzaSyAyRniSWIgVCvj30C2q7d9YlMnN06ZzT_M"
         }
     })
-}
+  }
   //init express
   const app = express()
   const server = createServer(app);
@@ -57,6 +57,7 @@
         const translated = await translations(chatObj.message, chatObj.senderType === "user" ? "th" : "en")
         chatObj.translated = he.decode(translated.data.data.translations[0].translatedText)
         const clients = await socket.in(obj.roomId).fetchSockets()
+        console.log(clients)
         if (clients.length < 1) {
           await storeChatMessages(chatObj) 
           if (chatObj.senderType === "driver") {
@@ -95,8 +96,8 @@
   const { getBookingByIdDB, getBookingWithPricesByIdDB } = require('./models/booking.js');
   const { pushMessage } = require('./js/linehelper/pushToLine.js');
   const { textTemplate } = require('./js/helper/textTemplate.js');
-const { flexWrapper } = require('./lineComponents/flexWrapper.js');
-const { chatNotification } = require('./lineComponents/chatNotification.js');
+  const { flexWrapper } = require('./lineComponents/flexWrapper.js');
+  const { chatNotification } = require('./lineComponents/chatNotification.js');
 
   //app use
   app.use(bodyParser.json())

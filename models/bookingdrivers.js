@@ -13,7 +13,7 @@ const getRegisteredDriversWithDriverInfo = (bookingId, sort) => {
     })
     .whereIn("bookingdrivers.offerStatus", ["selecting", "selected"])
     .join("drivers", "bookingdrivers.driverId", "drivers.driverId")
-    .orderBy(sort || "createdDate")
+    .orderBy(sort || "bookingdrivers.createdDate")
     .select()
 }
 

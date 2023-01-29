@@ -15,7 +15,7 @@
             },
             {
               "type": "text",
-              "text": "After that:",
+              "text": "And get your price",
               "margin": "md",
               "weight": "bold",
               "wrap": true,
@@ -23,24 +23,16 @@
             },
             {
               "type": "text",
-              "text": "1. Get your price",
-              "margin": "md",
-              "weight": "bold",
-              "wrap": true,
-              "size": "md"
-            },
-            {
-              "type": "text",
-              "text": "2. Choose a driver to book",
-              "weight": "bold",
-              "wrap": true,
-              "size": "md"
-            },
-            {
-              "type": "text",
-              "text": "*Choose within another 2 mins*",
+              "text": "For Booking:",
               "color": "#ff334b",
-              "size": "sm"
+              "size": "md"
+            },
+            {
+              "type": "text",
+              "text": "Choose a driver in 2 min",
+              "weight": "bold",
+              "wrap": true,
+              "size": "md"
             },
           ],
           "paddingStart": "xl",

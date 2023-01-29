@@ -83,6 +83,7 @@ const createBooking = async (req, res) => {
           return
         } 
         const splicedRegisters = driversRegisters.splice(0, 3)
+        console.log(driversRegisters)
 
         const cards = splicedRegisters.map((register, index) => {
           if (!register) return
@@ -112,17 +113,19 @@ const createBooking = async (req, res) => {
         })
         const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")
         messageToUser.push(cardsWrapped)
-        await updateBookingdriverByDriverId(id, splicedRegisters.map((register) => register.driverId), { offerStatus: "rejected" })
-        driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
+        if (driversRegisters.length) {
+          await updateBookingdriverByDriverId(id, driversRegisters.map((register) => register.driverId), { offerStatus: "rejected" })
+          await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
+        }
         await updateBookingDB(id, { bookingStatus: "selecting" })
         await pushMessage(messageToUser, "user", req.body.userId)
         setTimeout(async () => {
           const booking = (await getBookingByIdDB(id))[0]
           if (booking.bookingStatus !== "ongoing") {
-            const driversRegisters = await getRegisteredDriversWithDriverInfo(id, "jobDone")
+            const driversRegisters1 = await getRegisteredDriversWithDriverInfo(id, "jobDone")
             await updateBookingDB(id, { bookingStatus: "closed" })
             await pushMessage([textTemplate("Sorry, the time has run out. The process has been exited.")], "user", req.body.userId)
-            driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", driversRegisters.map((register) => register.driverId))
+            driversRegisters1.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", driversRegisters1.map((register) => register.driverId))
             return
           }
         }, 120000);
