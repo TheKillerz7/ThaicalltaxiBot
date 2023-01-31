@@ -31,7 +31,7 @@ const getUserById = async (req, res) => {
 
 const getCurrentBookingsByUserId = async (req, res) => {
   try {
-    const bookings = await getBookingByStatusAndUserId(["ongoing"], req.params.id)
+    const bookings = (await getBookingByStatusAndUserId(["ongoing"], req.params.id)).reverse()
     res.send(bookings)
   } catch (error) {
     console.log(error)
