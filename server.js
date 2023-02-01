@@ -117,6 +117,6 @@
   app.use('/booking', booking)
   app.use('/chat', chat)
   
-  server.listen(5000, () => {
+  server.listen(process.env.PORT || 5000, () => {
     console.log('listening on *:5000');
   });
