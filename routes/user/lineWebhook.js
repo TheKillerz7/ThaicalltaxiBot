@@ -115,7 +115,7 @@ router.post('/', async (req, res) => {
               await updateBookingDB(params.get("bookingId"), {bookingStatus: "ongoing"})
               driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาของคุณไม่ได้รับการอนุมัติ")], "driver", driversRegisters.map((register) => register.driverId))
               await pushMessage([flexWrapper(bookingAction(booking, "select", "คุณถูกรับเลือกในงานนี้", "green"))], 'driver', params.get("driverId"))
-              await pushMessage([flexWrapper(afterConfirm(params.get("bookingId"), roomId))], "user", event.source.userId)
+              await pushMessage([flexWrapper(afterConfirm((booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3), roomId))], "user", event.source.userId)
               const roomData = {
                 roomId,
                 bookingId: params.get("bookingId"),
