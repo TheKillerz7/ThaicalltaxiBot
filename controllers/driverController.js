@@ -165,6 +165,11 @@ const actionToDriver = async (req, res) => {
         await db.updateDriverDB(req.body.id, {driverStatus: "rejected"})
         await pushMessage([flexWrapper(actionToDriverFlex("คุณถูกปฏิเสธการสมัคร", req.body.message, "#cc2727", "register"))], "driver", req.body.id)
         break;
+
+      case "changeId":
+        await db.updateDriverDB(req.body.id, {driverStatus: "rejected"})
+        await pushMessage([textTemplate("รหัสคนขับรถของคุณถูกเปลี่ยนเป็น: " + req.body.id)], "driver", req.body.id)
+        break;
     
       default:
         break;
