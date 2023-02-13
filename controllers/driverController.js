@@ -168,7 +168,7 @@ const actionToDriver = async (req, res) => {
 
       case "changeId":
         await db.updateDriverDB(req.body.id, {driverStatus: "active", driverCode: req.body.message})
-        await pushMessage([textTemplate("รหัสคนขับรถของคุณถูกเปลี่ยนเป็น: " + req.body.id)], "driver", req.body.id)
+        await pushMessage([textTemplate("รหัสคนขับรถของคุณถูกเปลี่ยนเป็น: " + req.body.message)], "driver", req.body.id)
         break;
     
       default:
