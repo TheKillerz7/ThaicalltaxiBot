@@ -170,6 +170,14 @@ const actionToDriver = async (req, res) => {
         await db.updateDriverDB(req.body.id, {driverStatus: "active", driverCode: req.body.message})
         await pushMessage([textTemplate("รหัสคนขับรถของคุณถูกเปลี่ยนเป็น: " + req.body.message)], "driver", req.body.id)
         break;
+
+      case "setTL":
+        const driver = (await db.getDriverByIdDB(req.body.id))[0]
+        driver.vehicleInfo = JSON.parse(driver.vehicleInfo)
+        driver.vehicleInfo.carType = "Team Leader"
+        await db.updateDriverDB(req.body.id, {vehicleInfo: JSON.stringify(driver.vehicleInfo)})
+        await pushMessage([textTemplate("คุณถูกเลื่อนขั้นให้เป็นหัวหน้า")], "driver", req.body.id)
+        break;
     
       default:
         break;
