@@ -58,7 +58,7 @@ const selectedDriver = async (selectedDriverId, bookingId) => {
 const updateBookingdriverByDriverId = (bookingId, driverIds, data) => {
     return knex("bookingdrivers")
     .where("bookingId", bookingId)
-    .whereNotIn("driverId", [...driverIds])
+    .whereIn("driverId", [...driverIds])
     .update({...data})
 }
 
