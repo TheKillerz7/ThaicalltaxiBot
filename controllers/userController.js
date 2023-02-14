@@ -129,6 +129,10 @@ const getBookingHistory = async (userId, bookingId) => {
 
 const selectDriver = async (bookingId, driverId, userId) => {
   try {
+    const bookingStatus = (await getBookingByIdDB(bookingId))[0].bookingStatus
+    if (bookingStatus !== 'selecting') {
+      return
+    }
     const selectedRegister = await getRegisteredDriversWithDriverInfo(bookingId)
     const index = selectedRegister.findIndex((register) => register.driverId === driverId)
     const selectedRegisteredDriver = (selectedRegister.splice(index, 1))[0]
@@ -159,10 +163,6 @@ const selectDriver = async (bookingId, driverId, userId) => {
     ]
     const totalPrice = parseInt(selectedRegisteredDriver.course) + parseInt(selectedRegisteredDriver.tollway) + extraPrice
     const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegisteredDriver, JSON.parse(driver.vehicleInfo).carType))
-    const bookingStatus = (await getBookingByIdDB(bookingId))[0].bookingStatus
-    if (bookingStatus !== 'selecting') {
-      return
-    }
     if (selectedRegister.length) {
       await updateBookingdriverByDriverId(bookingId, selectedRegister.map((register) => register.driverId), { offerStatus: "rejected" })
       await multicastMessage([textTemplate("ขออภัย การเสนอราคาหมดเวลาแล้ว")], "driver", selectedRegister.map((register) => register.driverId))

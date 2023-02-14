@@ -99,7 +99,6 @@ router.post('/', async (req, res) => {
               break;
           
             case "selectDriver":
-              if (booking.bookingStatus === "selected") return
               if (params.get("value") === "select") {
                 await userController.selectDriver(params.get("bookingId"), params.get("driverId"), event.source.userId)
               }
