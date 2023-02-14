@@ -102,16 +102,16 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
             {
               "type": "icon",
               "size": "sm",
-              "url": "https://cdn-icons-png.flaticon.com/512/2107/2107737.png"
+              "url": "https://cdn-icons-png.flaticon.com/512/2107/2107957.png"
             },
             {
               "type": "icon",
               "size": "sm",
-              "url": "https://cdn-user-icons.flaticon.com/72473/72473417/1672803981196.svg?token=exp=1672750932~hmac=961060397e5cd406497c5593674809c0"
+              "url": "https://cdn-icons-png.flaticon.com/512/2107/2107957.png"
             },
             {
               "type": "text",
-              "text": "3.5",
+              "text": "5.0",
               "size": "sm",
               "color": "#999999",
               "margin": "md",
