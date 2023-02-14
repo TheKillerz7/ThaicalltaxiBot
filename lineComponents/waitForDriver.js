@@ -25,7 +25,9 @@
               "type": "text",
               "text": "For Booking:",
               "color": "#ff334b",
-              "size": "md"
+              "weight": "bold",
+              "margin": "md",
+              "size": "sm"
             },
             {
               "type": "text",

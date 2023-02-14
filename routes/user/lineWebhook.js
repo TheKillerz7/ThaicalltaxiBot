@@ -99,13 +99,14 @@ router.post('/', async (req, res) => {
               break;
           
             case "selectDriver":
+              console.log('dsa')
               if (params.get("value") === "select") {
                 await userController.selectDriver(params.get("bookingId"), params.get("driverId"), event.source.userId)
               }
               break;
   
             case "confirmInfo":
-              if (booking.bookingStatus === "ongoing") return 
+              if (booking.bookingStatus !== "selected") return 
               const uid = new ShortUniqueId({ length: 10 });
               const roomId = uid()
               booking.roomId = roomId

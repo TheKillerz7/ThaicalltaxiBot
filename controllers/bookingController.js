@@ -58,7 +58,7 @@ const createBooking = async (req, res) => {
         from: req.body.bookingInfo.from.province.th,
         to: req.body.bookingInfo.to.province.th
       }
-      if (ids.length) await multicastMessage([flexWrapper(jobNotification(req.body))], "driver", ids)
+      // if (ids.length) await multicastMessage([flexWrapper(jobNotification(req.body))], "driver", ids)
     } else {
       ids = [...drivers.filter((driver, index) => {
         driver.provinceNotification = JSON.parse(driver.provinceNotification)
@@ -132,7 +132,7 @@ const createBooking = async (req, res) => {
       } catch (error) {
         console.log(error)
       }
-    }, 180000);
+    }, 100000);
   } catch (error) {
     console.log(error)
   }
