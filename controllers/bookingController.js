@@ -87,28 +87,13 @@ const createBooking = async (req, res) => {
 
         const cards = splicedRegisters.map((register, index) => {
           if (!register) return
-          let extraObj = []
-          let extraPrice = 0
-          register.extra = JSON.parse(register.extra)
           register.message = JSON.parse(register.message)
-          register.extra.map((extra) => {
-            if (extra.title) {
-              const extraTemp = {}
-              extraPrice += parseInt(extra.price)
-              extraTemp[extra.title] = parseInt(extra.price)
-              extraObj.push(extraTemp)
-            }
-          })
           const prices = [
             {
               "Course": register.course
-            },
-            {
-              "Tollway": register.tollway
-            },
-            ...extraObj
+            }
           ]
-          const totalPrice = parseInt(register.course) + parseInt(register.tollway) + extraPrice
+          const totalPrice = parseInt(register.course)
           return driverRegisteredCard(prices, totalPrice, register, index + 1, req.body.bookingInfo.carType)
         })
         const cardsWrapped = flexWrapper(carouselWrapper(cards), "Driver's Offers")

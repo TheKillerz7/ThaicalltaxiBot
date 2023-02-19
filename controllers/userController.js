@@ -54,31 +54,14 @@ const getCurrentBooking = async (userId, bookingId) => {
   const roomId = (await getRoomsByBookingIdDB(booking.bookingId))[0].roomId
   booking.selectedCarType = carType
   booking.roomId = roomId
-
-  let extraObj = []
-  let extraPrice = 0
-
-  booking.extra = JSON.parse(booking.extra)
   booking.message = JSON.parse(booking.message)
   booking.bookingInfo = JSON.parse(booking.bookingInfo)
-  booking.extra.map((extra) => {
-    if (extra.title) {
-      const extraTemp = {}
-      extraPrice += parseInt(extra.price)
-      extraTemp[extra.title] = parseInt(extra.price)
-      extraObj.push(extraTemp)
-    }
-  })
   const prices = [
     {
       "Course": booking.course
-    },
-    {
-      "Tollway": booking.tollway
-    },
-    ...extraObj
+    }
   ]
-  const totalPrice = parseInt(booking.course) + parseInt(booking.tollway) + extraPrice
+  const totalPrice = parseInt(booking.course)
 
   const flex = flexWrapper(currentBooking(booking, prices, totalPrice))
   try {
@@ -93,31 +76,14 @@ const getBookingHistory = async (userId, bookingId) => {
   console.log(booking)
   const carType = JSON.parse((await getDriverByIdDB(booking.driverId))[0].vehicleInfo).carType
   booking.selectedCarType = carType
-
-  let extraObj = []
-  let extraPrice = 0
-
-  booking.extra = JSON.parse(booking.extra)
   booking.message = JSON.parse(booking.message)
   booking.bookingInfo = JSON.parse(booking.bookingInfo)
-  booking.extra.map((extra) => {
-    if (extra.title) {
-      const extraTemp = {}
-      extraPrice += parseInt(extra.price)
-      extraTemp[extra.title] = parseInt(extra.price)
-      extraObj.push(extraTemp)
-    }
-  })
   const prices = [
     {
       "Course": booking.course
-    },
-    {
-      "Tollway": booking.tollway
-    },
-    ...extraObj
+    }
   ]
-  const totalPrice = parseInt(booking.course) + parseInt(booking.tollway) + extraPrice
+  const totalPrice = parseInt(booking.course)
 
   const flex = flexWrapper(bookingHistory(booking, prices, totalPrice))
   try {
@@ -142,26 +108,13 @@ const selectDriver = async (bookingId, driverId, userId) => {
     let extraPrice = 0
 
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
-    selectedRegisteredDriver.extra = JSON.parse(selectedRegisteredDriver.extra)
     selectedRegisteredDriver.message = JSON.parse(selectedRegisteredDriver.message)
-    selectedRegisteredDriver.extra.map((extra) => {
-      if (extra.title) {
-        const extraTemp = {}
-        extraPrice += parseInt(extra.price)
-        extraTemp[extra.title] = parseInt(extra.price)
-        extraObj.push(extraTemp)
-      }
-    })
     const prices = [
       {
         "Course Price": selectedRegisteredDriver.course
-      },
-      {
-        "Tollway": selectedRegisteredDriver.tollway
-      },
-      ...extraObj
+      }
     ]
-    const totalPrice = parseInt(selectedRegisteredDriver.course) + parseInt(selectedRegisteredDriver.tollway) + extraPrice
+    const totalPrice = parseInt(selectedRegisteredDriver.course)
     const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegisteredDriver, JSON.parse(driver.vehicleInfo).carType))
     if (selectedRegister.length) {
       await updateBookingdriverByDriverId(bookingId, selectedRegister.map((register) => register.driverId), { offerStatus: "rejected" })
@@ -179,36 +132,14 @@ const meetingService = async (bookingId, driverId, value, userId) => {
   const selectedRegister = (await getRegisteredDriversByBookingIdandDriverId(bookingId, driverId))[0]
   const driver = (await getDriverByIdDB(driverId))[0]
   const booking = (await getBookingByIdDB(bookingId))[0]
-  let extraObj = []
-  let extraPrice = 0
-
   booking.bookingInfo = JSON.parse(booking.bookingInfo)
-  selectedRegister.extra = JSON.parse(selectedRegister.extra)
   selectedRegister.message = JSON.parse(selectedRegister.message)
-  selectedRegister.extra.map((extra) => {
-    if (extra.title) {
-      const extraTemp = {}
-      extraPrice += parseInt(extra.price)
-      extraTemp[extra.title] = parseInt(extra.price)
-      extraObj.push(extraTemp)
-    }
-  })
-  if (value === "yes") {
-    const extraTemp = {}
-    extraPrice += 100
-    extraTemp["Meeting"] = 100
-    extraObj.push(extraTemp)
-  }
   const prices = [
     {
       "Course Price": selectedRegister.course
-    },
-    {
-      "Tollway": selectedRegister.tollway
-    },
-    ...extraObj
+    }
   ]
-  const totalPrice = parseInt(selectedRegister.course) + parseInt(selectedRegister.tollway) + extraPrice
+  const totalPrice = parseInt(selectedRegister.course)
   const flex = flexWrapper(confirmInfo(booking, prices, totalPrice, selectedRegister, JSON.parse(driver.vehicleInfo).carType))
 
   try {

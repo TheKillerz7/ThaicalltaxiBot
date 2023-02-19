@@ -109,31 +109,14 @@ const getJobHistory = async (driverId, bookingId) => {
   const booking = (await getBookingWithPricesByIdDB(bookingId))[0]
   const carType = JSON.parse((await db.getDriverByIdDB(booking.driverId))[0].vehicleInfo).carType
   booking.selectedCarType = carType
-
-  let extraObj = []
-  let extraPrice = 0
-
-  booking.extra = JSON.parse(booking.extra)
   booking.message = JSON.parse(booking.message)
   booking.bookingInfo = JSON.parse(booking.bookingInfo)
-  booking.extra.map((extra) => {
-    if (extra.title) {
-      const extraTemp = {}
-      extraPrice += parseInt(extra.price)
-      extraTemp[extra.title] = parseInt(extra.price)
-      extraObj.push(extraTemp)
-    }
-  })
   const prices = [
     {
       "Course": booking.course
-    },
-    {
-      "Tollway": booking.tollway
-    },
-    ...extraObj
+    }
   ]
-  const totalPrice = parseInt(booking.course) + parseInt(booking.tollway) + extraPrice
+  const totalPrice = parseInt(booking.course)
 
   const flex = flexWrapper(jobHistory(booking, prices, totalPrice))
   try {
