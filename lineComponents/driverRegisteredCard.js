@@ -121,7 +121,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
         },
         {
           "type": "text",
-          "text": `${vehicleInfo.carType}`,
+          "text": `${vehicleInfo.carType} #${driverInfo.driverCode}`,
           "size": "md",
           "wrap": true,
           "weight": "bold",
@@ -138,14 +138,13 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           "margin": "lg",
           "spacing": "sm",
           "contents": [
-            ...pricesFlexObj,
             {
               "type": "box",
               "layout": "horizontal",
               "contents": [
                 {
                   "type": "text",
-                  "text": "TOTAL",
+                  "text": "PRICE",
                   "size": "md",
                   "color": "#555555",
                   "flex": 0,
@@ -161,6 +160,13 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
               ],
               "margin": "xl",
               "alignItems": "flex-end"
+            },
+            {
+              "type": "text",
+              "text": "Include: Gas, Toll, User Request",
+              "size": "md",
+              "color": "#111111",
+              "align": "end"
             },
             {
               "type": "separator",
