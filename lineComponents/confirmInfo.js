@@ -503,14 +503,13 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
             "margin": "lg",
             "spacing": "sm",
             "contents": [
-              pricesFlexObj,
               {
                 "type": "box",
                 "layout": "horizontal",
                 "contents": [
                   {
                     "type": "text",
-                    "text": "TOTAL",
+                    "text": "PRICE",
                     "size": "md",
                     "color": "#555555",
                     "flex": 0,

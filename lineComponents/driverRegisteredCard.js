@@ -70,8 +70,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
             {
               "type": "text",
               "text": `Driver ID: #${driverInfo.driverCode}`,
-              "weight": "bold",
-              "size": "lg",
+              "size": "sm",
               "gravity": "bottom"
             },
             arrival
