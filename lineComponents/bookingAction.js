@@ -18,7 +18,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
       "text": `ผู้โดยสาร: "${bookingInfo.bookingInfo.message.th}"`,
       "wrap": true,
       "size": "sm",
-      "color": "#b58b0b",
+      "color": "#e07212",
       "weight": "bold",
       "margin": "md"
     } : {

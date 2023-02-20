@@ -3,10 +3,10 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
 
   const message = driverInfo.message.en ? {
     "type": "text",
-    "text": `Driver: "${driverInfo.message.en}"`,
+    "text": `Driver Message: "${driverInfo.message.en}"`,
     "wrap": true,
     "size": "sm",
-    "color": "#b58b0b",
+    "color": "#e07212",
     "weight": "bold",
     "margin": "lg"
   } : {
@@ -70,7 +70,8 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
             {
               "type": "text",
               "text": `Driver ID: #${driverInfo.driverCode}`,
-              "size": "sm",
+              "weight": "bold",
+              "size": "lg",
               "gravity": "bottom"
             },
             arrival
@@ -157,15 +158,14 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
                   "align": "end"
                 }
               ],
-              "margin": "xl",
               "alignItems": "flex-end"
             },
             {
               "type": "text",
-              "text": "Include: Gas, Toll, User Request",
-              "size": "md",
-              "color": "#111111",
-              "align": "end"
+              "text": "*Include: Gas, Toll fee (Except DMK Tollway), Your Requests",
+              "size": "sm",
+              "wrap": true,
+              "color": "#ff334b"
             },
             {
               "type": "separator",

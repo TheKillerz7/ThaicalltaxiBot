@@ -16,8 +16,8 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
 
   const bookingMessage = bookingInfo.bookingInfo.message.en ? {
     "type": "text",
-    "text": `You: "${bookingInfo.bookingInfo.message.en}"`,
-    "color": "#b58b0b",
+    "text": `Your Message: "${bookingInfo.bookingInfo.message.en}"`,
+    "color": "#e07212",
     "size": "sm",
     "wrap": true,
     "weight": "bold",
@@ -28,8 +28,8 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
 
   const driverMessage = driverInfo.message.en ? {
     "type": "text",
-    "text": `Driver: "${driverInfo.message.en}"`,
-    "color": "#b58b0b",
+    "text": `Driver Message: "${driverInfo.message.en}"`,
+    "color": "#e07212",
     "size": "sm",
     "wrap": true,
     "weight": "bold",
