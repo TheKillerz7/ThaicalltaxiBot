@@ -69,7 +69,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           "contents": [
             {
               "type": "text",
-              "text": `Driver No.${number}`,
+              "text": `Driver ID: #${driverInfo.driverCode}`,
               "weight": "bold",
               "size": "lg",
               "gravity": "bottom"
@@ -121,7 +121,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
         },
         {
           "type": "text",
-          "text": `${vehicleInfo.carType} #${driverInfo.driverCode}`,
+          "text": `${vehicleInfo.carType}`,
           "size": "md",
           "wrap": true,
           "weight": "bold",
