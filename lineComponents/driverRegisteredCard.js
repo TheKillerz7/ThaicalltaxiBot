@@ -72,7 +72,8 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
               "text": `Driver ID: #${driverInfo.driverCode}`,
               "weight": "bold",
               "size": "lg",
-              "gravity": "bottom"
+              "gravity": "bottom",
+              "flex": 0
             },
             arrival
           ],
@@ -162,10 +163,10 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
             },
             {
               "type": "text",
-              "text": "*Include: Gas, Toll fee (Except DMK Tollway), Your Requests",
+              "text": "*Include: Gas, Toll (Except DMK Tollway), User's Extra Orders",
               "size": "sm",
               "wrap": true,
-              "color": "#ff334b"
+              "color": "#111111"
             },
             {
               "type": "separator",
