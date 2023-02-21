@@ -163,7 +163,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
             },
             {
               "type": "text",
-              "text": "*Include: Gas, Toll (Except DMK Tollway), User's Extra Orders",
+              "text": "*Include: Gas, User's Extra Orders,\nToll (Except DMK Tollway)",
               "size": "sm",
               "wrap": true,
               "color": "#111111"
