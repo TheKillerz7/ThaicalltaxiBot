@@ -15,7 +15,7 @@ const getChattingMessages = async (req, res) => {
 const getRoomByRoomId = async (req, res) => {
     const { roomId } = req.params
     try {
-        const room = await getRoomByRoomIdDB(roomId)
+        const room = (await getRoomByRoomIdDB(roomId))[0]
         const booking = (await getBookingByIdDB(room.bookingId))[0]
         const data = {
             ...room,
