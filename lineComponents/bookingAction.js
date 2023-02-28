@@ -134,7 +134,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": `${(booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3)}`,
+                  "text": `${(bookingInfo.id + 300000).toString().substring(0, 3) + "-" + (bookingInfo.id + 300000).toString().substring(3)}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -255,7 +255,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": `${(booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3)}`,
+                  "text": `${(bookingInfo.id + 300000).toString().substring(0, 3) + "-" + (bookingInfo.id + 300000).toString().substring(3)}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
