@@ -87,6 +87,14 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
+                  "text": "รหัสงาน",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
                   "text": "วันที่และเวลา",
                   "size": "sm",
                   "color": "#555555",
@@ -120,6 +128,13 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 {
                   "type": "text",
                   "text": "A to B",
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${(booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3)}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -177,6 +192,14 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
+                  "text": "รหัสงาน",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
+                {
+                  "type": "text",
                   "text": "ประเภท",
                   "size": "sm",
                   "color": "#555555",
@@ -226,6 +249,13 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 {
                   "type": "text",
                   "text": "Rent & Hire",
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": `${(booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3)}`,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
