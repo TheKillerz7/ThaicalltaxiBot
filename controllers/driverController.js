@@ -192,7 +192,6 @@ const transferJob = async (req, res) => {
 
 const startJob = async (req, res) => {
   try {
-    console.log('ddsa')
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
     const carType = JSON.parse((await db.getDriverByIdDB(req.body.userId))[0].vehicleInfo).carType
     booking.selectedCarType = carType
@@ -205,15 +204,12 @@ const startJob = async (req, res) => {
   }
 }
 
-const finishingJob = async (bookingId, driverId) => {
+const finishingJob = async (req, res) => {
   try {
-    const booking = (await getBookingByIdDB(bookingId))[0]
-    if (booking.bookingStatus !== "started") {
-      return
-    }
-    await db.finishingJobDB(bookingId)
-    await pushMessage([flexWrapper(commentFlex(driverId, bookingId))], "user", booking.userId) 
-    await pushMessage([textTemplate("เยี่ยม!\nภารกิจของคุณสิ้นสุดลงแล้ว")], "driver", driverId)
+    const booking = (await getBookingByIdDB(req.body.bookingId))[0]
+    await db.finishingJobDB(req.body.bookingId)
+    await pushMessage([flexWrapper(commentFlex(req.body.driverId, req.body.bookingId))], "user", booking.userId) 
+    await pushMessage([textTemplate("เยี่ยม!\nภารกิจของคุณสิ้นสุดลงแล้ว")], "driver", req.body.driverId)
   } catch (error) {
     console.log(error)
   }

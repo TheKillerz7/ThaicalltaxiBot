@@ -16,8 +16,12 @@ const getRoomByRoomId = async (req, res) => {
     const { roomId } = req.params
     try {
         const room = await getRoomByRoomIdDB(roomId)
-        console.log(room)
-        res.send(room)  
+        const booking = (await getBookingByIdDB(room.bookingId))[0]
+        const data = {
+            ...room,
+            bookingCode: (booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3)
+        }
+        res.send(data)  
     } catch (error) {
         console.log(error)
     }
@@ -31,7 +35,6 @@ const getRoomsByUserId = async (req, res) => {
         const roomsWithMessage = await Promise.all(rooms.map(async (room, index) => {
             const messages = await getMessagesByRoomId(room.roomId, 10)
             const booking = (await getBookingByIdDB(room.bookingId))[0]
-            console.log(booking)
             booking.bookingInfo = JSON.parse(booking.bookingInfo)
             let startingDate = []
             let pickupDateStart = ""
@@ -47,6 +50,7 @@ const getRoomsByUserId = async (req, res) => {
             })
             const obj = {
                 ...room,
+                bookingCode: (booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3),
                 messages: {
                     latestMessage: latestMessage,
                     unreadMessages: [...unreadMessages]
