@@ -1,5 +1,5 @@
 const express = require('express')
-const { getAllDriver, getDriverById, getCurrentJobs, createDriver, actionToDriver, getSelectedRegisterByBookingId, updateDriver, uploadImageName, getDriverImage, transferJob, startJob, getCurrentJobWithLineFlex } = require('../controllers/driverController')
+const { getAllDriver, getDriverById, getCurrentJobs, createDriver, actionToDriver, getSelectedRegisterByBookingId, updateDriver, uploadImageName, getDriverImage, transferJob, finishingJob } = require('../controllers/driverController')
 const multipleUpload = require('../js/uploadImage')
 const { getCurrentJobsDB, getAllJobByDriverIdDB } = require('../models/driver')
 
@@ -20,7 +20,7 @@ router.get('/jobs/current/:id', async (req, res) => {
     res.send(jobs)
 })
 
-router.post('/start', startJob)
+router.post('/finish', finishingJob)
 router.post('/action', actionToDriver)
 router.post('/', createDriver)
 
