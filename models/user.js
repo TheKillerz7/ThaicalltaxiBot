@@ -36,7 +36,7 @@ const getAllBookingsByUserIdWithPriceDB = (userId) => {
 
 const getRatingByBookingIdDB = (bookingId) => {
   return knex("comments")
-  .where("booking", bookingId)
+  .where("bookingId", bookingId)
   .select()
 }
 

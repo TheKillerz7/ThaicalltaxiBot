@@ -40,7 +40,6 @@ const getCurrentBookingsByUserId = async (req, res) => {
 
 const getRatingByBookingId = async (req, res) => {
   try {
-    console.log(req.params)
     const rating = await db.getRatingByBookingIdDB(req.params.id)
     res.send(rating)
   } catch (error) {
