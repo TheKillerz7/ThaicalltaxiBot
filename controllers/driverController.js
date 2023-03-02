@@ -207,6 +207,10 @@ const startJob = async (req, res) => {
 const finishingJob = async (req, res) => {
   try {
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
+    const driver = (await db.getDriverByIdDB(req.body.driverId))[0]
+    const addedJobDone = parseInt(driver.jobDone)
+    const addedCoin = parseInt(driver.coin) + (parseInt(booking.course) * 10 / 100)
+    await db.updateDriverDB(req.body.driverId, { jobDone: addedJobDone, coin: addedCoin })
     await db.finishingJobDB(req.body.bookingId)
     await pushMessage([flexWrapper(commentFlex(req.body.driverId, req.body.bookingId))], "user", booking.userId) 
     await pushMessage([textTemplate("ภารกิจของคุณสิ้นสุดลงแล้ว")], "driver", req.body.driverId)

@@ -38,6 +38,15 @@ const getCurrentBookingsByUserId = async (req, res) => {
   }
 }
 
+const getRatingByBookingId = async (req, res) => {
+  try {
+    const rating = (await db.getRatingByBookingIdDB(req.params.id))[0]
+    res.send(rating)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const getAllBookingsByUserId = async (req, res) => {
   try {
     const bookings = await getBookingByStatusAndUserId(["canceled", "finished"], req.params.id)
@@ -231,6 +240,7 @@ module.exports = {
     getAllUser,
     getAllBookingsByUserId,
     getCurrentBookingsByUserId,
+    getRatingByBookingId,
     selectDriver,
     getUserById,
     getCurrentBooking,

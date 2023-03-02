@@ -76,17 +76,17 @@ router.post('/', async (req, res) => {
           const booking = params.get("bookingId") && (await getBookingByIdDB(params.get("bookingId")))[0]
           if (params.get("bookingId")) booking.bookingInfo = JSON.parse(booking.bookingInfo)
           if (params.get("bookingId") && params.get("type") !== "bookingHistoryInfo") {
-            if (booking.bookingStatus === "canceled" || booking.bookingStatus === "finished") return await pushMessage([textTemplate("This booking has already been canceled or closed.")], "user", event.source.userId)
+            if (booking.bookingStatus === "canceled" || booking.bookingStatus === "finished") return
           }
           switch (params.get("type")) {
-            case "confirmCancel":
-              await pushMessage([flexWrapper(confirmCancel(params.get("bookingId")))], "user", event.source.userId)
-              break;
+            // case "confirmCancel":
+            //   await pushMessage([flexWrapper(confirmCancel(params.get("bookingId")))], "user", event.source.userId)
+            //   break;
           
-            case "confirmSelectDriver":
-              if (booking.bookingStatus === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
-              await pushMessage([flexWrapper(confirmSelect(params.get("bookingId"), params.get("driverId")))], "user", event.source.userId)
-              break;
+            // case "confirmSelectDriver":
+            //   if (booking.bookingStatus === "selected") return await pushMessage([textTemplate("Sorry, can't select a driver again because you've selected a driver.")], "user", event.source.userId)
+            //   await pushMessage([flexWrapper(confirmSelect(params.get("bookingId"), params.get("driverId")))], "user", event.source.userId)
+            //   break;
           
             case "cancel":
               if (params.get("value") === "cancel") {
