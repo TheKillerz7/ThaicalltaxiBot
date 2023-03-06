@@ -86,7 +86,10 @@ const finishingJobDB = async (bookingId) => {
   .update("bookingStatus", "finished")
 
   await knex("bookingdrivers")
-  .where("bookingId", bookingId)
+  .where({
+    bookingId: bookingId,
+    offerStatus: "selected"
+  })
   .update("offerStatus", "finished")
 }
 
