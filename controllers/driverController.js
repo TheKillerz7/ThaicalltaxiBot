@@ -214,8 +214,10 @@ const finishingJob = async (req, res) => {
     await db.finishingJobDB(req.body.bookingId)
     await pushMessage([flexWrapper(commentFlex(req.body.driverId, req.body.bookingId))], "user", booking.userId) 
     await pushMessage([textTemplate("ภารกิจของคุณสิ้นสุดลงแล้ว")], "driver", req.body.driverId)
+    res.send("ok")
   } catch (error) {
     console.log(error)
+    res.send("not ok")
   }
 }
 
