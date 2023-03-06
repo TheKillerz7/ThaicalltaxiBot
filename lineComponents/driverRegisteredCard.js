@@ -121,14 +121,6 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           ]
         },
         {
-          "type": "text",
-          "text": `${vehicleInfo.carType}`,
-          "size": "md",
-          "wrap": true,
-          "weight": "bold",
-          "color": "#5c5c5c"
-        },
-        {
           "type": "separator",
           "margin": "lg",
           "color": "#828282"
