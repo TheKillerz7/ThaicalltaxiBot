@@ -81,16 +81,16 @@ const updateDriverDB = (id, data) => {
 }
 
 const finishingJobDB = async (bookingId) => {
-  await knex("booking")
+  return knex("booking")
   .where("bookingId", bookingId)
   .update("bookingStatus", "finished")
 
-  await knex("bookingdrivers")
-  .where({
-    bookingId: bookingId,
-    offerStatus: "selected"
-  })
-  .update("offerStatus", "finished")
+  // await knex("bookingdrivers")
+  // .where({
+  //   bookingId: bookingId,
+  //   offerStatus: "selected"
+  // })
+  // .update("offerStatus", "finished")
 }
 
 const uploadImageNameDB = (data) => {
