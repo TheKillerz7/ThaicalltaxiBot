@@ -148,6 +148,14 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                   "color": "#555555",
                   "flex": 0,
                   "weight": "bold"
+                },
+                {
+                  "type": "text",
+                  "text": "Car Type",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
                 }
               ],
               "flex": 0,
@@ -181,6 +189,13 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 {
                   "type": "text",
                   "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": bookingInfo.bookingInfo.preferedCarType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"
@@ -262,7 +277,15 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                   "color": "#555555",
                   "flex": 0,
                   "weight": "bold"
-                }
+                },
+                {
+                  "type": "text",
+                  "text": "Car Type",
+                  "size": "sm",
+                  "color": "#555555",
+                  "flex": 0,
+                  "weight": "bold"
+                },
               ],
               "flex": 0,
               "spacing": "xs"
@@ -316,6 +339,13 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                 {
                   "type": "text",
                   "text": `${bookingInfo.bookingInfo.luggage.big} Big, ${bookingInfo.bookingInfo.luggage.medium} Medium`,
+                  "size": "sm",
+                  "color": "#111111",
+                  "align": "start"
+                },
+                {
+                  "type": "text",
+                  "text": bookingInfo.bookingInfo.preferedCarType,
                   "size": "sm",
                   "color": "#111111",
                   "align": "start"

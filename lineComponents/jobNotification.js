@@ -3,6 +3,12 @@ const moment = require("moment")
   exports.jobNotification = (bookingData) => {
     let startingDate = []
     let pickupDateStart = ""
+    let preferedCarType = ""
+    if (bookingData.bookingInfo.preferedCartype !== "VIP Van") {
+      preferedCarType = Array.from(bookingData.bookingInfo.preferedCartype)[0] + "+"
+    } else {
+      preferedCarType = "VV+"
+    }
     if (bookingData.bookingInfo.start?.pickupDate === "ASAP" || bookingData.bookingInfo.pickupDate === "ASAP") {
       pickupDateStart = "ASAP"
     } else {
@@ -225,6 +231,25 @@ const moment = require("moment")
                     "margin": "sm",
                     "justifyContent": "center",
                     "alignItems": "center"
+                  },
+                  {
+                    "type": "box",
+                    "layout": "vertical",
+                    "contents": [
+                      {
+                        "type": "text",
+                        "text": preferedCarType,
+                        "size": "xs",
+                        "color": "#ffffff",
+                        "weight": "bold"
+                      }
+                    ],
+                    "flex": 0,
+                    "cornerRadius": "sm",
+                    "backgroundColor": "#24a647",
+                    "paddingAll": "xs",
+                    "paddingStart": "sm",
+                    "paddingEnd": "sm"
                   }
                 ],
                 "margin": "sm"

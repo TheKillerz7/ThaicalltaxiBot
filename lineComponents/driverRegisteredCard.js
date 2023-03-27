@@ -1,9 +1,9 @@
-exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarType) => {
+exports.driverRegisteredCard = (prices, total, driverInfo) => {
   const vehicleInfo = JSON.parse(driverInfo.vehicleInfo)
 
   const message = driverInfo.message.en ? {
     "type": "text",
-    "text": `Driver Message: "${driverInfo.message.en}"`,
+    "text": `Operator Message: "${driverInfo.message.en}"`,
     "wrap": true,
     "size": "sm",
     "color": "#e07212",
@@ -58,7 +58,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
       "contents": [
         {
           "type": "text",
-          "text": "OFFER PRICE",
+          "text": "PRICE",
           "weight": "bold",
           "color": "#1e3a8a",
           "size": "xs"
@@ -69,7 +69,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
           "contents": [
             {
               "type": "text",
-              "text": `Driver ID: #${driverInfo.driverCode}`,
+              "text": `Price Details`,
               "weight": "bold",
               "size": "lg",
               "gravity": "bottom",
@@ -184,7 +184,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo, number, selectedCarTy
               "type": "button",
               "action": {
                 "type": "postback",
-                "label": "I Book This",
+                "label": "I Book Now",
                 "data": `type=selectDriver&value=select&bookingId=${driverInfo.bookingId}&driverId=${driverInfo.driverId}`
               },
               "color": "#ffffff",
