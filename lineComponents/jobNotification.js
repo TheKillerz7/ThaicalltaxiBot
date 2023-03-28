@@ -4,9 +4,8 @@ const moment = require("moment")
     let startingDate = []
     let pickupDateStart = ""
     let preferedCarType = ""
-    if (bookingData.bookingInfo.preferedCartype !== "VIP Van") {
-      console.log(bookingData.bookingInfo.preferedCartype)
-      preferedCarType = Array.from(bookingData.bookingInfo.preferedCartype)[0] + "+"
+    if (bookingData.bookingInfo.preferedCarType !== "VIP Van") {
+      preferedCarType = Array.from(bookingData.bookingInfo.preferedCarType)[0] + "+"
     } else {
       preferedCarType = "VV+"
     }
