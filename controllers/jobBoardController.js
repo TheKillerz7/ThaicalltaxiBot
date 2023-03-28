@@ -1,6 +1,7 @@
 const { textTemplate } = require('../js/helper/textTemplate')
 const { pushMessage } = require('../js/linehelper/pushToLine')
 const { driverRegisteredCard } = require('../lineComponents/driverRegisteredCard')
+const { flexWrapper } = require('../lineComponents/flexWrapper')
 const { driverRegisterToBookingDB, getBookingByIdDB } = require('../models/booking')
 const { getRegisteredDrivers } = require('../models/bookingdrivers')
 const { getDriverByIdDB } = require('../models/driver')
