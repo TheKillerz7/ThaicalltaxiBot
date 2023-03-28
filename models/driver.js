@@ -1,7 +1,7 @@
 const knex = require("./knexdb")
 
 const getAllDriverLightDB = (option, driverCode) => {
-  if (whereIn) {
+  if (driverCode) {
     return knex("drivers")
     .where({...option})
     .whereIn("driverCode", [...driverCode])
