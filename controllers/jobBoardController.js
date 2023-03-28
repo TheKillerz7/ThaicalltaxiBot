@@ -23,8 +23,6 @@ const driverRegisterToBooking = async (req, res) => {
     try {
         const data = req.body
         const booking = (await getBookingByIdDB(data.bookingId))[0]
-        const register = (await getRegisteredDrivers(data.bookingId))[0]
-        console.log(register)
         if (booking.bookingStatus !== "waiting") {
             res.send("งานนี้ได้หมดเวลาแล้ว")
             return
@@ -34,7 +32,7 @@ const driverRegisterToBooking = async (req, res) => {
             "Course": data.course
           }
         ]
-        const cardsWrapped = flexWrapper(driverRegisteredCard(prices, data.course, register), "Driver's Offers")
+        const cardsWrapped = flexWrapper(driverRegisteredCard(prices, data.course, data), "Driver's Offers")
         await updateBookingDB(id, { bookingStatus: "selecting" })
         await pushMessage(cardsWrapped, "user", booking.userId)
         // setTimeout(async () => {
