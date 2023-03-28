@@ -24,12 +24,11 @@ const driverRegisterToBooking = async (req, res) => {
         const data = req.body
         const booking = (await getBookingByIdDB(data.bookingId))[0]
         const register = (await getRegisteredDrivers(data.bookingId))[0]
+        console.log(register)
         if (booking.bookingStatus !== "waiting") {
             res.send("งานนี้ได้หมดเวลาแล้ว")
             return
         }
-        data.extra = JSON.stringify(data.extra)
-
         const prices = [
           {
             "Course": data.course
