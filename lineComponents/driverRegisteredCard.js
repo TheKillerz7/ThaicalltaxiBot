@@ -1,9 +1,8 @@
-exports.driverRegisteredCard = (prices, total, driverInfo) => {
-  const vehicleInfo = JSON.parse(driverInfo.vehicleInfo)
+exports.driverRegisteredCard = (prices, total, register) => {
 
-  const message = driverInfo.message.en ? {
+  const message = register.message.en ? {
     "type": "text",
-    "text": `Operator Message: "${driverInfo.message.en}"`,
+    "text": `Operator Message: "${register.message.en}"`,
     "wrap": true,
     "size": "sm",
     "color": "#e07212",
@@ -13,9 +12,9 @@ exports.driverRegisteredCard = (prices, total, driverInfo) => {
     "type": "filler"
   }
 
-  const arrival = driverInfo.arrival ? {
+  const arrival = register.arrival ? {
     "type": "text",
-    "text": `Arrive in ${driverInfo.arrival} mins`,
+    "text": `Arrive in ${register.arrival} mins`,
     "margin": "none",
     "size": "xs",
     "color": "#fc433d",
@@ -185,7 +184,7 @@ exports.driverRegisteredCard = (prices, total, driverInfo) => {
               "action": {
                 "type": "postback",
                 "label": "I Book Now",
-                "data": `type=selectDriver&value=select&bookingId=${driverInfo.bookingId}&driverId=${driverInfo.driverId}`
+                "data": `type=selectDriver&value=select&bookingId=${register.bookingId}&driverId=${register.driverId}`
               },
               "color": "#ffffff",
               "height": "sm"
