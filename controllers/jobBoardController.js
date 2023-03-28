@@ -34,7 +34,7 @@ const driverRegisterToBooking = async (req, res) => {
         ]
         const cardsWrapped = flexWrapper(driverRegisteredCard(prices, data.course, data), "Driver's Offers")
         await updateBookingDB(data.bookingId, { bookingStatus: "selecting" })
-        await pushMessage(cardsWrapped, "user", booking.userId)
+        await pushMessage([cardsWrapped], "user", booking.userId)
         // setTimeout(async () => {
         //   const booking = (await getBookingByIdDB(id))[0]
         //   if (booking.bookingStatus !== "ongoing") {
