@@ -47,7 +47,7 @@ const createBooking = async (req, res) => {
     const drivers = await getAllDriverLightDB({
       jobNotification: true,
       driverStatus: "active"
-    }, ["43"])
+    }, ["43", "AD1", "AD2", "AD3"])
     let ids = []
     ids = drivers.map((driver) => driver.driverId)
     if (req.body.bookingType === "A2B") {
