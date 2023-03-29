@@ -87,7 +87,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Booking Id",
+                  "text": "Booking ID",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,
@@ -207,7 +207,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                 },
                 {
                   "type": "text",
-                  "text": "Booking Id",
+                  "text": "Booking ID",
                   "size": "sm",
                   "color": "#555555",
                   "flex": 0,

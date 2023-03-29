@@ -8,14 +8,14 @@
           "contents": [
             {
               "type": "text",
-              "text": "Please wait 3 mins...",
+              "text": "Thanks for submitting...",
               "weight": "bold",
               "color": "#1DB446",
               "size": "lg"
             },
             {
               "type": "text",
-              "text": "And get your price",
+              "text": "Operator will reply to you ASAP",
               "margin": "md",
               "weight": "bold",
               "wrap": true,
@@ -23,7 +23,7 @@
             },
             {
               "type": "text",
-              "text": "For Booking:",
+              "text": "*Available time to reply*",
               "color": "#ff334b",
               "weight": "bold",
               "margin": "md",
@@ -31,7 +31,7 @@
             },
             {
               "type": "text",
-              "text": "Choose a driver in 2 min",
+              "text": "06.00 - 21.00 hours(Thailand)",
               "weight": "bold",
               "wrap": true,
               "size": "md"

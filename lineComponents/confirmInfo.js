@@ -553,7 +553,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                     "align": "end"
                   }
                 ],
-                "margin": "lg",
+                "margin": "md",
               },
               {
                 "type": "separator",
