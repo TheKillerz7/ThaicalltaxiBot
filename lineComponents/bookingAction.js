@@ -1,6 +1,6 @@
 const moment = require("moment")
 
-exports.bookingAction = (bookingInfo, action, title, color) => {
+exports.bookingAction = (bookingInfo, action, title, color, driverInfo, total) => {
   let startingDate = []
   let pickupDateStart = ""
   if (bookingInfo.bookingInfo.start?.pickupDate === "ASAP" || bookingInfo.bookingInfo.pickupDate === "ASAP") {
@@ -13,17 +13,55 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
   const endingDate = bookingInfo.bookingInfo.end?.pickupDate.split("/").reverse() || ""
   const pickupDateEnd = moment(new Date(endingDate[0], (parseInt(endingDate[1]) - 1).toString(), endingDate[2])).format("DD MMM YYYY")
 
-    const message = bookingInfo.bookingInfo.message.en ? {
-      "type": "text",
-      "text": `Passenger: "${bookingInfo.bookingInfo.message.en}"`,
-      "wrap": true,
-      "size": "sm",
-      "color": "#e07212",
-      "weight": "bold",
-      "margin": "md"
-    } : {
-      "type": "filler"
-    }
+  const bookingMessage = bookingInfo.bookingInfo.message.en ? {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Your Message:`,
+        "size": "sm",
+        "wrap": true,
+        "weight": "bold",
+        "margin": "md"
+      },
+      {
+        "type": "text",
+        "text": `"${bookingInfo.bookingInfo.message.en}"`,
+        "size": "sm",
+        "wrap": true,
+        "margin": "md"
+      }
+    ],
+    "margin": "md"
+  } : {
+    "type": "filler"
+  }
+
+  const driverMessage = driverInfo.message.en ? {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Driver Message:`,
+        "size": "sm",
+        "wrap": true,
+        "weight": "bold",
+        "margin": "md"
+      },
+      {
+        "type": "text",
+        "text": `"${driverInfo.message.en}"`,
+        "size": "sm",
+        "wrap": true,
+        "margin": "md"
+      }
+    ],
+    "margin": "md"
+  } : {
+    "type": "filler"
+  }
     
     const footer = action === "select" ?
     {
@@ -39,7 +77,7 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                         "type": "button",
                         "action": {
                           "type": "uri",
-                          "label": "แชทตอนนี้",
+                          "label": "Chat Now",
                           "uri": `https://liff.line.me/1657246657-1A9WmnMw?roomId=${bookingInfo.roomId}`
                         },
                         "color": "#ffffff",
@@ -476,15 +514,16 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
                   }
                 ],
                 "spacing": "lg",
+                "margin": "sm",
                 "cornerRadius": "30px"
               }
             ],
             "margin": "md"
           },
-          message,
           {
             "type": "separator",
-            "margin": "md"
+            "margin": "md",
+            "color": "#828282"
           },
           {
             "type": "box",
@@ -495,8 +534,58 @@ exports.bookingAction = (bookingInfo, action, title, color) => {
               bookingFlex
             ]
           },
+          {
+            "type": "separator",
+            "margin": "xl",
+            "color": "#828282"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "lg",
+            "spacing": "sm",
+            "contents": [
+              {
+                "type": "box",
+                "layout": "horizontal",
+                "contents": [
+                  {
+                    "type": "text",
+                    "text": "PRICE",
+                    "size": "md",
+                    "color": "#555555",
+                    "flex": 0,
+                    "weight": "bold"
+                  },
+                  {
+                    "type": "text",
+                    "text": `฿${total}`,
+                    "size": "md",
+                    "color": "#111111",
+                    "align": "end",
+                    "weight": "bold"
+                  }
+                ],
+                "alignItems": "flex-end"
+              },
+              {
+                "type": "text",
+                "text": "*Include: Gas, User's Extra Orders,\nToll (Except DMK Tollway)",
+                "size": "sm",
+                "wrap": true,
+                "color": "#111111"
+              },
+              {
+                "type": "separator",
+                "margin": "md",
+                "color": "#828282"
+              },
+              bookingMessage,
+              driverMessage,
+            ]
+          }
         ],
-        "paddingBottom": "1px"
+        "paddingBottom": "lg"
       },
       "footer": footer,
       "styles": {

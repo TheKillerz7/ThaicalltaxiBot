@@ -1,5 +1,6 @@
 const { textTemplate } = require('../js/helper/textTemplate')
 const { pushMessage } = require('../js/linehelper/pushToLine')
+const { confirmInfo } = require('../lineComponents/confirmInfo')
 const { driverRegisteredCard } = require('../lineComponents/driverRegisteredCard')
 const { flexWrapper } = require('../lineComponents/flexWrapper')
 const { driverRegisterToBookingDB, getBookingByIdDB, updateBookingDB } = require('../models/booking')
@@ -32,7 +33,7 @@ const driverRegisterToBooking = async (req, res) => {
             "Course": data.course
           }
         ]
-        const cardsWrapped = flexWrapper(driverRegisteredCard(prices, data.course, data), "Driver's Offers")
+        const cardsWrapped = flexWrapper(confirmInfo(booking, prices, data.course, data), "Price has arrived")
         await updateBookingDB(data.bookingId, { bookingStatus: "selecting" })
         await pushMessage([cardsWrapped], "user", booking.userId)
         // setTimeout(async () => {

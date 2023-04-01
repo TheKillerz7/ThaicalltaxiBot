@@ -15,93 +15,54 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
   const pickupDateEnd = moment(new Date(endingDate[0], (parseInt(endingDate[1]) - 1).toString(), endingDate[2])).format("DD MMM YYYY")
 
   const bookingMessage = bookingInfo.bookingInfo.message.en ? {
-    "type": "text",
-    "text": `Your Message: "${bookingInfo.bookingInfo.message.en}"`,
-    "color": "#e07212",
-    "size": "sm",
-    "wrap": true,
-    "weight": "bold",
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Your Message:`,
+        "size": "sm",
+        "wrap": true,
+        "weight": "bold",
+        "margin": "md"
+      },
+      {
+        "type": "text",
+        "text": `"${bookingInfo.bookingInfo.message.en}"`,
+        "size": "sm",
+        "wrap": true,
+        "margin": "md"
+      }
+    ],
     "margin": "md"
   } : {
     "type": "filler"
   }
 
   const driverMessage = driverInfo.message.en ? {
-    "type": "text",
-    "text": `Driver Message: "${driverInfo.message.en}"`,
-    "color": "#e07212",
-    "size": "sm",
-    "wrap": true,
-    "weight": "bold",
-    "margin": "sm"
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {
+        "type": "text",
+        "text": `Driver Message:`,
+        "size": "sm",
+        "wrap": true,
+        "weight": "bold",
+        "margin": "md"
+      },
+      {
+        "type": "text",
+        "text": `"${driverInfo.message.en}"`,
+        "size": "sm",
+        "wrap": true,
+        "margin": "md"
+      }
+    ],
+    "margin": "md"
   } : {
     "type": "filler"
   }
-
-  const pricesTitle = prices.map((price, index) => {
-    return {
-      "type": "text",
-      "text": `${Object.keys(prices[index])}`,
-      "size": "sm",
-      "color": "#555555",
-      "flex": 0,
-      "weight": "bold"
-    }
-  })
-  
-  const pricesValue = prices.map((price, index) => {
-    return {
-      "type": "text",
-      "text": `฿${price[Object.keys(prices[index])]}`,
-      "size": "sm",
-      "color": "#111111",
-      "align": "start"
-    }
-  })
-
-    const pricesFlexObj = {
-        "type": "box",
-        "layout": "horizontal",
-        "contents": [
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              driverInfo.arrival ? {
-                "type": "text",
-                "text": `Arrival Time`,
-                "size": "sm",
-                "color": "#555555",
-                "flex": 0,
-                "weight": "bold"
-              } : {
-                "type": "filler"
-              },
-              ...pricesTitle
-            ],
-            "flex": 0,
-            "spacing": "xs"
-          },
-          {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              driverInfo.arrival ? {
-                "type": "text",
-                "text": `${driverInfo.arrival} mins`,
-                "size": "sm",
-                "color": "#111111",
-                "align": "start"
-              } : {
-                "type": "filler"
-              },
-              ...pricesValue
-            ],
-            "margin": "xl",
-            "spacing": "xs"
-          }
-        ]
-    }
 
     const bookingFlex = bookingInfo.bookingType === "A2B" ? 
     {
@@ -415,7 +376,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "text",
-            "text": "Please confirm your final info",
+            "text": "Please confirm your price",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
@@ -549,11 +510,19 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                     "type": "text",
                     "text": `฿${total}`,
                     "size": "md",
-                    "color": "#1DB446",
-                    "align": "end"
+                    "color": "#111111",
+                    "align": "end",
+                    "weight": "bold"
                   }
                 ],
-                "margin": "md",
+                "alignItems": "flex-end"
+              },
+              {
+                "type": "text",
+                "text": "*Include: Gas, User's Extra Orders,\nToll (Except DMK Tollway)",
+                "size": "sm",
+                "wrap": true,
+                "color": "#111111"
               },
               {
                 "type": "separator",
@@ -571,34 +540,34 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "type": "box",
         "layout": "horizontal",
         "contents": [
-          // {
-          //   "type": "box",
-          //   "layout": "vertical",
-          //   "contents": [
-          //     {
-          //       "type": "button",
-          //       "action": {
-          //         "type": "postback",
-          //         "label": "Cancel",
-          //         "data": `type=cancel&value=cancel&bookingId=${driverInfo.bookingId}`
-          //       },
-          //       "color": "#424242",
-          //       "height": "sm"
-          //     }
-          //   ],
-          //   "backgroundColor": "#e0e0e0",
-          //   "cornerRadius": "md"
-          // },
           {
             "type": "box",
             "layout": "vertical",
-            // "margin": "md",
             "contents": [
               {
                 "type": "button",
                 "action": {
                   "type": "postback",
-                  "label": "Confirm",
+                  "label": "Cancel",
+                  "data": `type=cancel&value=cancel&bookingId=${driverInfo.bookingId}`
+                },
+                "color": "#424242",
+                "height": "sm"
+              }
+            ],
+            "backgroundColor": "#e0e0e0",
+            "cornerRadius": "md"
+          },
+          {
+            "type": "box",
+            "layout": "vertical",
+            "margin": "md",
+            "contents": [
+              {
+                "type": "button",
+                "action": {
+                  "type": "postback",
+                  "label": "Book",
                   "data": `type=confirmInfo&driverId=${driverInfo.driverId}&bookingId=${driverInfo.bookingId}`
                 },
                 "color": "#ffffff",

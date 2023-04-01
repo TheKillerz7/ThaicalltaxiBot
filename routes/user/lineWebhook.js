@@ -6,7 +6,7 @@ const areaPrices = require('../../areaPrices.json')
 const { postToDialogflow } = require('../../js/linehelper/postToDialogflow.js')
 const { replyMessage } = require('../../js/linehelper/replyToLine.js')
 const userController = require('../../controllers/userController.js')
-const { updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB, getRegisteredDriversWithDriverInfo } = require('../../models/bookingdrivers.js')
+const { updateBookingdriverByBookingId, getSelectedRegisterByBookingIdDB, getRegisteredDriversWithDriverInfo, getRegisteredDrivers } = require('../../models/bookingdrivers.js')
 const { pushMessage } = require('../../js/linehelper/pushToLine.js')
 const { flexWrapper } = require('../../lineComponents/flexWrapper.js')
 const { confirmCancel } = require('../../lineComponents/confirmCancel.js')
@@ -110,11 +110,9 @@ router.post('/', async (req, res) => {
               const uid = new ShortUniqueId({ length: 10 });
               const roomId = uid()
               booking.roomId = roomId
-              const driversRegisters = await getRegisteredDriversWithDriverInfo(params.get("driverId"), "jobDone")
-              driversRegisters.filter((register) => register.driverId !== params.get("driverId"))
+              const register = (await getRegisteredDrivers(params.get("bookingId")))[0]
               await updateBookingDB(params.get("bookingId"), {bookingStatus: "ongoing"})
-              driversRegisters.length && await multicastMessage([textTemplate("ขออภัย การเสนอราคาของคุณไม่ได้รับการอนุมัติ")], "driver", driversRegisters.map((register) => register.driverId))
-              await pushMessage([flexWrapper(bookingAction(booking, "select", "คุณถูกรับเลือกในงานนี้", "green"))], 'driver', params.get("driverId"))
+              await pushMessage([flexWrapper(bookingAction(booking, "select", "Booking Confirmed", "green", register, register.course))], 'driver', params.get("driverId"))
               await pushMessage([flexWrapper(afterConfirm((booking.id + 300000).toString().substring(0, 3) + "-" + (booking.id + 300000).toString().substring(3), roomId))], "user", event.source.userId)
               const roomData = {
                 roomId,
@@ -129,7 +127,7 @@ router.post('/', async (req, res) => {
                   senderId: params.get("driverId"),
                   senderType: "driver",
                   messageType: "greeting",
-                  translated: "Hi,\nI am your driver and very pleased to serve you!\n\nIf you have any requests or issues, please let me know with simple text for better translation."
+                  translated: "Thank you for booking! I am the operator(Driver Teem Leader) and very pleased to serve you.\n\nIf you have any requests or issues, feel free to let me know."
                 }
                 const translated = await translations(greeting.translated, "th")
                 greeting.message = he.decode(translated.data.data.translations[0].translatedText)

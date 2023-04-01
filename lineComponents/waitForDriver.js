@@ -8,15 +8,13 @@
           "contents": [
             {
               "type": "text",
-              "text": "Thanks for submitting...",
+              "text": "Thanks for submitting.",
               "weight": "bold",
-              "color": "#1DB446",
-              "size": "lg"
+              "size": "md"
             },
             {
               "type": "text",
-              "text": "Operator will reply to you ASAP",
-              "margin": "md",
+              "text": "Operator(Driver Team Leader) will reply to you ASAP",
               "weight": "bold",
               "wrap": true,
               "size": "md"
@@ -27,12 +25,11 @@
               "color": "#ff334b",
               "weight": "bold",
               "margin": "md",
-              "size": "sm"
+              "size": "md"
             },
             {
               "type": "text",
               "text": "06.00 - 21.00 hours(Thailand)",
-              "weight": "bold",
               "wrap": true,
               "size": "md"
             },
