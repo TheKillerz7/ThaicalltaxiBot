@@ -107,6 +107,7 @@ router.post('/', async (req, res) => {
   
             case "confirmInfo":
               console.log(booking.bookingStatus)
+              console.log("ds")
               if (booking.bookingStatus !== "selecting") return
               const uid = new ShortUniqueId({ length: 10 });
               const roomId = uid()
