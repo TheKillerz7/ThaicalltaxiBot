@@ -24,6 +24,7 @@ const driverRegisterToBooking = async (req, res) => {
     try {
         const data = req.body
         const booking = (await getBookingByIdDB(data.bookingId))[0]
+        booking.bookingInfo = JSON.parse(booking.bookingInfo)
         if (booking.bookingStatus !== "waiting") {
             res.send("งานนี้ได้หมดเวลาแล้ว")
             return
