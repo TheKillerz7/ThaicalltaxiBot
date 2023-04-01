@@ -31,7 +31,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "text": `"${bookingInfo.bookingInfo.message.en}"`,
         "size": "sm",
         "wrap": true,
-        "margin": "md"
       }
     ],
     "margin": "md"
@@ -56,7 +55,6 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "text": `"${driverInfo.message.en}"`,
         "size": "sm",
         "wrap": true,
-        "margin": "md"
       }
     ],
     "margin": "md"

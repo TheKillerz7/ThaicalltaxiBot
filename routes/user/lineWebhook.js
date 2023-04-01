@@ -93,8 +93,8 @@ router.post('/', async (req, res) => {
                 const driverId = (await getSelectedRegisterByBookingIdDB(params.get("bookingId")))[0]
                 await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
                 await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red"))], "user", event.source.userId)
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "งานถูกยกเลิก", "red"))], "driver", driverId.driverId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red", driverId, driverId.course))], "user", event.source.userId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "งานถูกยกเลิก", "red", driverId, driverId.course))], "driver", driverId.driverId)
               }
               break;
           
@@ -106,7 +106,7 @@ router.post('/', async (req, res) => {
               break;
   
             case "confirmInfo":
-              if (booking.bookingStatus !== "selected") return 
+              if (booking.bookingStatus !== "selecting") return 
               const uid = new ShortUniqueId({ length: 10 });
               const roomId = uid()
               booking.roomId = roomId
