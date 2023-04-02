@@ -29,8 +29,7 @@ const getRegisteredDriversByBookingIdandDriverId = (bookingId, driverId) => {
 const getSelectedRegisterByBookingIdDB = (bookingId) => {
     return knex("bookingdrivers")
     .where({
-        bookingId: bookingId,
-        offerStatus: "selected"
+        bookingId: bookingId
     })
     .select()
 }
