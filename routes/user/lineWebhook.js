@@ -74,7 +74,7 @@ router.post('/', async (req, res) => {
         const params = new URLSearchParams(event.postback.data)
         try {
           const booking = params.get("bookingId") && (await getBookingByIdDB(params.get("bookingId")))[0]
-          console.log(booking.bookingStatus)
+          console.log(booking)
           console.log("1")
           if (params.get("bookingId")) booking.bookingInfo = JSON.parse(booking.bookingInfo)
           if (params.get("bookingId") && params.get("type") !== "bookingHistoryInfo") {
