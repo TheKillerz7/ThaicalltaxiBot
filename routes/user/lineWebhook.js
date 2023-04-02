@@ -73,16 +73,11 @@ router.post('/', async (req, res) => {
       case "postback":
         const params = new URLSearchParams(event.postback.data)
         try {
-          const booking = params.get("bookingId") && (await getBookingByIdDB(params.get("bookingId")))[0]
-          console.log(booking)
-          console.log("1")
-          if (params.get("bookingId")) booking.bookingInfo = JSON.parse(booking.bookingInfo)
-          if (params.get("bookingId") && params.get("type") !== "bookingHistoryInfo") {
-            console.log(booking.bookingStatus)
-              console.log("2")
+          let booking
+          if (params.get("bookingId")) {
+            booking = (await getBookingByIdDB(params.get("bookingId")))[0]
+            booking.bookingInfo = JSON.parse(booking.bookingInfo)
             if (booking.bookingStatus === "canceled" || booking.bookingStatus === "finished") return
-            console.log(booking.bookingStatus)
-              console.log("3")
           }
           switch (params.get("type")) {
             // case "confirmCancel":
@@ -97,6 +92,7 @@ router.post('/', async (req, res) => {
             case "cancel":
               if (params.get("value") === "cancel") {
                 const driverId = (await getSelectedRegisterByBookingIdDB(params.get("bookingId")))[0]
+                console.log(driverId)
                 await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
                 await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
                 await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red", driverId, driverId.course))], "user", event.source.userId)
@@ -112,8 +108,6 @@ router.post('/', async (req, res) => {
               break;
   
             case "confirmInfo":
-              console.log(booking.bookingStatus)
-              console.log("ds")
               if (booking.bookingStatus !== "selecting") return
               const uid = new ShortUniqueId({ length: 10 });
               const roomId = uid()
