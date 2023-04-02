@@ -42,8 +42,7 @@ const getCurrentJobsDB = (driverId) => {
   .where("booking.bookingStatus", "ongoing")
   .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
   .where({
-    driverId,
-    "bookingdrivers.offerStatus": "selected"
+    driverId
   })
   .orderBy("booking.createdDate")
   .select()
