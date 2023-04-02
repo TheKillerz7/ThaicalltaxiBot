@@ -91,12 +91,11 @@ router.post('/', async (req, res) => {
           
             case "cancel":
               if (params.get("value") === "cancel") {
-                const driverId = (await getSelectedRegisterByBookingIdDB(params.get("bookingId")))[0]
-                console.log(driverId)
+                const register = (await getRegisteredDrivers(params.get("bookingId")))[0]
                 await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
                 await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red", driverId, driverId.course))], "user", event.source.userId)
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "งานถูกยกเลิก", "red", driverId, driverId.course))], "driver", driverId.driverId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red", register, register.course))], "user", event.source.userId)
+                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "งานถูกยกเลิก", "red", register, register.course))], "driver", register.driverId)
               }
               break;
           
