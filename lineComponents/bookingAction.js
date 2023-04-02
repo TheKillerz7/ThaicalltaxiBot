@@ -578,7 +578,7 @@ exports.bookingAction = (bookingInfo, action, title, color, driverInfo, total) =
               {
                 "type": "separator",
                 "margin": "md",
-                "color": "#828282"
+                "color": action === "select" ? "#828282" : "#ffffff"
               },
               bookingMessage,
               driverMessage,

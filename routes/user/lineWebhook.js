@@ -95,7 +95,6 @@ router.post('/', async (req, res) => {
                 await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
                 await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
                 await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "Booking's been canceled", "red", register, register.course))], "user", event.source.userId)
-                await pushMessage([flexWrapper(bookingAction(booking, "cancel",  "งานถูกยกเลิก", "red", register, register.course))], "driver", register.driverId)
               }
               break;
           
