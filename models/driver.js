@@ -52,8 +52,7 @@ const getAllJobByDriverIdDB = (driverId) => {
   return knex("booking")
   .join("bookingdrivers", "bookingdrivers.bookingId", "booking.bookingId")
   .where({
-    driverId,
-    "bookingdrivers.offerStatus": "selected"
+    driverId
   })
   .whereIn("booking.bookingStatus", ["canceled", "finished"])
   .orderBy("booking.createdDate")
