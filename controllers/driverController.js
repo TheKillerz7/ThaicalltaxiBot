@@ -177,6 +177,8 @@ const transferJob = async (req, res) => {
     if (!driver.length) return res.send("Driver not found.")
     const register = (await getRegisteredDrivers(req.body.bookingId))[0]
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
+    const room = (await getRoomsByBookingIdDB(req.body.bookingId))[0]
+    booking.roomId = room.roomId
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
     let data = {
       driverId: driver[0].driverId,
