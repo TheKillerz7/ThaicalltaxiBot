@@ -175,6 +175,7 @@ const transferJob = async (req, res) => {
   try {
     const driver = await db.getDriverByCodeDB(req.body.driverCode)
     if (!driver.length) return res.send("Driver not found.")
+    const register = (await getRegisteredDrivers(params.get("bookingId")))[0]
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
     let data = {
@@ -183,7 +184,7 @@ const transferJob = async (req, res) => {
       updatedDate: new Date()
     }
     await transferJobDB(req.body.bookingId, req.body.driverId, data)
-    await pushMessage([flexWrapper(bookingAction(booking, "select", "งานนี้ถูกโอนมาให้คุณ", "green"))], 'driver', driver[0].driverId)
+    await pushMessage([flexWrapper(bookingAction(booking, "select", "งานนี้ถูกโอนมาให้คุณ", "green", register, register.course))], 'driver', driver[0].driverId)
     res.send("Successful")
   } catch (error) {
     console.log(error)

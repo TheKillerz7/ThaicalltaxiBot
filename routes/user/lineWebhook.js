@@ -90,7 +90,7 @@ router.post('/', async (req, res) => {
             //   break;
           
             case "cancel":
-              if (params.get("value") === "cancel") {
+              if (params.get("value") === "cancel") {c
                 const register = (await getRegisteredDrivers(params.get("bookingId")))[0]
                 await updateBookingDB(params.get("bookingId"), {bookingStatus: "canceled"})
                 await updateBookingdriverByBookingId(params.get("bookingId"), {offerStatus: "canceled"})
