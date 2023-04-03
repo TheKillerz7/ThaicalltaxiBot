@@ -11,7 +11,7 @@ const { flexWrapper } = require('../lineComponents/flexWrapper')
 const { jobHistory } = require('../lineComponents/jobHistory')
 const { startedJob } = require('../lineComponents/startedJob')
 const { getBookingByIdDB, updateBookingDB, getBookingWithPricesByIdDB, updatePriceDB, transferJobDB } = require('../models/booking')
-const { getSelectedRegisterByBookingIdDB } = require('../models/bookingdrivers')
+const { getSelectedRegisterByBookingIdDB, getRegisteredDrivers } = require('../models/bookingdrivers')
 const { getRoomsByBookingIdDB } = require('../models/chatting')
 const fs = require('fs')
 const async = require('async');
@@ -175,7 +175,7 @@ const transferJob = async (req, res) => {
   try {
     const driver = await db.getDriverByCodeDB(req.body.driverCode)
     if (!driver.length) return res.send("Driver not found.")
-    const register = (await getRegisteredDrivers(params.get("bookingId")))[0]
+    const register = (await getRegisteredDrivers(req.body.bookingId))[0]
     const booking = (await getBookingByIdDB(req.body.bookingId))[0]
     booking.bookingInfo = JSON.parse(booking.bookingInfo)
     let data = {
