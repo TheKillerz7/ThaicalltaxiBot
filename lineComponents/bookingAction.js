@@ -411,6 +411,7 @@ exports.bookingAction = (bookingInfo, action, title, color, driverInfo, total) =
           }
         ],
         "spacing": "lg",
+        "margin": "sm",
         "cornerRadius": "30px"
       }
     }) : [

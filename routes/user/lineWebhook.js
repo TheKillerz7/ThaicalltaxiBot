@@ -127,7 +127,7 @@ router.post('/', async (req, res) => {
                   senderId: params.get("driverId"),
                   senderType: "driver",
                   messageType: "greeting",
-                  translated: "Thank you for booking! I am the operator(Driver Teem Leader) and very pleased to serve you.\n\nIf you have any requests or issues, feel free to let me know."
+                  translated: "Thank you for booking! We are Thai-Taxi operators(Driver Team Leader) and very pleased to serve you.\n\nIf you have any requests or issues, feel free to let us know."
                 }
                 const translated = await translations(greeting.translated, "th")
                 greeting.message = he.decode(translated.data.data.translations[0].translatedText)

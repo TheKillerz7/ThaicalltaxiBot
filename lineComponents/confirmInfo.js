@@ -23,8 +23,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "text": `Your Message:`,
         "size": "sm",
         "wrap": true,
-        "weight": "bold",
-        "margin": "md"
+        "weight": "bold"
       },
       {
         "type": "text",
@@ -47,8 +46,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "text": `Driver Message:`,
         "size": "sm",
         "wrap": true,
-        "weight": "bold",
-        "margin": "md"
+        "weight": "bold"
       },
       {
         "type": "text",
@@ -57,7 +55,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "wrap": true,
       }
     ],
-    "margin": "md"
+    "margin": "sm"
   } : {
     "type": "filler"
   }
@@ -374,7 +372,7 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
         "contents": [
           {
             "type": "text",
-            "text": "Please confirm your price",
+            "text": "PRICE INFORMATION",
             "weight": "bold",
             "color": "#1DB446",
             "size": "sm"
@@ -508,9 +506,9 @@ exports.confirmInfo = (bookingInfo, prices, total, driverInfo, carType) => {
                     "type": "text",
                     "text": `฿${total}`,
                     "size": "md",
-                    "color": "#111111",
+                    "weight": "bold",
+                    "color": "#1DB446",
                     "align": "end",
-                    "weight": "bold"
                   }
                 ],
                 "alignItems": "flex-end"
