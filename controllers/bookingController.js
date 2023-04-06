@@ -3,7 +3,7 @@ const { pushMessage } = require('../js/linehelper/pushToLine');
 const { flexWrapper } = require('../lineComponents/flexWrapper');
 const { driverRegisteredCard } = require('../lineComponents/driverRegisteredCard');
 const { getRegisteredDriversWithDriverInfo, updateBookingdriverByDriverId, getSelectedRegisterByBookingIdDB, updateBookingdriverByBookingId } = require('../models/bookingdrivers');
-const { createBookingDB, updateBookingDB, getBookingByIdDB, updatePriceDB } = require('../models/booking');
+const { createBookingDB, updateBookingDB, getBookingByIdDB, updatePriceDB, getAllBookingDB } = require('../models/booking');
 const { userBooking } = require('../lineComponents/userBooking');
 const { textTemplate } = require('../js/helper/textTemplate');
 const { carouselWrapper } = require('../lineComponents/carouselWrapper');
@@ -13,8 +13,13 @@ const { getAllDriverDB, getAllDriverLightDB } = require('../models/driver');
 const { jobNotification } = require('../lineComponents/jobNotification');
 const { waitForDriver } = require('../lineComponents/waitForDriver');
 
-const getAllBooking = (req, res) => {
-res.send("ok")
+const getAllBooking = async (req, res) => {
+  try {
+    const bookings = await getAllBookingDB(req.params.status)
+    res.send(bookings)
+  } catch (error) {
+    res.send(error)
+  }
 }
 
 const getBookingByStatus = async (req, res) => {
