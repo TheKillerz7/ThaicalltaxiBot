@@ -301,11 +301,11 @@ router.post("/", async (req, res) => {
               break;
           }
         } catch (error) {
-          await pushMessage(
-            [textTemplate(JSON.stringify(error))],
-            "user",
-            event.source.userId
-          );
+          // await pushMessage(
+          //   [textTemplate(JSON.stringify(error))],
+          //   "user",
+          //   event.source.userId
+          // );
           console.log(error);
         }
         break;
