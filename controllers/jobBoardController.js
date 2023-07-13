@@ -21,7 +21,7 @@ const getBookingByStatusWithoutDriverId = async (req, res) => {
   console.log(bookings);
   const ParsedBookings = bookings.map((booking, index) => {
     const bookingTemp = booking;
-    // bookingTemp.bookingInfo = bookingTemp.bookingInfo;
+    bookingTemp.bookingInfo = JSON.parse(bookingTemp.bookingInfo);
     return bookingTemp;
   });
   res.send(ParsedBookings);
