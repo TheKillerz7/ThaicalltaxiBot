@@ -115,7 +115,7 @@ router.post("/", async (req, res) => {
 
             case "cancel":
               if (params.get("value") === "cancel") {
-                c;
+                
                 const register = (
                   await getRegisteredDrivers(params.get("bookingId"))
                 )[0];
