@@ -90,7 +90,7 @@ const cancelBooking = async (req, res) => {
     await updateBookingDB(req.body.bookingId, {bookingStatus: "canceled"})
     await updateBookingdriverByBookingId(req.body.bookingId, {offerStatus: "canceled"})
     await pushMessage([flexWrapper(bookingAction(booking, "cancel", "Booking's been canceled", "red", register, register.course))], "user", req.body.userId)
-    await pushMessage([flexWrapper(bookingAction(booking, "cancel", "งานถูกยกเลิก", "red"))], "driver", register.driverId)
+    await pushMessage([flexWrapper(bookingAction(booking, "cancel", "งานถูกยกเลิก", "red", register, register.course))], "driver", register.driverId)
     res.send('ok')
   } catch (error) {
     console.log(error)
