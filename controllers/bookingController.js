@@ -93,7 +93,7 @@ const cancelBooking = async (req, res) => {
     await pushMessage([flexWrapper(bookingAction(booking, "cancel", "งานถูกยกเลิก", "red", register, register.course))], "driver", register.driverId)
     res.send('ok')
   } catch (error) {
-    console.log(error)
+    console.log(error.response.data.details)
   }
 }
 
